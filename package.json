@@ -1,10 +1,12 @@
 {
   "name": "uncle",
   "version": "1.0.0",
-  "description": "personalized slack bots for coding bootcamps",
+  "description": "personalized slack bots for educational institutions",
   "main": "server/server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev:buildserver": "babel ./server --out-dir ./server-dist --presets=es2015 --copy-files",
+    "dev:start": "node server-dist/server.js"
   },
   "repository": {
     "type": "git",
@@ -21,8 +23,20 @@
   },
   "homepage": "https://github.com/Berserk-Worms/Uncle#readme",
   "dependencies": {
+    "babel-cli": "^6.11.4",
+    "babel-core": "^6.13.2",
+    "babel-loader": "^6.2.4",
+    "babel-plugin-add-module-exports": "^0.2.1",
+    "babel-plugin-transform-decorators-legacy": "^1.3.4",
+    "babel-preset-es2015": "^6.13.2",
+    "babel-preset-react": "^6.11.1",
+    "babel-preset-stage-1": "^6.13.0",
     "body-parser": "^1.15.2",
     "express": "^4.14.0",
     "pg": "^6.0.3"
+  },
+  "devDependencies": {
+    "webpack": "^1.13.1",
+    "webpack-dev-server": "^1.14.1"
   }
 }

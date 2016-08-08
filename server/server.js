@@ -1,5 +1,5 @@
-var express = require('express');
-var bodyParser = require('body-parser');
+import express from 'express';
+import bodyParser from 'body-parser';
 //server config for middleware later
 // import server-config from './server-config';
 
