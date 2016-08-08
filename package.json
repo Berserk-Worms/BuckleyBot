@@ -5,8 +5,8 @@
   "main": "server/server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev:buildserver": "babel ./server --out-dir ./server-dist --presets=es2015 --copy-files --watch",
-    "dev:start": "nodemon server-dist/server.js"
+    "dev:buildserver": "babel ./server/src --out-dir ./server/dist --presets=es2015 --copy-files --watch",
+    "dev:start": "nodemon server/dist/server.js"
   },
   "repository": {
     "type": "git",
