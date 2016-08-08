@@ -1,15 +1,23 @@
 'use strict';
 
-var express = require('express');
-var bodyParser = require('body-parser');
+var _express = require('express');
+
+var _express2 = _interopRequireDefault(_express);
+
+var _bodyParser = require('body-parser');
+
+var _bodyParser2 = _interopRequireDefault(_bodyParser);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 //server config for middleware later
 // import server-config from './server-config';
 
-var app = express();
+var app = (0, _express2.default)();
 var port = process.env.PORT || 8080;
 
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+app.use(_bodyParser2.default.urlencoded({ extended: true }));
+app.use(_bodyParser2.default.json());
 
 app.get('/', function (req, res) {
   res.json('Hello World');
