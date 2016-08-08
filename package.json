@@ -5,8 +5,8 @@
   "main": "server/server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev:buildserver": "babel ./server --out-dir ./server-dist --presets=es2015 --copy-files",
-    "dev:start": "node server-dist/server.js"
+    "dev:buildserver": "babel ./server --out-dir ./server-dist --presets=es2015 --copy-files --watch",
+    "dev:start": "nodemon server-dist/server.js"
   },
   "repository": {
     "type": "git",
@@ -33,6 +33,7 @@
     "babel-preset-stage-1": "^6.13.0",
     "body-parser": "^1.15.2",
     "express": "^4.14.0",
+    "nodemon": "^1.10.0",
     "pg": "^6.0.3"
   },
   "devDependencies": {
