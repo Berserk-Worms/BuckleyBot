@@ -1,7 +1,7 @@
 {
   "name": "uncle",
   "version": "1.0.0",
-  "description": "personalized slack bots for coding bootcamps",
+  "description": "personalized slack bots for educational institutions",
   "main": "server/server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
