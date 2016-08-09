@@ -6,7 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev:buildserver": "babel ./server/src --out-dir ./server/dist --presets=es2015 --copy-files --watch",
-    "dev:start": "nodemon server/dist/server.js"
+    "dev:start": "nodemon server/dist/server.js",
+    "dev:buildClient": "webpack",
+    "dev:watchClient": "webpack --watch"
   },
   "repository": {
     "type": "git",
@@ -34,9 +36,13 @@
     "body-parser": "^1.15.2",
     "express": "^4.14.0",
     "nodemon": "^1.10.0",
-    "pg": "^6.0.3"
+    "pg": "^6.0.3",
+    "react": "^15.3.0",
+    "react-dom": "^15.3.0"
   },
   "devDependencies": {
+    "css-loader": "^0.23.1",
+    "style-loader": "^0.13.1",
     "webpack": "^1.13.1",
     "webpack-dev-server": "^1.14.1"
   }

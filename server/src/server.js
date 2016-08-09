@@ -8,6 +8,8 @@ const port = process.env.PORT || 8080;
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
+app.use(express.static('client'));
+
 
 app.get('/', function(req, res) {
   res.json('Hello World')
