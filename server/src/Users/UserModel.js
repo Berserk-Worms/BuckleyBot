@@ -1,6 +1,8 @@
 import db from '../db/db-config';
+import Sequelize from 'Sequelize';
 
 //generate a user model
+
 let User = db.define('user', {
   id: {
     type: Sequelize.INTEGER,
@@ -25,6 +27,13 @@ let User = db.define('user', {
     type: Sequelize.STRING
   }
 });
+
+User.sync()
+  .then(err => {
+    console.log('WORKED!')
+  }, err => {
+    console.log('An error occured while generating table.')
+  });
 
 export default User;
 

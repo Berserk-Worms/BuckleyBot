@@ -2,8 +2,11 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import bot from './bot';
 import dbConnect from './db/db-config';
+// import dbConnect from './db/db-config';
 import Sequelize from 'sequelize';
+import User from './Users/UserModel';
 // import routes from './routes/router';
+
 //server config for middleware later
 // import server-config from './server-config';
 
@@ -13,27 +16,6 @@ const port = process.env.PORT || 8080;
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 app.use(express.static('client'));
-
-var sequelize = new Sequelize('uncle', null, null, {
-  host: 'localhost',
-    protocol: 'postgres',
-    dialect: 'postgres'
-
-    , pool: {
-      max: 5,
-      min: 0,
-      idle: 10000
-    }
-});
-
-sequelize
-  .authenticate()
-  .then(err => {
-      console.log('Connection has been established');
-    }, (err) => {
-      console.log('Unable to connect to database: ', err);
-    });
-
 
 // const router = routes(app, express);
 
