@@ -9,7 +9,7 @@ let generateInfo = (token) => {
 
 //we have a database of users based on slack bot interaction
 //we should be able to find, addUser, deleteUser
-let findUser = (req, res) => {
+const findUser = (req, res) => {
   User.findOne({
     where: {
       username: req.body.username,
@@ -26,7 +26,7 @@ let findUser = (req, res) => {
 };
 
 //Adduser if not created, otherwise will return user info
-let addUser = (req, res) => {
+const addUser = (req, res) => {
   User.count({
     where: {
       username: req.body.username
@@ -59,7 +59,7 @@ let addUser = (req, res) => {
     //else create the user
 }
 
-let deleteUser = (req, res) => {
+const deleteUser = (req, res) => {
   User.destroy({
     where: {
       username: req.body.username,
