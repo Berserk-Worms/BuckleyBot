@@ -41,6 +41,7 @@
     "pg": "^6.0.3",
     "react": "^15.3.0",
     "react-dom": "^15.3.0",
+    "request": "^2.74.0",
     "sequelize": "^3.23.6"
   },
   "devDependencies": {
