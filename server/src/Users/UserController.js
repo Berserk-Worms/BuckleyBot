@@ -1,10 +1,44 @@
 import User from './UserModel';
 // import bcryt from 'bcryt-nodejs';
+import request from 'request';
+
 
 //some logic to query slack for slack_id and team_id
 //need to register app to receive client id and client secret
 let generateInfo = (token) => {
 
+}
+
+//auth user the first time they sign in with Slack
+const authUser = (req, res) => {
+  console.log('authenticating user!');
+  //check for error (perhaps they declined to sign in)
+  //if no error, extract code and swap for access token
+
+  console.log('this is the req.query:', req.query);
+
+  let options = {
+    uri: 'https://slack.com/api/oauth.access',
+    method:'GET',
+    qs: {
+      client_id: process.env.CLIENT_ID,
+      client_secret: process.env.CLIENT_SECRET,
+      code: req.query.code,
+      redirect_uri: 'http://localhost:8080/slack/users/auth'
+    }
+  }
+
+  //make get request to slack oauth.access
+  request(options, (err, response, body) => {
+    body = JSON.parse(body);
+
+    if (body.ok) {
+      console.log('response body', body);
+      // find or create user using access token and the info from body
+    } else {
+      //redirect to handle error
+    }
+  });
 }
 
 //we have a database of users based on slack bot interaction
@@ -85,5 +119,6 @@ const deleteUser = (req, res) => {
 export default {
   findUser: findUser,
   addUser: addUser,
-  deleteUser: deleteUser
+  deleteUser: deleteUser,
+  authUser: authUser
 };
