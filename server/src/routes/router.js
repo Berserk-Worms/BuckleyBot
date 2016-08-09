@@ -23,5 +23,9 @@ module.exports = (app, express) => {
   app.post('/slack/users/profile', profileController.addProfile);
   app.put('/slack/users/profile', profileController.updateProfile);
   app.delete('/slack/users/profile', profileController.deleteProfile);
-  
+
+  //////////////////////////////////////////////
+  //Handling Oauth
+  //////////////////////////////////////////////
+  app.get('/slack/users/auth', userController.authUser);
 }
