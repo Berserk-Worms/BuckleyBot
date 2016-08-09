@@ -16,7 +16,7 @@ const addTeam = (req, res) => {
       client_id: process.env.CLIENT_ID,
       client_secret: process.env.CLIENT_SECRET,
       code: code,
-      redirect_uri: 'http://localhost:8080/slack/teams/auth'
+      redirect_uri: process.env.SLACK_TEAM_REDIRECT_URI
     }
   }
 
@@ -30,7 +30,7 @@ const addTeam = (req, res) => {
     } else {
       //redirect to handle error
     }
-    
+
   });
 
 } 
