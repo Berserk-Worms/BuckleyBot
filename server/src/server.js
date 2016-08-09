@@ -1,5 +1,6 @@
 import express from 'express';
 import bodyParser from 'body-parser';
+import bot from './bot';
 //server config for middleware later
 // import server-config from './server-config';
 
