@@ -1,8 +1,6 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import bot from './bot';
-import dbConnect from './db/db-config';
-// import dbConnect from './db/db-config';
 import Sequelize from 'sequelize';
 import User from './Users/UserModel';
 // import routes from './routes/router';
