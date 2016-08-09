@@ -1,5 +1,5 @@
-import user from '../Users/UserQuery';
-import profile from '../Profile/ProfileQuery';
+import user from '../Users/UserController';
+import profile from '../Profile/ProfileController';
 
 module.exports = (app, express) => {
   //////////////////

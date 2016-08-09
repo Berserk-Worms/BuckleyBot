@@ -19,5 +19,5 @@ let Profile = db.define('profile', {
 //Add User ID to the profile as a foreign key
 Profile.hasOne(User, {foreignKey: 'fk_user'});
 
-module.export = Profile;
+export default Profile;
 

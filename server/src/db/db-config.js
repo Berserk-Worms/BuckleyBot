@@ -35,9 +35,8 @@ module.export = () => {
   db.authenticate()
     .then(err => {
       console.log('Connection has been established');
-    })
-    .catch(err => {
-      console.log('Unable to connect to the database, ', err);
-    });
+    }, (err) => {
+      console.log('Unable to connect to database: ', err);
+    }
 }
 

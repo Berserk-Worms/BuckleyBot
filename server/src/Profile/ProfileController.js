@@ -8,10 +8,11 @@ let findProfile = (req, res) => {
     }
   })
   .then(profile => {
-    res.send(profile);
+    res.json(profile);
   })
   .catch(err => {
     console.log('Error: ', err)
+    done(err);
   });
 };
 
@@ -28,8 +29,8 @@ let addProfile = (req, res) => {
     }
     //else create profile
     Profile.create({
-      bio_name:
-      bio_location:
+      bio_name: req.body.bio_name,
+      bio_location: req.body_bio_location
     })
     .then(profile => {
       console.log('Created new profile!');
@@ -54,9 +55,9 @@ let deleteProfile = (req, res) => {
   })
 };
 
-export.module = {
+export default {
   findProfile: findProfile,
   addProfile: addProfile,
   deleteProfile: deleteProfile
-}
+};
 

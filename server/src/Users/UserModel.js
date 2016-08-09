@@ -26,5 +26,5 @@ let User = db.define('user', {
   }
 });
 
-module.export = User;
+export default User;
 

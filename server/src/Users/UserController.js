@@ -17,7 +17,7 @@ const findUser = (req, res) => {
     }
   })
   .then(user => {
-    res.send(user);
+    res.json(user);
   })
   .catch(err => {
     console.log('Error: ', err);
@@ -44,8 +44,8 @@ const addUser = (req, res) => {
     User.create({
       username: req.body.username,
       access_token: SLACK_TOKEN,
-      slack_id: /*some slack_id queried using slack token*/,
-      team_id: /*some team_id queried using slack token*/
+      slack_id: '1111', /*some slack_id queried using slack token*/
+      team_id: '2222' /*some team_id queried using slack token*/
     })
     .then(user => {
       console.log('Created new user!');
@@ -77,8 +77,8 @@ const deleteUser = (req, res) => {
 }
 
 
-export.module = {
+export default {
   findUser: findUser,
   addUser: addUser,
   deleteUser: deleteUser
-}
+};
