@@ -1,19 +1,19 @@
-import user from '../Users/UserController';
-import profile from '../Profile/ProfileController';
+import userController from '../Users/UserController';
+import rrofileController from '../Profile/ProfileController';
 
 module.exports = (app, express) => {
   //////////////////
   //Handling Users
   //////////////////
-  app.get('/Slack/users', user.findUser);
-  app.post('/Slack/users', user.addUser);
-  app.delete('/Slack/users', user.deleteUser);
+  app.get('/Slack/users', userController.findUser);
+  app.post('/Slack/users', userController.addUser);
+  app.delete('/Slack/users', userController.deleteUser);
 
   //////////////////
   //Handling Profile
   //////////////////
-  app.get('/Slack/users/profile', profile.findProfile);
-  app.post('/Slack/users/profile', profile.addProfile);
-  app.delete('/Slack/users/profile', profile.deleteProfile);
+  app.get('/Slack/users/profile', profileController.findProfile);
+  app.post('/Slack/users/profile', profileController.addProfile);
+  app.delete('/Slack/users/profile', profileController.deleteProfile);
   
 }

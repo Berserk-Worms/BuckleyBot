@@ -2,34 +2,28 @@ import Sequelize from 'sequelize';
 
 //make path for production environment
 
-let db; 
-
-if (process.env.DATABASE_URL) {
-  db = new Sequelize(process.env.DATABASE_URL, {
+let db = process.env.DATABASE_URL === null ? 
+  new Sequelize(process.env.DATABASE_URL, {
     host: process.env.DATABASE_URL.split(':')[2],
     protocol: 'postgres',
-    dialect: 'postgres'
+    dialect: 'postgres',
 
-    , pool: {
+    pool: {
       max: 5,
       min: 0,
       idle: 10000
     }
-  })
-//and dev environment
-} else {
-  db = new Sequelize('uncle', null, null, {
+  }) : new Sequelize('uncle', null, null, {
     host: 'localhost',
     protocol: 'postgres',
-    dialect: 'postgres'
+    dialect: 'postgres',
 
-    , pool: {
+    pool: {
       max: 5,
       min: 0,
       idle: 10000
     }
-  })
-}
+  });
 
 db.authenticate()
   .then(err => {

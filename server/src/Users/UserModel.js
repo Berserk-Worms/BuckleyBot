@@ -1,5 +1,5 @@
 import db from '../db/db-config';
-import Sequelize from 'Sequelize';
+import Sequelize from 'sequelize';
 
 //generate a user model
 
