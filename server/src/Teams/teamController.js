@@ -20,8 +20,17 @@ const addTeam = (req, res) => {
     }
   }
 
-  request(options, (err, res, body) => {
-    console.log(body);
+  request(options, (err, response, body) => {
+    body = JSON.parse(body);
+
+    if (body.ok) {
+      // save team to database
+      // redirect to success page
+      res.redirect('/');
+    } else {
+      //redirect to handle error
+    }
+    
   });
 
 } 
