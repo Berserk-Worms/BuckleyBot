@@ -1,6 +1,10 @@
 import User from './UserModel';
+<<<<<<< ecb01819b8143dcea3e9d3bffdce19681896f6a4
 import request from 'request';
 
+=======
+// import bcryt from 'bcryt-nodejs';
+>>>>>>> Merge master into infra-conversation
 
 //some logic to query slack for slack_id and team_id
 //need to register app to receive client id and client secret
@@ -88,10 +92,17 @@ const addUser = (req, res) => {
       res.end()
     } else {
       User.create({
+<<<<<<< ecb01819b8143dcea3e9d3bffdce19681896f6a4
         name: req.body.username,
         accessToken: req.body.token,
         slackUserId: '1111', /*some slack_id queried using slack token*/
         teamId: '2222' /*some team_id queried using slack token*/
+=======
+        username: req.body.username,
+        access_token: req.body.token,
+        slack_id: '1111', /*some slack_id queried using slack token*/
+        team_id: '2222' /*some team_id queried using slack token*/
+>>>>>>> Merge master into infra-conversation
       })
       .then(user => {
         console.log('Created new user!');

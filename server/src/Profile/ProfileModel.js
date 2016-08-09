@@ -4,8 +4,22 @@ import User from '../Users/UserModel';
 
 //generate a profile model
 let Profile = db.define('profile', {
+<<<<<<< ecb01819b8143dcea3e9d3bffdce19681896f6a4
   name: Sequelize.STRING, 
   location: Sequelize.STRING
+=======
+  id: {
+    type: Sequelize.INTEGER,
+    primaryKey: true,
+    autoIncrement: true
+  },
+  name: {
+    type: Sequelize.STRING
+  }, 
+  location: {
+    type: Sequelize.STRING
+  }
+>>>>>>> Merge master into infra-conversation
 });
 
 //Add User ID to the profile as a foreign key
