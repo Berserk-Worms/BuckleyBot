@@ -1,6 +1,6 @@
 import db from '../db/db-config';
-import User from '../Users/UserModel';
 import Sequelize from 'sequelize';
+import User from '../Users/UserModel';
 
 //generate a profile model
 let Profile = db.define('profile', {
@@ -9,16 +9,23 @@ let Profile = db.define('profile', {
     primaryKey: true,
     autoIncrement: true
   },
-  bio_name: {
+  name: {
     type: Sequelize.STRING
   }, 
-  bio_location: {
+  location: {
     type: Sequelize.STRING
   }
 });
 
 //Add User ID to the profile as a foreign key
-Profile.hasOne(User, {foreignKey: 'fk_user'});
+Profile.belongsTo(User);
+
+Profile.sync()
+  .then(err => {
+    console.log('Profile table is connected')
+  }, err => {
+    console.log('An error occured while generating the Profile table')
+  });
 
 export default Profile;
 

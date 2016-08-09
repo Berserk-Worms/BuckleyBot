@@ -30,9 +30,9 @@ let User = db.define('user', {
 
 User.sync()
   .then(err => {
-    console.log('WORKED!')
+    console.log('User table is connected')
   }, err => {
-    console.log('An error occured while generating table.')
+    console.log('An error occured while generating the User table.')
   });
 
 export default User;

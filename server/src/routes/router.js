@@ -14,6 +14,7 @@ module.exports = (app, express) => {
   //////////////////
   app.get('/Slack/users/profile', profileController.findProfile);
   app.post('/Slack/users/profile', profileController.addProfile);
+  app.put('/Slack/users/profile', profileController.updateProfile);
   app.delete('/Slack/users/profile', profileController.deleteProfile);
   
 }
