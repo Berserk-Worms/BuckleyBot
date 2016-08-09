@@ -1,63 +1,87 @@
 import db from '../db/db-config';
 import Profile from './ProfileModel';
 
-let findProfile = (req, res) => {
+
+const findProfile = (req, res) => {
+
+  let userId = req.query.userId;
+
   Profile.findOne({
-    where: {
-      //logic to find key value 
-    }
+    where: { userId }
   })
   .then(profile => {
     res.json(profile);
   })
   .catch(err => {
-    console.log('Error: ', err)
-    done(err);
+    res.send('Profile was not found');
   });
 };
 
-let addProfile = (req, res) => {
+const addProfile = (req, res) => {  
+
+  let userId = req.body.userId;
+  let name = req.body.name;
+  let location = req.body.location;
+
   Profile.count({
-    where: {
-      //logic to find key value 
-    }
+    where: { userId }
   })
   .then(count => {
-    if (count !== 0) {
-      console.log('Profile already exists.');
-      res.end();
-    }
-    //else create profile
-    Profile.create({
-      bio_name: req.body.bio_name,
-      bio_location: req.body_bio_location
-    })
+
+    if (count !== 0) { res.send('Profile already exists'); }
+
+    Profile.create({ name, location })
     .then(profile => {
-      console.log('Created new profile!');
-      res.end();
+      res.send('New profile created')
     })
+    .catch(err => {
+      res.send('Profile creation failed')
+    });
+
   })
 };
 
-let deleteProfile = (req, res) => {
-  User.destroy({
-    where: {
-      //logic to find key value 
-    }
+const updateProfile = (req, res) => {
+  let userId = req.body.userId;
+  let name = req.body.name;
+  let location = req.body.location;
+
+  Profile.find({
+    where: { userId }
   })
   .then(profile => {
-    console.log('deleted profile: ', profile);
-    res.end();
+
+    if(profile) {
+      profile.updateAttributes({ name, location })
+      .then(profile => res.send('Profile has been updated'))
+      .catch(err => res.send('Error updating profile'))
+    } else {
+      res.send('Profile not found')
+    }
+
+  })
+  .catch(err => console.log(err));
+
+};
+
+const deleteProfile = (req, res) => {
+  let userId = req.body.userId;
+
+  Profile.destroy({
+    where: { userId }
+  })
+  .then(profile => {
+    res.send('Profile successfully deleted');
   })
   .catch(err => {
-    console.log('Error: ', err);
-    done(err);
+    res.send('Profile deletion failed');
   })
 };
 
 export default {
   findProfile: findProfile,
   addProfile: addProfile,
+  updateProfile: updateProfile,
   deleteProfile: deleteProfile
 };
 
