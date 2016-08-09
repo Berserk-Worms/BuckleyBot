@@ -12,8 +12,8 @@ controller.spawn({
 
 controller.hears('', ['direct_message'], function(bot, message) {
   console.log('replying to message');
-  let responses = ["I'm grumpy if I don't get my macros in"]
-  bot.reply(message, responses[Math.floor(Math.random()*responses.length)]);
+  let responses = ["Yooo It's your boi JBuxxx, wats good?"]
+  bot.reply(message, responses[0]);
 });
 
 
