@@ -9,7 +9,8 @@ const UNCLE = Botkit.slackbot({
 UNCLE.spawn({
   //Create .env file in the root directory and add SLACK_BOT_TOKEN
   token: process.env.SLACK_BOT_TOKEN
-}).startRTM();
+});
+// }).startRTM();
 
 UNCLE.hears("", ['direct_message'], function(bot, message) {
   console.log('replying to message');

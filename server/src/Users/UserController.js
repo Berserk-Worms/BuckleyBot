@@ -1,5 +1,5 @@
-import User from 'UserModel';
-import bcryt from 'bcryt-nodejs';
+import User from './UserModel';
+// import bcryt from 'bcryt-nodejs';
 
 //some logic to query slack for slack_id and team_id
 //need to register app to receive client id and client secret
@@ -38,19 +38,24 @@ const addUser = (req, res) => {
     if (count !== 0) {
       console.log('User already exists');
       res.end()
-    }
+    } else {
+      User.create({
+        username: req.body.username,
+        access_token: req.body.token,
+        slack_id: '1111', /*some slack_id queried using slack token*/
+        team_id: '2222' /*some team_id queried using slack token*/
+      })
+      .then(user => {
+        console.log('Created new user!');
+        res.end();
+      })
+      .catch(err => {
+        console.log('Error creating user...');
+        done(err)
+      }) 
+    }   
     //else create user
     //when a new user is added, need to generate a hash
-    User.create({
-      username: req.body.username,
-      access_token: SLACK_TOKEN,
-      slack_id: '1111', /*some slack_id queried using slack token*/
-      team_id: '2222' /*some team_id queried using slack token*/
-    })
-    .then(user => {
-      console.log('Created new user!');
-      res.end();
-    })
   })
   .catch(err => {
     console.log('Error: ', err);

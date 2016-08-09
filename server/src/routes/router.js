@@ -1,5 +1,5 @@
 import userController from '../Users/UserController';
-import rrofileController from '../Profile/ProfileController';
+import profileController from '../Profile/ProfileController';
 
 module.exports = (app, express) => {
   //////////////////
@@ -14,6 +14,7 @@ module.exports = (app, express) => {
   //////////////////
   app.get('/Slack/users/profile', profileController.findProfile);
   app.post('/Slack/users/profile', profileController.addProfile);
+  app.put('/Slack/users/profile', profileController.updateProfile);
   app.delete('/Slack/users/profile', profileController.deleteProfile);
   
 }
