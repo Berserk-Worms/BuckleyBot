@@ -1,6 +1,7 @@
 import db from '../db/db-config';
 import Profile from './ProfileModel';
 
+
 const findProfile = (req, res) => {
   let userId = req.query.userId;
 
@@ -17,17 +18,11 @@ const addProfile = (req, res) => {
   let name = req.body.name;
   let location = req.body.location;
 
-  Profile.count({
-    where: { userId }
+  Profile.findOrCreate({
+    where: { name, location, userId }
   })
-  .then(count => {
-
-    if (count !== 0) { res.send('Profile already exists'); }
-
-    Profile.create({ name, location })
-      .then(profile => res.send('New profile created'))
-      .catch(err => res.send('Profile creation failed'));
-
+  .spread( (profile, created) => {
+    created ? res.send('Profile created') : res.send('Profile already exists');
   })
   .catch(err => res.send(err));
 

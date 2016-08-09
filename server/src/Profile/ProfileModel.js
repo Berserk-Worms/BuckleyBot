@@ -1,7 +1,6 @@
 import db from '../db/db-config';
 import Sequelize from 'sequelize';
 import User from '../Users/UserModel';
-import Sequelize from 'sequelize';
 
 //generate a profile model
 let Profile = db.define('profile', {
@@ -23,7 +22,7 @@ Profile.belongsTo(User);
 
 Profile.sync()
   .then(err => {
-    console.log('Profile Table is connected')
+    console.log('Profile table is connected')
   }, err => {
     console.log('An error occured while generating the Profile table')
   });

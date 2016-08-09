@@ -29,7 +29,7 @@ let db = process.env.DATABASE_URL === null ?
 
 db.authenticate()
   .then(err => {
-    console.log('Connection has been established');
+    console.log('Database connection has been established');
   }, (err) => {
     console.log('Unable to connect to database: ', err);
   });
