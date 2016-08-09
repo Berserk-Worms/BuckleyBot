@@ -1,5 +1,5 @@
 import db from '../db/db-config';
-import User from '../Users/ProfileModel';
+import Profile from './ProfileModel';
 
 let findProfile = (req, res) => {
   Profile.findOne({

@@ -1,5 +1,5 @@
 import userController from '../Users/UserController';
-import rrofileController from '../Profile/ProfileController';
+import profileController from '../Profile/ProfileController';
 
 module.exports = (app, express) => {
   //////////////////
