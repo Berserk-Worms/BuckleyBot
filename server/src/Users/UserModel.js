@@ -9,7 +9,7 @@ let User = db.define('user', {
     primaryKey: true,
     autoIncrement: true
   },
-  username: {
+  name: {
     type: Sequelize.STRING
   }, 
   access_token: {
@@ -18,12 +18,15 @@ let User = db.define('user', {
   //Slack id retrieved at https://slack.com/api/users.list
   //and returns all member id in a team. slack_id under
   //members[n].id
-  slack_id: {
+  slack_user_id: {
     type: Sequelize.STRING
   },
   //team id retrieved at https://slack.com/api/team.info
   //and returns team info. team_id under team.id
   team_id: {
+    type: Sequelize.STRING
+  },
+  email: {
     type: Sequelize.STRING
   }
 });

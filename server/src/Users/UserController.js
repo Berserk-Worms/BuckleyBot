@@ -34,9 +34,24 @@ const authUser = (req, res) => {
 
     if (body.ok) {
       console.log('response body', body);
+      //TODO: refactor and make sure we aren't repeating ourselves
+      let name = body.user.name;
+      let access_token = body.access_token;
+      let slack_user_id = body.user.id;
+      let team_id = body.team.id;
+      let email = body.user.email;
+
+      User.findOrCreate({
+        where: {name, access_token, slack_user_id, team_id, email}
+      })
+      .spread((user, create) => {
+        created ? res.send('User created') : res.send('User already exists.');
+      })
+      .catch(err => res.send(err));
       // find or create user using access token and the info from body
     } else {
       //redirect to handle error
+      console.log('Error: ', err);
     }
   });
 }
