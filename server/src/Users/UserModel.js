@@ -1,4 +1,5 @@
 import db from '../db/db-config';
+import Team from '../Teams/teamModel'; 
 import Sequelize from 'sequelize';
 
 //generate a user model
@@ -15,6 +16,8 @@ let User = db.define('user', {
   teamId: Sequelize.STRING,
   email: Sequelize.STRING
 });
+
+User.belongsTo(Team);
 
 User.sync()
   .then(err => {

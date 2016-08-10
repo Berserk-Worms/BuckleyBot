@@ -5,8 +5,6 @@ import request from 'request';
 
 const addTeam = (req, res) => {
 
-  console.log('this should show up twice if redirected');
-
   let code = req.query.code;
 
   let options = {
@@ -22,13 +20,27 @@ const addTeam = (req, res) => {
 
   request(options, (err, response, body) => {
     body = JSON.parse(body);
+    let slackTeamData = {
+      slackTeamToken: body.access_token,
+      slackTeamName: body.team_name,
+      slackTeamId: body.team_id,
+      slackBotId: body.bot.bot_user_id,
+      slackBotToken: body.bot.bot_access_token
+    }
 
     if (body.ok) {
-      // save team to database
-      // redirect to success page
-      res.redirect('/');
+      Team.findOrCreate({ where : slackTeamData })
+        .spread( (team, created) => {
+          res.redirect('/');
+        })
+        .catch(err => {
+          //TODO: redirect to error page
+          res.redirect('/');
+        })
+
     } else {
-      //redirect to handle error
+      //TODO: redirect to error page
+      res.redirect('/');
     }
 
   });

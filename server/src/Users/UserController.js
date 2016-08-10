@@ -1,5 +1,4 @@
 import User from './UserModel';
-// import bcryt from 'bcryt-nodejs';
 import request from 'request';
 
 
