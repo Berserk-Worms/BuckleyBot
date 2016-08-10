@@ -13,7 +13,7 @@ let User = db.define('user', {
   slackUserId: Sequelize.STRING,
   //team id retrieved at https://slack.com/api/team.info
   //and returns team info. team_id under team.id
-  teamId: Sequelize.STRING,
+  slackTeamId: Sequelize.STRING,
   email: Sequelize.STRING
 });
 

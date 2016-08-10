@@ -1,5 +1,7 @@
 import User from './userModel';
+import Profile from '../profile/profileModel'
 import request from 'request';
+import rp from 'request-promise';
 
 //some logic to query slack for slack_id and team_id
 //need to register app to receive client id and client secret
@@ -74,41 +76,37 @@ const findUser = (req, res) => {
 
 //Adduser if not created, otherwise will return user info
 const addUser = (req, res) => {
-  User.count({
-    where: {
-      name: req.body.username
-    }
-  })
-  //find if user is currently in database, 
-  .then(count => {
-    //if in database, throw err
-    if (count !== 0) {
-      console.log('User already exists');
-      res.end()
-    } else {
-      User.create({
-        name: req.body.username,
-        accessToken: req.body.token,
-        slackUserId: '1111', /*some slack_id queried using slack token*/
-        teamId: '2222' /*some team_id queried using slack token*/
-      })
-      .then(user => {
-        console.log('Created new user!');
-        res.end();
-      })
-      .catch(err => {
-        console.log('Error creating user...');
-        done(err)
-      }) 
-    }   
-    //else create user
-    //when a new user is added, need to generate a hash
-  })
-  .catch(err => {
-    console.log('Error: ', err);
-    done(err);
-  })
-    //else create the user
+  let users = req.body.users;
+  let teamId = req.body.teamId;
+  let accessToken = null;
+
+  users.forEach( ({ name, slackUserId, slackTeamId, email }) => {
+    
+    User.findOrCreate({
+      where: { name, accessToken, slackUserId, slackTeamId, email, teamId }
+    })
+    .spread ((user, created) => {
+      let userId = user.id;
+      let name = user.name;
+      let location = 'San Francisco';
+
+      if(created) {
+        console.log(user.name + ' added');
+        Profile.findOrCreate({ where: { userId, name, location } })
+          .spread((profile, created) => {
+            created ? console.log('profile created') : console.log('profile already exists'); 
+          })
+          .catch(err => console.log(err));
+
+      } else {
+        console.log(user.name + ' exists');
+      }
+
+    })
+    .catch(err => console.log(err));   
+
+  });
+
 }
 
 const deleteUser = (req, res) => {
@@ -129,9 +127,4 @@ const deleteUser = (req, res) => {
 }
 
 
-export default {
-  findUser: findUser,
-  addUser: addUser,
-  deleteUser: deleteUser,
-  authUser: authUser
-};
+export default { findUser, addUser, deleteUser, authUser };
