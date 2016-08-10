@@ -27,7 +27,7 @@ const authUser = (req, res) => {
     }
   }
 
-  request(options)
+  rp(options)
     .then(body => {
       body = JSON.parse(body);
 
@@ -77,6 +77,8 @@ const findUser = (req, res) => {
 };
 
 //Adduser if not created, otherwise will return user info
+//users need to passed as a array even if it's a single user
+//accessToken is set to null initially 
 const addUser = (req, res) => {
   let users = req.body.users;
   let teamId = req.body.teamId;

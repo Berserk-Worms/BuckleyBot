@@ -84,6 +84,7 @@ const findTeamUsers = (team) => {
 
 const parseUsersInfo = (users) => {
   return users.filter((user) => {
+    // Slack bot is considered a bot so it needs to be omitted
     return user.is_bot === false && user.id !== 'USLACKBOT'
   })
   .map((user) => {
