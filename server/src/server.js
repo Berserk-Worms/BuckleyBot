@@ -1,6 +1,6 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import bot from './bot';
+import bot from './bot/bot';
 import Sequelize from 'sequelize';
 import routes from './routes/router';
 
