@@ -1,5 +1,5 @@
 import db from '../db/db-config';
-import Team from './TeamModel';
+import Team from './teamModel';
 import request from 'request';
 
 

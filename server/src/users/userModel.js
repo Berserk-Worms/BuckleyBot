@@ -1,5 +1,5 @@
 import db from '../db/db-config';
-import Team from '../Teams/teamModel'; 
+import Team from '../teams/teamModel'; 
 import Sequelize from 'sequelize';
 
 //generate a user model
