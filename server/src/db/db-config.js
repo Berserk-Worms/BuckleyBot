@@ -8,8 +8,6 @@ let db = new Sequelize(databaseUrl, {
   host: host,
   protocol: 'postgres',
   dialect: 'postgres',
-
-<<<<<<< ecb01819b8143dcea3e9d3bffdce19681896f6a4
   pool: {
     max: 5,
     min: 0,
@@ -17,26 +15,6 @@ let db = new Sequelize(databaseUrl, {
   },
   logging: false
 });
-=======
-    pool: {
-      max: 5,
-      min: 0,
-      idle: 10000
-    },
-    logging: false
-  }) : new Sequelize('uncle', null, null, {
-    host: 'localhost',
-    protocol: 'postgres',
-    dialect: 'postgres',
-
-    pool: {
-      max: 5,
-      min: 0,
-      idle: 10000
-    },
-    logging: false
-  });
->>>>>>> Merge master into infra-conversation
 
 db.authenticate()
   .then(err => {
