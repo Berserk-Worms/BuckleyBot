@@ -1,7 +1,5 @@
 import User from './UserModel';
-// import bcryt from 'bcryt-nodejs';
 import request from 'request';
-
 
 //some logic to query slack for slack_id and team_id
 //need to register app to receive client id and client secret

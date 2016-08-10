@@ -2,8 +2,7 @@ import teamController from '../Teams/teamController';
 import userController from '../Users/UserController';
 import profileController from '../Profile/ProfileController';
 
-module.exports = (app, express) => {
-  
+export default (app, express) => {
   //////////////////////////////////////////////
   //Handling Team Oauth
   //////////////////////////////////////////////
