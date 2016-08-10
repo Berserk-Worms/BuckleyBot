@@ -1,6 +1,6 @@
-import teamController from '../Teams/teamController';
-import userController from '../Users/UserController';
-import profileController from '../Profile/ProfileController';
+import teamController from '../teams/teamController';
+import userController from '../users/userController';
+import profileController from '../profile/profileController';
 
 export default (app, express) => {
   //////////////////////////////////////////////

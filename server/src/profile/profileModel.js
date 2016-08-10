@@ -1,6 +1,6 @@
 import db from '../db/db-config';
 import Sequelize from 'sequelize';
-import User from '../Users/UserModel';
+import User from '../users/userModel';
 
 //generate a profile model
 let Profile = db.define('profile', {

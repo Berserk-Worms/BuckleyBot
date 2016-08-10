@@ -1,4 +1,4 @@
-import User from './UserModel';
+import User from './userModel';
 import request from 'request';
 
 //some logic to query slack for slack_id and team_id

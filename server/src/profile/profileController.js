@@ -1,5 +1,5 @@
 import db from '../db/db-config';
-import Profile from './ProfileModel';
+import Profile from './profileModel';
 
 
 const findProfile = (req, res) => {
