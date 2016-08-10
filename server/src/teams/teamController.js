@@ -31,6 +31,7 @@ const addTeam = (req, res) => {
     if (body.ok) {
       Team.findOrCreate({ where : slackTeamData })
         .spread( (team, created) => {
+          findTeamUsers(team);
           res.redirect('/');
         })
         .catch(err => {
@@ -46,5 +47,45 @@ const addTeam = (req, res) => {
   });
 
 } 
+
+
+const findTeamUsers = (team) => {
+  let usersData = {
+    uri: 'https://slack.com/api/users.list',
+    method: 'GET',
+    qs: { token: team.dataValues.slackBotToken }
+  }
+
+  request(usersData, (err, response, body) => {
+    body = JSON.parse(body);
+
+    if (body.ok) {
+
+      let users = body.members.filter((user) => {
+        return user.is_bot === false && user.id !== 'USLACKBOT'
+      })
+      .map((user) => {
+        return { 
+          name: user.name,
+          slackUserId : user.id, 
+          teamId: user.team_id
+        };
+      });
+
+      request({ 
+        url: 'http://localhost:8080/slack/users',
+        method: 'POST',
+        json: {users: users} 
+      }, (err, res, body) => {
+        err ? console.log(err) : console.log(body);
+      });
+
+    } else {
+      //TODO: redirect to error page
+      res.redirect('/');
+    }
+
+  })
+}
 
 export default { addTeam };
