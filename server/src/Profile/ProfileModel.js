@@ -4,17 +4,8 @@ import User from '../Users/UserModel';
 
 //generate a profile model
 let Profile = db.define('profile', {
-  id: {
-    type: Sequelize.INTEGER,
-    primaryKey: true,
-    autoIncrement: true
-  },
-  name: {
-    type: Sequelize.STRING
-  }, 
-  location: {
-    type: Sequelize.STRING
-  }
+  name: Sequelize.STRING, 
+  location: Sequelize.STRING
 });
 
 //Add User ID to the profile as a foreign key
