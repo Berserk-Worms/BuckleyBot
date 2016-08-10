@@ -21,13 +21,13 @@ let askFirstName = (response, convo) => {
     convo.say("Nice to meet you " + response.text + "!");
     askLocation(response, convo);
     convo.next();
-  })
+  });
 }
 
 let askLocation = (response, convo) => {
   convo.ask("Where are you from?", (response, convo) => {
     convo.say("I heard that " + response.text + " is a great place. Well I'll be here to help you out if you need me!")
     convo.next();
-  })
+  });
 }
 
