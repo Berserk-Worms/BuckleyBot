@@ -1,6 +1,5 @@
 import User from './userModel';
 import Profile from '../profile/profileModel'
-import request from 'request';
 import rp from 'request-promise';
 
 //some logic to query slack for slack_id and team_id
@@ -28,32 +27,35 @@ const authUser = (req, res) => {
     }
   }
 
-  //make get request to slack oauth.access
-  request(options, (err, response, body) => {
-    body = JSON.parse(body);
+  request(options)
+    .then(body => {
+      body = JSON.parse(body);
 
-    if (body.ok) {
-      console.log('response body', body);
-      //TODO: refactor and make sure we aren't repeating ourselves
-      let name = body.user.name;
-      let accessToken = body.access_token;
-      let slackUserId = body.user.id;
-      let teamId = body.team.id;
-      let email = body.user.email;
+      if (body.ok) {
+        console.log('response body', body);
+        //TODO: refactor and make sure we aren't repeating ourselves
+        let name = body.user.name;
+        let accessToken = body.access_token;
+        let slackUserId = body.user.id;
+        let teamId = body.team.id;
+        let email = body.user.email;
 
-      User.findOrCreate({
-        where: {name, accessToken, slackUserId, teamId, email}
-      })
-      .spread((user, create) => {
-        created ? res.send('User created') : res.send('User already exists.');
-      })
-      .catch(err => res.send(err));
-      // find or create user using access token and the info from body
-    } else {
-      //redirect to handle error
-      console.log('Error: ', err);
-    }
-  });
+        User.findOrCreate({
+          where: {name, accessToken, slackUserId, teamId, email}
+        })
+        .spread((user, create) => {
+          created ? res.send('User created') : res.send('User already exists.');
+        })
+        .catch(err => res.send(err));
+        // find or create user using access token and the info from body
+      } else {
+        //redirect to handle error
+        console.log('Error: ', err);
+      }
+
+    })
+    .catch(err => res.redirect('/'));
+
 }
 
 //we have a database of users based on slack bot interaction

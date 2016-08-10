@@ -1,6 +1,7 @@
 import db from '../db/db-config';
 import Sequelize from 'sequelize';
 
+//Generates Team model
 let Team = db.define('team', {
   slackTeamToken: Sequelize.STRING,
   slackTeamName: Sequelize.STRING,

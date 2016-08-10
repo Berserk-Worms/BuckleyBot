@@ -1,4 +1,3 @@
-import db from '../db/db-config';
 import Profile from './profileModel';
 
 

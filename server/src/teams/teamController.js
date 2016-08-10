@@ -1,12 +1,8 @@
-import db from '../db/db-config';
 import Team from './teamModel';
-import request from 'request';
 import rp from 'request-promise';
 
 const addTeam = (req, res) => {
-
   let code = req.query.code;
-
   let options = {
     uri: 'https://slack.com/api/oauth.access',
     method:'GET',
@@ -54,43 +50,50 @@ const findTeamUsers = (team) => {
   let teamId = team.dataValues.id;
   let token = team.dataValues.slackBotToken;
 
-  let usersData = {
+  let teamUsersData = {
     uri: 'https://slack.com/api/users.list',
     method: 'GET',
     qs: { token }
   }
 
-  request(usersData, (err, response, body) => {
-    body = JSON.parse(body);
+  rp(teamUsersData)
+    .then(body => {
+      body = JSON.parse(body);
 
-    if (body.ok) {
+      if (body.ok) {
 
-      let users = body.members.filter((user) => {
-        return user.is_bot === false && user.id !== 'USLACKBOT'
-      })
-      .map((user) => {
-        return { 
-          name: user.name,
-          slackUserId : user.id, 
-          slackTeamId: user.team_id,
-          email: user.profile.email
-        };
-      });
+        let users = parseUsersInfo(body.members);
 
-      request({ 
-        url: 'http://localhost:8080/slack/users',
-        method: 'POST',
-        json: { users, teamId } 
-      }, (err, res, body) => {
-        err ? console.log(err) : console.log(body);
-      });
+        let usersData = { 
+          url: 'http://localhost:8080/slack/users',
+          method: 'POST',
+          json: { users, teamId } 
+        }
 
-    } else {
-      //TODO: redirect to error page
-      res.redirect('/');
-    }
+        rp(usersData)
+        .then(body => console.log(body))
+        .catch(err => console.log(err));
 
+      } else {
+        //TODO: redirect to error page
+        res.redirect('/');
+      }
+    }) 
+    .catch(err => console.log(err));
+}
+
+const parseUsersInfo = (users) => {
+  return users.filter((user) => {
+    return user.is_bot === false && user.id !== 'USLACKBOT'
   })
+  .map((user) => {
+    return { 
+      name: user.name,
+      slackUserId : user.id, 
+      slackTeamId: user.team_id,
+      email: user.profile.email
+    };
+  });
 }
 
 export default { addTeam };
