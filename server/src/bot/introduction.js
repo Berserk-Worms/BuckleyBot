@@ -4,14 +4,14 @@ import BUCKLEY from '../bot.js';
 
 //Init convo by accepting an argument of created Profile
 const intro = (createdProfile) => {
-  User.findAll({
+  User.find({
     where: {id: createdProfile.userId}
   })
   .then(user => {
-    let id = user[0].dataValues.slackUserId;
+    let id = user.dataValues.slackUserId;
     //console logs
-    console.log(`----------\nthis is the userid: ${user[0].dataValues.id}, ` +
-      `and the slackId: ${user[0].dataValues.slackUserId}\n----------`);
+    console.log(`----------\nthis is the userid: ${user.dataValues.id}, ` +
+      `and the slackId: ${user.dataValues.slackUserId}\n----------`);
 
     BUCKLEY.startPrivateConversation(
       //hard coded for testing
@@ -31,7 +31,7 @@ const askName = (response, convo) => {
   convo.ask("Sweet! Nice to meet you. My Name is Buckley, What's yours?", (response, convo) => {
     console.log('This is the response: ', response);
     convo.say("Nice to meet you " + response.text + "!");
-    update(response, {name: response.text});
+    updateProfile(response, {name: response.text});
     askLocation(response, convo);
     convo.next();
   });
@@ -41,12 +41,12 @@ const askLocation = (response, convo) => {
   convo.ask("Where are you from?", (response, convo) => {
     convo.say(`I heard that ${response.text} is a great place.` +
       `Well I'll be here to help you out if you need me!`);
-    update(response, {location: response.text})
+    updateProfile(response, {location: response.text})
     convo.next();
   });
 }
 
-const update = (response, kvPair) => {
+const updateProfile = (response, profilePayload) => {
   User.find({
     where: {slackUserId: response.user}
   })
@@ -55,7 +55,7 @@ const update = (response, kvPair) => {
       where: {userId: user.id}
     })
     .then(profile => {
-      profile.updateAttributes(kvPair)
+      profile.updateAttributes(profilePayload)
         .then(() => console.log('Profile has been updated!'))
         .catch(() => console.log('Could not update profile.'));
     });
