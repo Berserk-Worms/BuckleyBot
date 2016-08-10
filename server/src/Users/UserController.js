@@ -34,9 +34,24 @@ const authUser = (req, res) => {
 
     if (body.ok) {
       console.log('response body', body);
+      //TODO: refactor and make sure we aren't repeating ourselves
+      let name = body.user.name;
+      let accessToken = body.access_token;
+      let slackUserId = body.user.id;
+      let teamId = body.team.id;
+      let email = body.user.email;
+
+      User.findOrCreate({
+        where: {name, accessToken, slackUserId, teamId, email}
+      })
+      .spread((user, create) => {
+        created ? res.send('User created') : res.send('User already exists.');
+      })
+      .catch(err => res.send(err));
       // find or create user using access token and the info from body
     } else {
       //redirect to handle error
+      console.log('Error: ', err);
     }
   });
 }
@@ -46,8 +61,8 @@ const authUser = (req, res) => {
 const findUser = (req, res) => {
   User.findOne({
     where: {
-      username: req.body.username,
-      slack_id: req.body.slack_id
+      name: req.body.username,
+      slackId: req.body.slack_id
     }
   })
   .then(user => {
@@ -63,7 +78,7 @@ const findUser = (req, res) => {
 const addUser = (req, res) => {
   User.count({
     where: {
-      username: req.body.username
+      name: req.body.username
     }
   })
   //find if user is currently in database, 
@@ -74,10 +89,10 @@ const addUser = (req, res) => {
       res.end()
     } else {
       User.create({
-        username: req.body.username,
-        access_token: req.body.token,
-        slack_id: '1111', /*some slack_id queried using slack token*/
-        team_id: '2222' /*some team_id queried using slack token*/
+        name: req.body.username,
+        accessToken: req.body.token,
+        slackUserId: '1111', /*some slack_id queried using slack token*/
+        teamId: '2222' /*some team_id queried using slack token*/
       })
       .then(user => {
         console.log('Created new user!');
@@ -101,8 +116,8 @@ const addUser = (req, res) => {
 const deleteUser = (req, res) => {
   User.destroy({
     where: {
-      username: req.body.username,
-      slack_id: req.body.slack_id
+      name: req.body.username,
+      slackUserId: req.body.slack_id
     }
   })
   .then(user => {
