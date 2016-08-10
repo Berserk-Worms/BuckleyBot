@@ -1,6 +1,6 @@
 import User from '../users/userModel';
 import Profile from '../profile/profileModel';
-import BUCKLEY from '../bot';
+import BUCKLEY from '../bot.js';
 
 //Init convo by accepting an argument of created Profile
 const intro = (createdProfile) => {
@@ -8,10 +8,10 @@ const intro = (createdProfile) => {
     where: {id: createdProfile.userId}
   })
   .then(user => {
+    let id = user[0].dataValues.slackUserId;
+    //console logs
     console.log(`----------\nthis is the userid: ${user[0].dataValues.id}, ` +
       `and the slackId: ${user[0].dataValues.slackUserId}\n----------`);
-
-    let id = user[0].dataValues.slackUserId;
 
     BUCKLEY.startPrivateConversation(
       //hard coded for testing
