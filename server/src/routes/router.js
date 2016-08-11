@@ -1,6 +1,9 @@
-import teamController from '../teams/teamController';
 import userController from '../users/userController';
 import profileController from '../profile/profileController';
+import teamController from '../teams/teamController';
+import jobController from '../jobs/jobController';
+import tagController from '../tags/tagController'
+import jobTagController from '../jobs_tags/jobTagController';
 
 export default (app, express) => {
   //////////////////////////////////////////////

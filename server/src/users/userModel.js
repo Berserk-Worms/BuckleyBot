@@ -17,7 +17,6 @@ let User = db.define('user', {
   email: Sequelize.STRING
 });
 
-User.belongsTo(Team);
 
 User.sync()
   .then(err => {
@@ -25,6 +24,8 @@ User.sync()
   }, err => {
     console.log('An error occured while generating the User table.')
   });
+
+
 
 export default User;
 
