@@ -55,7 +55,6 @@ const authUser = (req, res) => {
 
     })
     .catch(err => res.redirect('/'));
-
 }
 
 //we have a database of users based on slack bot interaction

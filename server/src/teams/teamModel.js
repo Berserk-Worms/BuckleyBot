@@ -1,5 +1,6 @@
 import db from '../db/db-config';
 import Sequelize from 'sequelize';
+import { teams } from '../bot'
 
 //Generates Team model
 let Team = db.define('team', {
@@ -8,6 +9,13 @@ let Team = db.define('team', {
   slackTeamId: Sequelize.STRING,
   slackBotId: Sequelize.STRING,
   slackBotToken: Sequelize.STRING
+});
+
+Team.hook('afterCreate', (team, options) => {
+  //invoke the method from bot.js for looping through teams
+  //this will allow the bot.js store to have {teamid: instance of bot}
+  //of the newly created team
+  teams();
 });
 
 Team.sync()
