@@ -39,6 +39,6 @@ export default (app, express) => {
   //////////////////////////////////////////////
   //Handling Tag
   //////////////////////////////////////////////
-  app.post('/api/tags', tagController.addTags);
+  app.post('/api/tags/job', tagController.addJobTags);
 
 }

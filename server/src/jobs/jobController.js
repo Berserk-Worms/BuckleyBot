@@ -21,7 +21,7 @@ const addJob = (req, res) => {
       if (created) {
         console.log('created new job', job.dataValues.title);
         request({
-          url: 'http://localhost:8080/api/tags',
+          url: 'http://localhost:8080/api/tags/job',
           method: 'POST',
           json: { job, tagsData }
         }, (err, resp, body) => {
