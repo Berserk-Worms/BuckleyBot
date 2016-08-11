@@ -1,4 +1,4 @@
-import rp from 'rp';
+import rp from 'request-promise';
 import FeedParser from 'feedparser';
 
 
