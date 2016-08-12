@@ -11,9 +11,9 @@ let Job = db.define('job', {
 });
 
 Job.sync()
-  .then(err => {
+  .then(() => {
     console.log('Job table is connected')
-  }, err => {
+  }, (err) => {
     console.log('An error occured while generating the Job table')
   });
 

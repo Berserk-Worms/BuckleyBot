@@ -9,17 +9,19 @@ let getJobsFromStackOverflow = () => {
 
   req.on('error', function(err) {
     throw err;
-  })
+  });
 
   req.on('response', function(res) {
-    if (res.statusCode != 200) return this.emit('error', new Error('Bad status code'));
+    if (res.statusCode !== 200) {
+      return this.emit('error', new Error('Bad status code'));
+    } 
     //Pipe data from request stream to feedparser
     this.pipe(parser);
   })
 
   parser.on('error', function(err) {
     throw err;
-  })
+  });
 
   //Do something when there is data being piped in
   parser.on('readable', function() {
@@ -48,10 +50,15 @@ let getJobsFromStackOverflow = () => {
           json: { jobData, tagsData } 
         }
         //send data to server
-        request(options);
+        request(options, (err, resp, body) => {
+          //Throw error if we are unable to save jobs tags into database
+          if (err) {
+            throw err;
+          }
+        });
       }
     }
-  })
+  });
 }
 
 getJobsFromStackOverflow();

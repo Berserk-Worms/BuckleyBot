@@ -7,9 +7,9 @@ let Tag = db.define('tag', {
 });
 
 Tag.sync()
-  .then(err => {
+  .then(() => {
     console.log('Tag table is connected')
-  }, err => {
+  }, (err) => {
     console.log('An error occured while generating the Tag table')
   });
 

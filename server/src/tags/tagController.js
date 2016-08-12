@@ -18,11 +18,15 @@ const addJobTags = (req, res) => {
           where: { name: tag }
         })
         .spread((tag, created) => {
+          //Sequelize association that adds job and tag to JobTag join table
           tag.addJob(foundJob)
           res.end();
         })
       })
     })
+    .catch((err) => {
+      throw err;
+    });
   //Loop through array of tags
 }
 

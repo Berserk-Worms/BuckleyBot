@@ -1,7 +1,7 @@
 import Job from './jobModel';
 import request from 'request';
 
-//Add a job
+//Post method for the api route /api/job
 const addJob = (req, res) => {
   let jobData = req.body.jobData;
   let tagsData = req.body.tagsData;
@@ -24,12 +24,14 @@ const addJob = (req, res) => {
           method: 'POST',
           json: { job, tagsData }
         }, (err, resp, body) => {
-          //TODO check the resp status
+          //TODO check the resp status and body
+          //If the job and tags save successfully we should expect a status of 200
+          //If we turn this into a microservice into the future we should have a proper response with the user and tag data being sent back
           res.end()
         })
       } else {
-        res.end();
         console.log('we already have that job in the database');
+        res.end();
       }
     })
 }

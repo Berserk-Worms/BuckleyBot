@@ -1,6 +1,6 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import bot from './bot'
+import bot from './bot';
 import Sequelize from 'sequelize';
 import routes from './routes/router';
 
@@ -19,5 +19,3 @@ const router = routes(app, express);
 app.listen(port, () => {
   console.log('Server started on port ' + port);
 });
-
-

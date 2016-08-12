@@ -10,9 +10,9 @@ Job.belongsToMany(Tag, { through: JobTag });
 Tag.belongsToMany(Job, { through: JobTag });
 
 JobTag.sync()
-  .then(err => {
+  .then(() => {
     console.log('Job Tag table is connected')
-  }, err => {
+  }, (err) => {
     console.log('An error occured while generating the Job Tag table')
   });
 
