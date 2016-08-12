@@ -17,11 +17,12 @@ let userJobsListener = {
           //TODO Filter with sequelize rather than _.filter
           let filterJobs = _.filter(jobs, (job) => {
             return job.dataValues.title.toLowerCase().indexOf('lead') === -1 && 
-              job.dataValues.title.toLowerCase().indexOf('senior') && 
-              job.dataValues.title.toLowerCase().indexOf('manager') &&
-              job.dataValues.title.toLowerCase().indexOf('sr.')
+              job.dataValues.title.toLowerCase().indexOf('senior') === -1 && 
+              job.dataValues.title.toLowerCase().indexOf('manager') === -1 &&
+              job.dataValues.title.toLowerCase().indexOf('sr.') === -1
           })
 
+          console.log(filterJobs.length)
           //Format job data for Slack message attachment 
           let attachments = _.map(filterJobs, (job) => {
             return {
