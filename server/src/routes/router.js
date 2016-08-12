@@ -1,6 +1,9 @@
-import teamController from '../teams/teamController';
 import userController from '../users/userController';
 import profileController from '../profile/profileController';
+import teamController from '../teams/teamController';
+import jobController from '../jobs/jobController';
+import tagController from '../tags/tagController'
+import jobTagController from '../jobs_tags/jobTagController';
 
 export default (app, express) => {
   //////////////////////////////////////////////
@@ -27,4 +30,15 @@ export default (app, express) => {
   //Handling Oauth
   //////////////////////////////////////////////
   app.get('/slack/users/auth', userController.authUser);
+
+  //////////////////////////////////////////////
+  //Handling Job
+  //////////////////////////////////////////////
+  app.post('/api/job', jobController.addJob);
+
+  //////////////////////////////////////////////
+  //Handling Tag
+  //////////////////////////////////////////////
+  app.post('/api/tags/job', tagController.addJobTags);
+
 }

@@ -19,10 +19,11 @@ Profile.hook('afterCreate', (profile, options) => {
 });
 
 Profile.sync()
-  .then(err => {
+  .then(() => {
     console.log('Profile table is connected');
-  }, err => {
-    console.log('An error occured while generating the Profile table');
+  }, (err) => {
+    console.log(err);
+    console.log('An error occured while generating the Profile table')
   });
 
 export default Profile;

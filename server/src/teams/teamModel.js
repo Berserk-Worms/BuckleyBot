@@ -19,9 +19,9 @@ Team.hook('afterCreate', (team, options) => {
 });
 
 Team.sync()
-  .then(err => {
+  .then(() => {
     console.log('Team table is connected');
-  }, err => {
+  }, (err) => {
     console.log('An error occured while generating the Team table');
   });
 

@@ -15,11 +15,10 @@ let User = db.define('user', {
 User.belongsTo(Team);
 
 User.sync()
-  .then(err => {
+  .then(() => {
     console.log('User table is connected');
-  }, err => {
+  }, (err) => {
     console.log('An error occured while generating the User table.');
   });
 
 export default User;
-
