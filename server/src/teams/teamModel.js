@@ -1,6 +1,6 @@
 import db from '../db/db-config';
 import Sequelize from 'sequelize';
-import { teams } from '../bot'
+import { teams } from '../bot';
 
 //Generates Team model
 let Team = db.define('team', {
