@@ -1,5 +1,7 @@
 import User from './userModel';
-import Profile from '../profile/profileModel'
+import Profile from '../profile/profileModel';
+import Team from '../teams/teamModel';
+
 import rp from 'request-promise';
 
 //some logic to query slack for slack_id and team_id
@@ -33,28 +35,48 @@ const authUser = (req, res) => {
 
       if (body.ok) {
         console.log('response body', body);
-        //TODO: refactor and make sure we aren't repeating ourselves
-        let name = body.user.name;
-        let accessToken = body.access_token;
-        let slackUserId = body.user.id;
         let teamId = body.team.id;
-        let email = body.user.email;
 
-        User.findOrCreate({
-          where: {name, accessToken, slackUserId, teamId, email}
+        //TODO: Fix nested promise structure -- this is an antipattern (PM)
+        Team.findOne({ where: {slackTeamId: teamId} })
+        .then((team) => {
+          if (team !== null) {
+            console.log('team exists:', team);
+            findOrCreateUser(body, res);
+          } else {
+            // TODO: implement this with front end /oops page
+            // this is where we handle a user that signs in but their team
+            // has not yet installed bot to their slack
+            console.log('Team needs to add uncle bot first!');
+          }
         })
-        .spread((user, create) => {
-          created ? res.send('User created') : res.send('User already exists.');
-        })
-        .catch(err => res.send(err));
-        // find or create user using access token and the info from body
+        .catch((err) => {
+          console.log("Error finding team:", err);
+        });
       } else {
         //redirect to handle error
         console.log('Error: ', err);
       }
-
     })
     .catch(err => res.redirect('/'));
+}
+
+//moved findOrCreateUser into its own function
+const findOrCreateUser = (body, res) => {
+  // find or create user using access token and the info from body
+  let name = body.user.name;
+  let accessToken = body.access_token;
+  let slackUserId = body.user.id;
+  let slackTeamId = body.team.id;
+  let email = body.user.email;
+
+  User.findOrCreate({
+    where: { name, accessToken, slackUserId, slackTeamId, email }
+  })
+  .spread((user, create) => {
+    created ? res.send('User created') : res.send('User already exists.');
+  })
+  .catch(err => res.send(err));
 }
 
 //we have a database of users based on slack bot interaction
