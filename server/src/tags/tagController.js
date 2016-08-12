@@ -18,14 +18,8 @@ const addJobTags = (req, res) => {
           where: { name: tag }
         })
         .spread((tag, created) => {
-          if (created) {
-            console.log('created new tag', tag.dataValues.name);
-            tag.addJob(foundJob)
-            res.end();
-          } else {
-            res.end();
-            console.log('we already have the tag:', tag.dataValues.name);
-          }
+          tag.addJob(foundJob)
+          res.end();
         })
       })
     })

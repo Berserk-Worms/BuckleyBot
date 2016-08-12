@@ -1,6 +1,8 @@
 import Botkit from 'botkit';
 import dotenv from 'dotenv';
 import Team from './teams/teamModel';
+import userJobsListener from './bots/job.js'
+
 dotenv.config();
 
 const store = {};
@@ -32,19 +34,15 @@ const teams = () => {
 //then to teamModel (for hook afterCreate)
 teams();
 
-// const BUCKLEY = connection.spawn({
-//   //Create .env file in the root directory and add SLACK_BOT_TOKEN
-//   token: process.env.SLACK_BOT_TOKEN
-// });
-
-// BUCKLEY.startRTM();
-
-connection.hears("", ['direct_message'], function(bot, message) {
-  console.log('replying to message');
-  bot.reply(message, "Hi hi captain! What's happening?");
+//Handle different bot listeners
+connection.hears("jobs", ['direct_message'], function(bot, message) {
+  userJobsListener.replyWithJobs(bot, message);
 });
 
-export { store, teams };
+
+export default { 
+  store, teams  
+};
 
 
 

@@ -13,7 +13,7 @@ const addTeam = (req, res) => {
       redirect_uri: 'http://localhost:8080/slack/teams/auth'
     }
   }
-
+  console.log('adding team');
   rp(options)
     .then((body) => {
       body = JSON.parse(body);
