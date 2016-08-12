@@ -1,6 +1,6 @@
 import db from '../db/db-config';
 import Sequelize from 'sequelize';
-import { teams } from '../bot';
+import { addTeamBot } from '../bot'
 
 //Generates Team model
 let Team = db.define('team', {
@@ -15,7 +15,10 @@ Team.hook('afterCreate', (team, options) => {
   //invoke the method from bot.js for looping through teams
   //this will allow the bot.js store to have {teamid: instance of bot}
   //of the newly created team
-  teams();
+
+  //should call the method where we are only adding one team
+  // console.log(team);
+  addTeamBot(team);
 });
 
 Team.sync()

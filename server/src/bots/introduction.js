@@ -16,7 +16,7 @@ const intro = (createdProfile) => {
     // console.log('this is the user, ', user)
     const BUCKLEY = store[user.dataValues.slackTeamId];
 
-    console.log('this is buckley, ', BUCKLEY)
+    // console.log('this is buckley, ', BUCKLEY)
 
     BUCKLEY.startPrivateConversation({user: id}, (err, convo) => {
       convo.ask('Yoooo, watsup?!?', (response, convo) => {

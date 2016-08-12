@@ -8,6 +8,9 @@ dotenv.config();
 const store = {};
 
 const connection = Botkit.slackbot({
+  //this will make it possible to be interactive with
+  //the convo.ask function
+  interactive_replies: true,
   debug: false
 });
 
@@ -29,6 +32,16 @@ const teams = () => {
     });
 }
 
+const addTeamBot = (createdTeam) => {
+  let data = createdTeam.dataValues;
+  let temp = connection.spawn({
+    token: data.slackBotToken
+  });
+
+  store[data.slackTeamId] = temp;
+  store[data.slackTeamId].startRTM();
+}
+
 //allow you to do RTM without having to create a new team
 //note this is imported to server.js first
 //then to teamModel (for hook afterCreate)
@@ -39,10 +52,73 @@ connection.hears("jobs", ['direct_message'], function(bot, message) {
   userJobsListener.replyWithJobs(bot, message);
 });
 
+// const BUCKLEY = connection.spawn({
+//   //Create .env file in the root directory and add SLACK_BOT_TOKEN
+//   token: process.env.SLACK_BOT_TOKEN
+// });
 
-export default { 
-  store, teams  
-};
+// BUCKLEY.startRTM();
+
+connection.hears("", ['direct_message'], function(bot, message) {
+  console.log('replying to message');
+  bot.ask({
+    'text': `Yoyo wat's snapping?`,
+    attachments: [
+      {
+        text: 'Do you like my buttons?',
+        fallback: 'Unable to show',
+        callback_id: '123',
+        attachment_type: 'default',
+        actions: [
+          {
+            'name': 'yes',
+            'text': 'Yes',
+            'value': 'yes',
+            'type': 'button'
+          },
+          {
+            'name': 'no',
+            'text': 'No',
+            'value': 'no',
+            'type': 'button'
+          }
+        ]
+      }, [
+        {
+          pattern: 'yes',
+          callback: (response, convo) => {
+            convo.say('FABULOUS!');
+            convo.next();
+            //do something such as send info to database
+          }
+        },  
+        {
+          pattern: 'no',
+          callback: (response, convo) => {
+            convo.say('Too bad.');
+            convo.next();
+          }
+        }
+      ]
+    ]
+  });
+});
+
+const jobs = (response, convo) => {
+  convo.ask('Jobs Jobs Jobs Jobs Jobs', (response, convo) => {
+    convo.say('Is that all...?');
+    convo.next();
+  })
+}
+
+const no = (response, convo) => {
+  convo.ask('Alright, is that your final answer?', (response, convo) => {
+    convo.say(`That's too bad. Try again.`);
+    convo.next();
+  })
+}
+
+export { store, teams, addTeamBot };
 
 
 

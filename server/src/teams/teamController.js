@@ -71,8 +71,8 @@ const findTeamUsers = (team) => {
         }
 
         rp(usersData)
-        .then(body => console.log(body))
-        .catch(err => console.log(err));
+        .then(response => { console.log('Success: ', response.statusCode) })
+        .catch(err => { console.log('this is usersData error: ', err) });
 
       } else {
         //TODO: redirect to error page
