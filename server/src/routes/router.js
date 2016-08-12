@@ -1,3 +1,4 @@
+import path from 'path';
 import userController from '../users/userController';
 import profileController from '../profile/profileController';
 import teamController from '../teams/teamController';
@@ -41,4 +42,10 @@ export default (app, express) => {
   //////////////////////////////////////////////
   app.post('/api/tags/job', tagController.addJobTags);
 
+  //////////////////////////////////////////////
+  //Handling Error
+  //////////////////////////////////////////////
+  app.get('*', (req, res)=>{
+    res.sendFile(path.resolve(__dirname + '/../../../client/index.html'));
+  });
 }
