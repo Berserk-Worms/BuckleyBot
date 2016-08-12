@@ -38,6 +38,7 @@ const authUser = (req, res) => {
         let teamId = body.team.id;
 
         //TODO: Fix nested promise structure -- this is an antipattern (PM)
+        //Check for any team with the slack team id -- if this exists, find or create user
         Team.findOne({ where: {slackTeamId: teamId} })
         .then((team) => {
           if (team !== null) {
@@ -48,6 +49,8 @@ const authUser = (req, res) => {
             // this is where we handle a user that signs in but their team
             // has not yet installed bot to their slack
             console.log('Team needs to add uncle bot first!');
+            // TODO: redirect to /oops
+            res.redirect('/');
           }
         })
         .catch((err) => {
@@ -70,6 +73,7 @@ const findOrCreateUser = (body, res) => {
   let slackTeamId = body.team.id;
   let email = body.user.email;
 
+  //TODO:
   User.findOrCreate({
     where: { name, accessToken, slackUserId, slackTeamId, email }
   })
