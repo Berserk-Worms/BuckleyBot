@@ -11,7 +11,7 @@ const connection = Botkit.slackbot({
   //this will make it possible to be interactive with
   //the convo.ask function
   // interactive_replies: true,
-  debug: false
+  debug: false,
 });
 
 const teams = () => {
@@ -20,7 +20,10 @@ const teams = () => {
       for (let i = 0; i < teams.length; i++) {
         let data = teams[i].dataValues;
         let temp = connection.spawn({
-          token: data.slackBotToken
+          token: data.slackBotToken,
+          //add a retry to count to let the bot reconnect 
+          //automatic retries are disabled by default
+          retry: 20
         });
         //dangerous! slack team tokens....
         store[data.slackTeamId] = temp;
@@ -35,7 +38,8 @@ const teams = () => {
 const addTeamBot = (createdTeam) => {
   let data = createdTeam.dataValues;
   let temp = connection.spawn({
-    token: data.slackBotToken
+    token: data.slackBotToken,
+    retry: 20
   });
 
   store[data.slackTeamId] = temp;
@@ -63,6 +67,18 @@ connection.hears("", ['direct_message'], (bot, message) => {
   console.log('replying to message');
   // bot.startConversation(message, buttonTest);
 });
+
+connection.on('rtm_open', (bot) => {
+  console.log(`** The RTM api just opened at ${Date.now()}`);
+})
+
+connection.on('rtm_close', (bot) => {
+  console.log(`** The RTM api just closed at ${Date.now()}`);
+});
+
+connection.on('rtm_reconnect_failed', (bot) => {
+  console.log(`** The RTM api retry attempts have been exhausted at ${Date.now()}`);
+})
 
 /////////////////////////////////////////////////////////
 //This section is for interactive buttons
