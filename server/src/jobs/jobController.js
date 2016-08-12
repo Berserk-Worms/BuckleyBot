@@ -3,7 +3,6 @@ import request from 'request';
 
 //Add a job
 const addJob = (req, res) => {
-  console.log('in the job controller');
   let jobData = req.body.jobData;
   let tagsData = req.body.tagsData;
   //Find or create job

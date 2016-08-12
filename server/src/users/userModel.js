@@ -21,7 +21,4 @@ User.sync()
     console.log('An error occured while generating the User table.');
   });
 
-
-
 export default User;
-

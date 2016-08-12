@@ -14,7 +14,7 @@ let userJobsListener = {
         tag.getJobs()
         .then((jobs) => {
 
-          //Filter with sequelize
+          //TODO Filter with sequelize rather than _.filter
           let filterJobs = _.filter(jobs, (job) => {
             return job.dataValues.title.toLowerCase().indexOf('lead') === -1 && 
               job.dataValues.title.toLowerCase().indexOf('senior') && 
@@ -22,7 +22,7 @@ let userJobsListener = {
               job.dataValues.title.toLowerCase().indexOf('sr.')
           })
 
-          //Format job data for Slack
+          //Format job data for Slack message attachment 
           let attachments = _.map(filterJobs, (job) => {
             return {
               title: `:computer: ${job.dataValues.title}`,
