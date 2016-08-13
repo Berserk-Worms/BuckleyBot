@@ -35,4 +35,26 @@ It may be helpful to have one terminal tab open per process
 4. run the build process to bundle client files and transpile code
   * `npm run dev:watchClient`
 
+#### Local bot testing
+
+It is required to have multiple tabs open 
+
+1. Drop current database (uncle) by starting another database:
+  * `psql anotherdatabase`
+  Within the database:
+  * `drop database uncle`
+2. Create a new database (uncle) and start:
+  * `createdb uncle`
+  * `psql uncle`
+  * `\c uncle`
+3. run the build process to bundle files and transpile code
+  * `npm run dev:buildserver`
+4. run the (node) server from the root directory of this project
+  * `npm run dev:start`
+5. Multiple saves might be required to generate all tables in database
+  * command + s in sublime
+6. Drop the current App in slack.com/apps under manage tab. Click Remove App
+7. Add the app
+8. Run node server/dist/utils/jobScraper.js to add jobs to database
+9. Interact with the bot
 
