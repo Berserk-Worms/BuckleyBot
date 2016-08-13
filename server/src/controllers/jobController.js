@@ -1,5 +1,5 @@
 import Job from '../models/jobModel';
-import request from 'request';
+import rp from 'request-promise';
 
 //Post method for the api route /api/job
 const addJob = (req, res) => {
