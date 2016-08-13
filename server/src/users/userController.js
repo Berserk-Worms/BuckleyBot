@@ -49,8 +49,7 @@ const authUser = (req, res) => {
             // this is where we handle a user that signs in but their team
             // has not yet installed bot to their slack
             console.log('Team needs to add uncle bot first!');
-            // TODO: redirect to /oops
-            res.redirect('/');
+            res.redirect('/oops');
           }
         })
         .catch((err) => {
