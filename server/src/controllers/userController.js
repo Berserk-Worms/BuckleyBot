@@ -4,10 +4,17 @@ import Team from '../models/teamModel';
 
 import rp from 'request-promise';
 
+import jwt from 'jwt-simple';
+
 //some logic to query slack for slack_id and team_id
 //need to register app to receive client id and client secret
 let generateInfo = (token) => {
 
+}
+
+const tokenForUser = (user) => {
+  const timestamp = new Date().getTime();
+  return jwt.encode({ sub: user.id, iat: timestamp }, process.env.JWT_SECRET);
 }
 
 //auth user the first time they sign in with Slack
@@ -78,6 +85,7 @@ const findOrCreateUser = (body, res) => {
   })
   .spread((user, created) => {
     created ? console.log('User created') : console.log('User already exists.');
+    // TODO: issue client token so clientside can persist user data
     res.redirect('/profile');
   })
   .catch(err => res.send(err));
