@@ -12,21 +12,21 @@ const addJobTags = (req, res) => {
       id: job.id
     }
   })
-    .then( (foundJob) => {
-      tagsData.forEach((tag) => {
-        Tag.findOrCreate({ 
-          where: { name: tag }
-        })
-        .spread((tag, created) => {
-          //Sequelize association that adds job and tag to JobTag join table
-          tag.addJob(foundJob)
-          res.end();
-        })
+  .then( (foundJob) => {
+    tagsData.forEach((tag) => {
+      Tag.findOrCreate({ 
+        where: { name: tag }
+      })
+      .spread((tag, created) => {
+        //Sequelize association that adds job and tag to JobTag join table
+        tag.addJob(foundJob)
+        res.end();
       })
     })
-    .catch((err) => {
-      throw err;
-    });
+  })
+  .catch((err) => {
+    throw err;
+  });
   //Loop through array of tags
 }
 

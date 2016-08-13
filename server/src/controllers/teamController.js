@@ -15,8 +15,9 @@ const addTeam = (req, res) => {
   }
 
   rp(options)
-    .then((body) => {
-      body = JSON.parse(body);
+  .then((body) => {
+    body = JSON.parse(body);
+    if (body.ok) {
       let slackTeamData = {
         slackTeamToken: body.access_token,
         slackTeamName: body.team_name,
@@ -24,24 +25,25 @@ const addTeam = (req, res) => {
         slackBotId: body.bot.bot_user_id,
         slackBotToken: body.bot.bot_access_token
       }
-
-      if (body.ok) {
-        Team.findOrCreate({ where : slackTeamData })
-          .spread( (team, created) => {
-            findTeamUsers(team);
-            res.redirect('/');
-          })
-          .catch(err => {
-            //TODO: redirect to error page due to bad data base request
-            res.redirect('/');
-          })
-      } else {
-        //TODO: redirect to error page due to failed respone request to slack
-        res.redirect('/');
-      }
-
-    })  
-    .catch(err => res.redirect('/') /* due to failed request to slack */ );
+      return slackTeamData;
+    } else {
+      //TODO: redirect to error page due to failed respone request to slack
+      res.redirect('/');
+    }
+  })
+  .then((slackTeamData) => {
+    Team.create(slackTeamData)
+    .then((team) => {
+      findTeamUsers(team);
+      res.redirect('/');
+    })
+    .catch(err => {
+      console.log('error creating a team:', err);
+      //TODO: redirect to error page due to bad data base request
+      res.redirect('/');
+    })
+  })  
+  .catch(err => res.redirect('/') /* due to failed request to slack */ );
 
 } 
 
@@ -57,29 +59,23 @@ const findTeamUsers = (team) => {
   }
 
   rp(teamUsersData)
-    .then(body => {
-      body = JSON.parse(body);
-
-      if (body.ok) {
-
-        let users = parseUsersInfo(body.members);
-
-        let usersData = { 
-          url: 'http://localhost:8080/slack/users',
-          method: 'POST',
-          json: { users, teamId } 
-        }
-
-        rp(usersData)
-        .then(response => { console.log('Success: ', response.statusCode) })
-        .catch(err => { console.log('this is usersData error: ', err) });
-
-      } else {
-        //TODO: redirect to error page
-        res.redirect('/');
+  .then(body => {
+    body = JSON.parse(body);
+    if (body.ok) {
+      let users = parseUsersInfo(body.members);
+      let usersData = { 
+        url: 'http://localhost:8080/slack/users',
+        method: 'POST',
+        json: { users, teamId } 
       }
-    }) 
-    .catch(err => console.log(err));
+      return usersData
+    } else {
+      //TODO: redirect to error page
+      res.redirect('/');
+    }
+  }) 
+  .then(rp)
+  .catch(err => console.log(err));
 }
 
 const parseUsersInfo = (users) => {
