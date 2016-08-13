@@ -54,7 +54,7 @@ const completedReply = (bot, message) => {
 
 const inProcessReply = (bot, message) => {
   bot.startPrivateConversation({ user: message.user }, (err, convo) => {
-    convo.say(`I have found a list of jobs for you! However, ` +
+    convo.ask(`I have found a list of jobs for you! However, ` +
       `it seems like I do not have you location yet ಠ_ಠ \n` +
       `Can you tell me where you are from?`, (response, convo) => {
       convo.say(`I heard that ${response.text} is a great place. ` + 
