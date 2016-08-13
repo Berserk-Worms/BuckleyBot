@@ -28,11 +28,11 @@ It may be helpful to have one terminal tab open per process
 
 1. start the local postgres server:
   * `npm run dev:startdb`
-1. run the build process to bundle server files and transpile code
+2. run the build process to bundle server files and transpile code
   * `npm run dev:buildserver`
-1. run the (node) server from the root directory of this project
+3. run the (node) server from the root directory of this project
   * `npm run dev:start`
-1. run the build process to bundle client files and transpile code
+4. run the build process to bundle client files and transpile code
   * `npm run dev:watchClient`
 
 
