@@ -2,7 +2,7 @@ import Botkit from 'botkit';
 import dotenv from 'dotenv';
 import Team from './teams/teamModel';
 import userJobsListener from './bots/job';
-import checkProfile from './bots/helper';
+import helper from './bots/helper';
 
 dotenv.config();
 
@@ -58,7 +58,7 @@ connection.hears("jobs", ['direct_message'], function(bot, message) {
   //this function continues to check if profile (name/location)
   //has been completed, in case the original websocket was closed
   //prior to completing onboarding
-  checkProfile.checkStage(bot, message);
+  helper.checkStage(bot, message);
   userJobsListener.replyWithJobs(bot, message);
 });
 
@@ -80,11 +80,12 @@ connection.on('rtm_open', (bot) => {
 
 connection.on('rtm_close', (bot) => {
   console.log(`** The RTM api just closed at ${Date.now()}`);
-  bot.startRTM((err, bot, payload) => {
-    if (err) {
-      throw new Error('Could not connect to Slack');
-    }
-  });
+  //Need to determine if the retry or the bot.startRTM is reconnecting
+  // bot.startRTM((err, bot, payload) => {
+  //   if (err) {
+  //     throw new Error('Could not connect to Slack');
+  //   }
+  // });
 });
 
 connection.on('rtm_reconnect_failed', (bot) => {

@@ -1,7 +1,7 @@
 import db from '../db/db-config';
 import Sequelize from 'sequelize';
 import User from '../users/userModel';
-import { intro } from '../bots/introduction';
+import intro from '../bots/introduction';
 
 //Generates Profile model
 let Profile = db.define('profile', {

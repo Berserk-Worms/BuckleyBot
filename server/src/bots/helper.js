@@ -11,19 +11,21 @@ import { updateProfile } from '../bots/introduction';
 //stage: in-process -> name update but no location
 //stage: completed -> name and location updated
 
-const checkProfile =  {
+const helper =  {
   checkStage: (bot, message) => {
+    //Want to shorten code below,
+    //however, when using eager loading for user (extend profile)
+    //receive an error that profile is not associated to the user
     User.find({
       where: { slackUserId: message.user }
     })
     .then(user => {
-      // console.log('this is the user inside of helper.js, ', user);
       let userId = user.dataValues.id;
       Profile.find({
         where: { userId }
       })
       .then(profile => {
-        console.log(profile.dataValues);
+        console.log('this is inside helper.checkstage, profile: ', profile.dataValues);
         let stage = profile.dataValues.stage;
         //depending on the stage, would have to give different respones
         routeOnStage(stage, bot, message);
@@ -36,6 +38,23 @@ const checkProfile =  {
       console.log('Error with checking users');
     })
   },
+  updateProfile: (response, profilePayload) => {
+    console.log('this is the response: ', response)
+    User.find({
+      where: {slackUserId: response.user}
+    })
+    .then(user => {
+      let userId = user.dataValues.id;
+      Profile.find({
+        where: { userId }
+      })
+      .then(profile => {
+        profile.updateAttributes(profilePayload)
+          .then(() => console.log('Profile has been updated!'))
+          .catch(() => console.log('Could not update profile.'))
+      })
+    })
+  }
 };
 
 const routeOnStage = (currStage, bot, message) => {
@@ -57,9 +76,12 @@ const inProcessReply = (bot, message) => {
     convo.ask(`I have found a list of jobs for you! However, ` +
       `it seems like I do not have you location yet ಠ_ಠ \n` +
       `Can you tell me where you are from?`, (response, convo) => {
+      
+      console.log(response);
+
       convo.say(`I heard that ${response.text} is a great place. ` + 
         `Well, I'll be here to help you out if you need me!`);
-      updateProfile(response, {stage: 'completed'})
+      helper.updateProfile(response, { location: response.text, stage: 'completed' })
       convo.next();
     });
   });
@@ -70,8 +92,11 @@ const incompleteReply = (bot, message) => {
     convo.ask(`Hey there! I have found a list of jobs for you! ` + 
       `However, it seems like I don't have your name or location ヽ(￣д￣;)ノ \n` +
       `What's your name?`, (response, convo) => {
+      
+      console.log(response);
+
       convo.say(`Nice to meet you ${response.text} !`);
-      updateProfile(response, {stage: 'in-process'})
+      helper.updateProfile(response, { name: response.text, stage: 'in-process' })
       followUp(response, convo);
       convo.next();
     });
@@ -80,12 +105,15 @@ const incompleteReply = (bot, message) => {
 
 const followUp = (response, convo) => {
   convo.ask(`Can you tell me where you are from?`, (response, convo) => {
+    
+    console.log(response);
+
     convo.say(`I heard that ${response.text} is a great place. ` + 
       `Well, I'll be here to help you out if you need me!`);
-    updateProfile(response, {stage: 'completed'})
+    helper.updateProfile(response, { location: response.text, stage: 'completed' })
     convo.next();
   });
 }
 
 
-export default checkProfile;
+export default helper;
