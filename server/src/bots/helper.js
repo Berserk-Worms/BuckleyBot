@@ -1,8 +1,8 @@
 import { connection } from '../bot.js';
-import User from '../users/userModel';
-import Team from '../teams/teamModel';
-import Profile from '../profile/profileModel';
-import { updateProfile } from '../bots/introduction';
+import User from '../models/userModel';
+import Team from '../models/teamModel';
+import Profile from '../models/profileModel';
+import { updateProfile } from './introduction';
 
 //we want to check if the user on the team has been
 //onboard with introduction or not, in this case
