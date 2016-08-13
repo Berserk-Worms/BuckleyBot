@@ -31,23 +31,18 @@ const updateProfile = (req, res) => {
   let userId = req.body.userId;
   let name = req.body.name;
   let location = req.body.location;
+  console.log('updating');
 
-  Profile.find({
-    where: { userId }
+  Profile.update(
+    { name, location },
+    { where: { userId } } 
+  )
+  .then(() => {
+    res.send('successfull updated profile');
   })
-  .then(profile => {
-
-    if(profile) {
-      profile.updateAttributes({ name, location })
-        .then(profile => res.send('Profile has been updated'))
-        .catch(err => res.send('Error updating profile'));
-    } else {
-      res.send('Profile not found')
-    }
-
-  })
-  .catch(err => res.send(err));
-
+  .catch(err => { 
+    res.send('error updating profie:', err);
+  });
 };
 
 
