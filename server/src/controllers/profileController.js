@@ -12,7 +12,8 @@ const findProfile = (req, res) => {
 };
 
 
-const addProfile = (req, res) => {  
+const addProfile = (req, res) => { 
+  console.log('add to profile'); 
   let userId = req.body.userId;
   let name = req.body.name;
   let location = req.body.location;

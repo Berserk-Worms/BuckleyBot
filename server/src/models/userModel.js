@@ -3,6 +3,7 @@ import Team from './teamModel';
 import Sequelize from 'sequelize';
 
 //Generates User model
+//TODO Add unique constraints to slackUserId
 let User = db.define('user', {
   name: Sequelize.STRING, 
   accessToken: Sequelize.STRING,
