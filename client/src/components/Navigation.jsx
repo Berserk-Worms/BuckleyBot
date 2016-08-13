@@ -7,7 +7,7 @@ class Navigation extends Component {
       <Navbar className="nav-size" inverse>
         <Navbar.Header>
           <Navbar.Brand>
-            <a href="#">BuckleyBot</a>
+            <a href="/">BuckleyBot</a>
           </Navbar.Brand>
           <Navbar.Toggle />
         </Navbar.Header>
@@ -22,3 +22,5 @@ class Navigation extends Component {
 }
 
 export default Navigation;
+
+// NOTE: the a tag that goes to home may need to be a link tag through react router

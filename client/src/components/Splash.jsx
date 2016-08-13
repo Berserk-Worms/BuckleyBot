@@ -5,7 +5,7 @@ class Splash extends Component {
     return (
       <div className="app-background">
         <div className="center-vertical-align">
-        <h1 className="title center-item">BuckleyBot: Slackbot for Students</h1>
+        <h1 className="center-item">BuckleyBot: Slackbot for Students</h1>
           <div className="center-item">
             <img className="robo-big-head-img" src="../assets/robo_big_head.png" alt=""/>
           </div>
