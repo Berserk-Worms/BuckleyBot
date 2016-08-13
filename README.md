@@ -39,6 +39,8 @@ It may be helpful to have one terminal tab open per process
 
 It is required to have multiple tabs open 
 
+0. start the local postgres server:
+  * `npm run dev:startdb`
 1. Drop current database (uncle) by starting another database:
   * `psql anotherdatabase`
   Within the database:
