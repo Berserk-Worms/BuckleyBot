@@ -18,7 +18,7 @@ const intro = (createdProfile) => {
 
     // console.log('this is buckley, ', BUCKLEY)
 
-    BUCKLEY.startPrivateConversation({user: id}, (err, convo) => {
+    BUCKLEY.startPrivateConversation({ user: id }, (err, convo) => {
       convo.ask('Yoooo, watsup?!?', (response, convo) => {
         askName(response, convo);
         convo.next();
@@ -36,7 +36,7 @@ const askName = (response, convo) => {
   convo.ask("Sweet! Nice to meet you. My Name is Buckley, What's yours?", (response, convo) => {
     console.log('This is the response: ', response);
     convo.say("Nice to meet you " + response.text + "!");
-    updateProfile(response, {name: response.text});
+    updateProfile(response, {name: response.text, stage: 'in-process'});
     askLocation(response, convo);
     convo.next();
   });
@@ -46,7 +46,7 @@ const askLocation = (response, convo) => {
   convo.ask("Where are you from?", (response, convo) => {
     convo.say(`I heard that ${response.text} is a great place. ` +
       `Well I'll be here to help you out if you need me!`);
-    updateProfile(response, {location: response.text})
+    updateProfile(response, {location: response.text, stage: 'completed'})
     convo.next();
   });
 }
@@ -71,4 +71,4 @@ const updateProfile = (response, profilePayload) => {
   });
 }
 
-export default intro;
+export { intro, updateProfile };

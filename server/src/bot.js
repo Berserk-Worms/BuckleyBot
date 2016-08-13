@@ -1,7 +1,8 @@
 import Botkit from 'botkit';
 import dotenv from 'dotenv';
 import Team from './teams/teamModel';
-import userJobsListener from './bots/job.js'
+import userJobsListener from './bots/job.js';
+import checkProfile from './bots/helper.js';
 
 dotenv.config();
 
@@ -53,6 +54,8 @@ teams();
 
 //Handle different bot listeners
 connection.hears("jobs", ['direct_message'], function(bot, message) {
+  console.log('this is the message, ', message )
+  checkProfile.checkStage(bot, message);
   userJobsListener.replyWithJobs(bot, message);
 });
 
@@ -74,6 +77,11 @@ connection.on('rtm_open', (bot) => {
 
 connection.on('rtm_close', (bot) => {
   console.log(`** The RTM api just closed at ${Date.now()}`);
+  bot.startRTM((err, bot, payload) => {
+    if (err) {
+      throw new Error('Could not connect to Slack');
+    }
+  });
 });
 
 connection.on('rtm_reconnect_failed', (bot) => {
