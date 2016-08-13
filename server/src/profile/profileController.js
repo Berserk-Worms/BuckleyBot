@@ -24,7 +24,6 @@ const addProfile = (req, res) => {
     created ? res.send('Profile created') : res.send('Profile already exists');
   })
   .catch(err => res.send(err));
-
 };
 
 
