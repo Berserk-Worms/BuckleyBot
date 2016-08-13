@@ -1,6 +1,6 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import bot from './bot';
+import { teams } from './bot';
 import Sequelize from 'sequelize';
 import routes from './routes/router';
 
@@ -17,5 +17,8 @@ app.use(express.static('client'));
 const router = routes(app, express);
 
 app.listen(port, () => {
+  //invoking teams to generate all instances of bots
+  //which exist in the database
+  teams();
   console.log('Server started on port ' + port);
 });
