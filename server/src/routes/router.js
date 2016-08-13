@@ -48,4 +48,9 @@ export default (app, express) => {
   app.get('*', (req, res)=>{
     res.sendFile(path.resolve(__dirname + '/../../../client/index.html'));
   });
+
+  //////////////////////////////////////////////
+  //Handling Interactive Buttons
+  //////////////////////////////////////////////
+  app.get('/slack/receive', buttonController.test)
 }

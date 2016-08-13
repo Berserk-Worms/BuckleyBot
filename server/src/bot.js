@@ -11,8 +11,19 @@ const store = {};
 const connection = Botkit.slackbot({
   //this will make it possible to be interactive with
   //the convo.ask function
-  // interactive_replies: true,
+  interactive_replies: true,
   debug: false,
+});
+
+connection.configureSlackApp({
+  clientId: process.env.CLIENT_ID,
+  clientSecret: process.env.CLIENT_SECRET,
+  redirectUri: 'http://localhost:8080',
+  scopes: ['incoming-webhook','team:read','users:read','channels:read','im:read','im:write','groups:read','emoji:read','chat:write:bot']
+});
+
+connection.setupWebserver(process.env.port, (err, webServer) => {
+  connection .createWebhookEndpoints(connection.webserver);
 });
 
 //allow you to do RTM without having to create a new team
@@ -71,7 +82,7 @@ connection.hears("jobs", ['direct_message'], function(bot, message) {
 
 connection.hears("", ['direct_message'], (bot, message) => {
   console.log('replying to message');
-  // bot.startConversation(message, buttonTest);
+  bot.startConversation(message, buttonTest);
 });
 
 connection.on('rtm_open', (bot) => {
@@ -94,67 +105,102 @@ connection.on('rtm_reconnect_failed', (bot) => {
 
 /////////////////////////////////////////////////////////
 //This section is for interactive buttons
-// const buttonTest = (err, convo) => {
-//   convo.ask({
-//     attachments: [
-//       {
-//         title: 'Do you like my buttons?',
-//         callback_id: '123',
-//         attachment_type: 'default',
-//         actions: [
-//           {
-//             "name": "yes",
-//             "text": "Yes",
-//             "value": "y",
-//             "type": "button",
-//           },
-//           {
-//             "name": "no",
-//             "text": "No",
-//             "value": "n",
-//             "type": "button",
-//           }
-//         ]
-//       }, [
-//         {
-//           pattern: "y",
-//           callback: (reply, convo) => {
-//             convo.say('FABULOUS!');
-//             convo.next();
-//             //do something such as send info to database
-//           }
-//         },  
-//         {
-//           pattern: "n",
-//           callback: (reply, convo) => {
-//             convo.say('Too bad.');
-//             convo.next();
-//           }
-//         },
-//         {
-//           default: true,
-//           callback: (reply, convo) => {
-//             return;
-//           }
-//         }
-//       ]
-//     ]
-//   });
-// };
 
-// const jobs = (response, convo) => {
-//   convo.ask('Jobs Jobs Jobs Jobs Jobs', (response, convo) => {
-//     convo.say('Is that all...?');
-//     convo.next();
-//   })
-// }
+const buttonTest = (err, convo) => {
+  convo.ask({
+    attachments: [
+      {
+        title: 'Do you like my buttons?',
+        callback_id: '123',
+        attachment_type: 'default',
+        actions: [
+          {
+            "name": "yes",
+            "text": "Yes",
+            "value": "y",
+            "type": "button",
+          },
+          {
+            "name": "no",
+            "text": "No",
+            "value": "n",
+            "type": "button",
+          }
+        ]
+      }/*, [
+        {
+          pattern: "y",
+          callback: (reply, convo) => {
+            convo.say('FABULOUS!');
+            convo.next();
+            //do something such as send info to database
+          }
+        },  
+        {
+          pattern: "n",
+          callback: (reply, convo) => {
+            convo.say('Too bad.');
+            convo.next();
+          }
+        },
+        {
+          default: true,
+          callback: (reply, convo) => {
+            return;
+          }
+        }
+      ]*/
+    ]
+  });
+};
 
-// const no = (response, convo) => {
-//   convo.ask('Alright, is that your final answer?', (response, convo) => {
-//     convo.say(`That's too bad. Try again.`);
-//     convo.next();
-//   })
-// }
+connection.on('interactive_message_callback', (bot, message) => {
+  bot.replyInteractive(message, {
+    text: '...',
+    attachments: [
+      {
+        title: 'My buttons',
+        callback_id: '123',
+        attachment_type: 'default',
+        actions: [
+          {
+            "name":"yes",
+            "text": "Yes!",
+            "value": "yes",
+            "type": "button",
+          },
+          {
+           "text": "No!",
+            "name": "no",
+            "value": "delete",
+            "style": "danger",
+            "type": "button",
+            "confirm": {
+              "title": "Are you sure?",
+              "text": "This will do something!",
+              "ok_text": "Yes",
+              "dismiss_text": "No"
+            }
+          }
+        ]
+      }
+    ]
+  });
+});
+
+const jobs = (response, convo) => {
+  convo.ask('Jobs Jobs Jobs Jobs Jobs', (response, convo) => {
+    convo.say('Is that all...?');
+    convo.next();
+  })
+}
+
+const no = (response, convo) => {
+  convo.ask('Alright, is that your final answer?', (response, convo) => {
+    convo.say(`That's too bad. Try again.`);
+    convo.next();
+  })
+}
 /////////////////////////////////////////////////////////
 
 export { store, teams, addTeamBot };
