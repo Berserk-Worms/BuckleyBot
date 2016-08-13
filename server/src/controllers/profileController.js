@@ -17,13 +17,11 @@ const addProfile = (req, res) => {
   let name = req.body.name;
   let location = req.body.location;
 
-  Profile.findOrCreate({
-    where: { name, location, userId }
+  Profile.create({ name, location, userId })
+  .then((profile) => {
+    res.send(`Profile created: ${profile}`);
   })
-  .spread( (profile, created) => {
-    created ? res.send('Profile created') : res.send('Profile already exists');
-  })
-  .catch(err => res.send(err));
+  .catch(err => res.send(`Error in creating profile: ${err}`));
 };
 
 
