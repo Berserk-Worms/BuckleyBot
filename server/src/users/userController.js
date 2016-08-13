@@ -49,8 +49,7 @@ const authUser = (req, res) => {
             // this is where we handle a user that signs in but their team
             // has not yet installed bot to their slack
             console.log('Team needs to add uncle bot first!');
-            // TODO: redirect to /oops
-            res.redirect('/');
+            res.redirect('/oops');
           }
         })
         .catch((err) => {
@@ -77,8 +76,9 @@ const findOrCreateUser = (body, res) => {
   User.findOrCreate({
     where: { name, accessToken, slackUserId, slackTeamId, email }
   })
-  .spread((user, create) => {
-    created ? res.send('User created') : res.send('User already exists.');
+  .spread((user, created) => {
+    created ? console.log('User created') : console.log('User already exists.');
+    res.redirect('/profile');
   })
   .catch(err => res.send(err));
 }

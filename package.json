@@ -46,6 +46,7 @@
     "react-redux": "^4.4.5",
     "react-router": "^2.6.1",
     "redux": "^3.5.2",
+    "redux-promise": "^0.5.3",
     "request": "^2.74.0",
     "request-promise": "^4.1.1",
     "sequelize": "^3.23.6",
