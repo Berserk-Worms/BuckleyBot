@@ -1,6 +1,6 @@
 import Botkit from 'botkit';
 import dotenv from 'dotenv';
-import Team from './teams/teamModel';
+import Team from './models/teamModel';
 import userJobsListener from './bots/job';
 import helper from './bots/helper';
 

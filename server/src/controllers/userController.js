@@ -1,4 +1,4 @@
-import User from '../mdoels/userModel';
+import User from '../models/userModel';
 import Profile from '../models/profileModel';
 import Team from '../models/teamModel';
 

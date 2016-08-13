@@ -1,5 +1,5 @@
-import User from '../users/userModel';
-import Profile from '../profile/profileModel';
+import User from '../models/userModel';
+import Profile from '../models/profileModel';
 import { store } from '../bot';
 import helper from '../bots/helper'
 
