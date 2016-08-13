@@ -39,7 +39,7 @@ const authUser = (req, res) => {
 
         //TODO: Fix nested promise structure -- this is an antipattern (PM)
         //Check for any team with the slack team id -- if this exists, find or create user
-        Team.findOne({ where: {slackTeamId: teamId} })
+        Team.findOne({ where: { slackTeamId: teamId} })
         .then((team) => {
           if (team !== null) {
             console.log('team exists:', team);
@@ -126,16 +126,12 @@ const addUser = (req, res) => {
             created ? console.log('profile created') : console.log('profile already exists'); 
           })
           .catch(err => console.log(err));
-
       } else {
         console.log(user.name + ' exists');
       }
-
     })
     .catch(err => console.log(err));   
-
   });
-
 }
 
 const deleteUser = (req, res) => {
