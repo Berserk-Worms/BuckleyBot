@@ -1,8 +1,8 @@
 import Botkit from 'botkit';
 import dotenv from 'dotenv';
 import Team from './teams/teamModel';
-import userJobsListener from './bots/job.js';
-import checkProfile from './bots/helper.js';
+import userJobsListener from './bots/job';
+import checkProfile from './bots/helper';
 
 dotenv.config();
 
