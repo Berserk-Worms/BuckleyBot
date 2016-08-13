@@ -1,6 +1,6 @@
 import { connection } from '../bot.js';
-import Tag from '../tags/tagModel';
-import Job from '../jobs/jobModel';
+import Tag from '../models/tagModel';
+import Job from '../models/jobModel';
 import _ from 'underscore';
 
 

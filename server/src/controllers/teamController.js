@@ -1,4 +1,4 @@
-import Team from './teamModel';
+import Team from '../models/teamModel';
 import rp from 'request-promise';
 
 const addTeam = (req, res) => {

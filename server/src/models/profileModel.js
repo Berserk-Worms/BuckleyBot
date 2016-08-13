@@ -1,6 +1,6 @@
 import db from '../db/db-config';
 import Sequelize from 'sequelize';
-import User from '../users/userModel';
+import User from './userModel';
 import intro from '../bots/introduction';
 
 //Generates Profile model

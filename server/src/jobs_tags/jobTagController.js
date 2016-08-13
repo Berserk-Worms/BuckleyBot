@@ -1,1 +1,0 @@
-import JobTag from './jobTagModel';

@@ -1,4 +1,4 @@
-import Profile from './profileModel';
+import Profile from '../models/profileModel';
 
 
 const findProfile = (req, res) => {

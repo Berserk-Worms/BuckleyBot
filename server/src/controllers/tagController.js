@@ -1,5 +1,5 @@
-import Tag from './tagModel';
-import Job from '../jobs/jobModel';
+import Tag from '../models/tagModel';
+import Job from '../models/jobModel';
 import request from 'request';
 
 //Add Tags

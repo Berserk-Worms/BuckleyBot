@@ -1,10 +1,10 @@
 import path from 'path';
-import userController from '../users/userController';
-import profileController from '../profile/profileController';
-import teamController from '../teams/teamController';
-import jobController from '../jobs/jobController';
-import tagController from '../tags/tagController'
-import jobTagController from '../jobs_tags/jobTagController';
+import userController from '../controllers/userController';
+import profileController from '../controllers/profileController';
+import teamController from '../controllers/teamController';
+import jobController from '../controllers/jobController';
+import tagController from '../controllers/tagController'
+import jobTagController from '../controllers/jobTagController';
 
 export default (app, express) => {
   //////////////////////////////////////////////
