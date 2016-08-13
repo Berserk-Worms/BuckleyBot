@@ -55,6 +55,10 @@ teams();
 //Handle different bot listeners
 connection.hears("jobs", ['direct_message'], function(bot, message) {
   console.log('this is the message, ', message )
+
+  //this function continues to check if profile (name/location)
+  //has been completed, in case the original websocket was closed
+  //prior to completing onboarding
   checkProfile.checkStage(bot, message);
   userJobsListener.replyWithJobs(bot, message);
 });
