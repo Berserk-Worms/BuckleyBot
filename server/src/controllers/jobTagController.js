@@ -1,1 +1,1 @@
-import JobTag from './jobTagModel';
+import JobTag from '../models/jobTagModel';

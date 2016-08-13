@@ -1,4 +1,4 @@
-import Job from './jobModel';
+import Job from '../models/jobModel';
 import request from 'request';
 
 //Post method for the api route /api/job

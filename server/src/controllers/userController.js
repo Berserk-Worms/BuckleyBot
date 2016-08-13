@@ -1,6 +1,6 @@
-import User from './userModel';
-import Profile from '../profile/profileModel';
-import Team from '../teams/teamModel';
+import User from '../mdoels/userModel';
+import Profile from '../models/profileModel';
+import Team from '../models/teamModel';
 
 import rp from 'request-promise';
 
