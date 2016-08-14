@@ -111,11 +111,11 @@ const addUser = (req, res) => {
 
   users.forEach( ({ name, slackUserId, slackTeamId, email }) => {
 
-    let userPromise = User.create({
+    User.create({
       name, accessToken, slackUserId, slackTeamId, email, teamId 
     })
     .then((user) => {
-      rp({
+      return {
         url: 'http://localhost:8080/slack/users/profile',
         method: 'POST',
         json: { 
@@ -123,8 +123,9 @@ const addUser = (req, res) => {
           name: user.name, 
           location: 'San Francisco' 
         }
-      })
+      }
     })
+    .then(rp)
     .catch(err => console.log(err));   
     
   });
