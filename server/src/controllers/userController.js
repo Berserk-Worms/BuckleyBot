@@ -61,10 +61,11 @@ const authUser = (req, res) => {
         })
         .catch((err) => {
           console.log("Error finding team:", err);
+          res.redirect('/oops');
         });
       } else {
         //redirect to handle error
-        console.log('Error: ', err);
+        console.log('Malformed body. Error: ', err);
       }
     })
     .catch(err => res.redirect('/'));
@@ -79,14 +80,16 @@ const findOrCreateUser = (body, res) => {
   let slackTeamId = body.team.id;
   let email = body.user.email;
 
-  //TODO:
+  //TODO: fix the duplicate user issue
   User.findOrCreate({
     where: { name, accessToken, slackUserId, slackTeamId, email }
   })
   .spread((user, created) => {
-    created ? console.log('User created') : console.log('User already exists.');
-    // TODO: issue client token so clientside can persist user data
-    res.redirect('/profile');
+    created ? console.log('New User created in the DB') : console.log('User already exists in DB.');
+    // TODO: issue the JWT
+    // TODO: and store it in the client
+    // QUESTION: how do we send it to the client? 
+    res.redirect(`/profile`);
   })
   .catch(err => res.send(err));
 }
