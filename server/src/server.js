@@ -1,6 +1,6 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import { teams } from './bot';
+import { teams, connection } from './bot';
 import Sequelize from 'sequelize';
 import routes from './routes/router';
 
@@ -22,3 +22,4 @@ app.listen(port, () => {
   teams();
   console.log('Server started on port ' + port);
 });
+

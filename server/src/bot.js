@@ -13,18 +13,7 @@ const connection = Botkit.slackbot({
   //the convo.ask function
   interactive_replies: true,
   debug: false,
-});
-
-connection.configureSlackApp({
-  clientId: process.env.CLIENT_ID,
-  clientSecret: process.env.CLIENT_SECRET,
-  redirectUri: 'http://localhost:8080',
-  scopes: ['incoming-webhook','team:read','users:read','channels:read','im:read','im:write','groups:read','emoji:read','chat:write:bot']
-});
-
-connection.setupWebserver(process.env.port, (err, webServer) => {
-  connection .createWebhookEndpoints(connection.webserver);
-});
+})
 
 //allow you to do RTM without having to create a new team
 //note this is imported to server.js first
@@ -80,9 +69,9 @@ connection.hears("jobs", ['direct_message'], function(bot, message) {
 
 // BUCKLEY.startRTM();
 
-connection.hears("", ['direct_message'], (bot, message) => {
+connection.hears("hello", ['direct_message'], (bot, message) => {
   console.log('replying to message');
-  bot.startConversation(message, buttonTest);
+  bot.reply(message, 'Great weather today huh?');
 });
 
 connection.on('rtm_open', (bot) => {
@@ -106,53 +95,34 @@ connection.on('rtm_reconnect_failed', (bot) => {
 /////////////////////////////////////////////////////////
 //This section is for interactive buttons
 
-const buttonTest = (err, convo) => {
-  convo.ask({
-    attachments: [
+connection.hears('interactive', 'direct_message', function(bot, message) {
+  bot.reply(message, {
+    attachments:[
       {
-        title: 'Do you like my buttons?',
+        title: 'Do you want to interact with my buttons?',
         callback_id: '123',
         attachment_type: 'default',
         actions: [
           {
-            "name": "yes",
+            "name":"yes",
             "text": "Yes",
-            "value": "y",
+            "value": "some_data_for_yes",
             "type": "button",
+            "style": "primary"
           },
           {
-            "name": "no",
+            "name":"no",
             "text": "No",
-            "value": "n",
+            "value": "some_data_for_no",
             "type": "button",
+            "stype": "default"
           }
         ]
-      }/*, [
-        {
-          pattern: "y",
-          callback: (reply, convo) => {
-            convo.say('FABULOUS!');
-            convo.next();
-            //do something such as send info to database
-          }
-        },  
-        {
-          pattern: "n",
-          callback: (reply, convo) => {
-            convo.say('Too bad.');
-            convo.next();
-          }
-        },
-        {
-          default: true,
-          callback: (reply, convo) => {
-            return;
-          }
-        }
-      ]*/
+      }
     ]
   });
-};
+});
+
 
 connection.on('interactive_message_callback', (bot, message) => {
   bot.replyInteractive(message, {
@@ -203,7 +173,7 @@ const no = (response, convo) => {
 }
 /////////////////////////////////////////////////////////
 
-export { store, teams, addTeamBot };
+export { store, teams, addTeamBot, connection };
 
 
 

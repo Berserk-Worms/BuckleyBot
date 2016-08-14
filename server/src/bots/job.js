@@ -27,7 +27,12 @@ let userJobsListener = {
           let attachments = _.map(filterJobs, (job) => {
             return {
               title: `:computer: ${job.dataValues.title}`,
-              text: `:office: ${job.dataValues.company} - ${job.dataValues.location} \n :link: ${job.dataValues.link}`
+              text: `:office: ${job.dataValues.company} - ${job.dataValues.location} \n :link: ${job.dataValues.link}`,
+              callback_id: `clickSaveJobs`,
+              attachment_type: `default`,
+              actions: [
+                {name: `saveJob`, text: `Save`, value: `saveJob`, type: `button`, style: `default`}
+              ]
             }
           })
 

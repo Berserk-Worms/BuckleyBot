@@ -5,6 +5,7 @@ import profileController from '../controllers/profileController';
 import jobController from '../controllers/jobController';
 import tagController from '../controllers/tagController'
 import jobTagController from '../controllers/jobTagController';
+import buttonController from '../controllers/buttonController';
 
 export default (app, express) => {
   //////////////////////////////////////////////
@@ -43,14 +44,15 @@ export default (app, express) => {
   app.post('/api/tags/job', tagController.addJobTags);
 
   //////////////////////////////////////////////
+  //Handling Interactive Buttons
+  //////////////////////////////////////////////
+  app.get('/slack/receive', buttonController.test)
+  app.post('/slack/receive', buttonController.test);
+  
+  //////////////////////////////////////////////
   //Handling Error
   //////////////////////////////////////////////
   app.get('*', (req, res)=>{
     res.sendFile(path.resolve(__dirname + '/../../../client/index.html'));
   });
-
-  //////////////////////////////////////////////
-  //Handling Interactive Buttons
-  //////////////////////////////////////////////
-  app.get('/slack/receive', buttonController.test)
 }

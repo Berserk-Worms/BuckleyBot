@@ -68,7 +68,8 @@ const routeOnStage = (currStage, bot, message) => {
 }
 
 const completedReply = (bot, message) => {
-  bot.reply(message, `Below are some jobs you might be interested in!`)
+  bot.reply(message, `Below are some jobs you might be interested in! ` +
+    `Let me know if you need anything else!`);
 };
 
 const inProcessReply = (bot, message) => {
