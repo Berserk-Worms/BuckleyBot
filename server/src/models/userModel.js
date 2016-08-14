@@ -18,9 +18,6 @@ let User = db.define('user', {
   }
 });
 
-
-
-
 User.sync()
   .then(() => {
     console.log('User table is connected');
