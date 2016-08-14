@@ -12,7 +12,7 @@ const addJobTags = (req, res) => {
       id: job.id
     }
   })
-  .then( (foundJob) => {
+  .then((foundJob) => {
     tagsData.forEach((tag) => {
       Tag.findOrCreate({ 
         where: { name: tag }
