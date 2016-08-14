@@ -112,7 +112,7 @@ const addUser = (req, res) => {
   users.forEach( ({ name, slackUserId, slackTeamId, email }) => {
 
     User.create({
-      name, accessToken, slackUserId, slackTeamId, email, teamId 
+      name, accessToken, slackUserId, slackTeamId, email 
     })
     .then((user) => {
       return {

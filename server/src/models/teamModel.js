@@ -1,14 +1,18 @@
 import db from '../db/db-config';
 import Sequelize from 'sequelize';
+// import User from './userModel';
 import { addTeamBot } from '../bot'
 
 //Generates Team model
 let Team = db.define('team', {
   slackTeamToken: Sequelize.STRING,
   slackTeamName: Sequelize.STRING,
-  slackTeamId: Sequelize.STRING,
   slackBotId: Sequelize.STRING,
-  slackBotToken: Sequelize.STRING
+  slackBotToken: Sequelize.STRING,
+  slackTeamId: { 
+    type: Sequelize.STRING,
+    unique: 'compositeIndex'
+  }
 });
 
 Team.hook('afterCreate', (team, options) => {
