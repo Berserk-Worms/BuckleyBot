@@ -4,26 +4,10 @@ import Team from '../models/teamModel';
 
 import rp from 'request-promise';
 
-import jwt from 'jwt-simple';
-
-//some logic to query slack for slack_id and team_id
-//need to register app to receive client id and client secret
-let generateInfo = (token) => {
-
-}
-
-const tokenForUser = (user) => {
-  const timestamp = new Date().getTime();
-  return jwt.encode({ sub: user.id, iat: timestamp }, process.env.JWT_SECRET);
-}
-
-//auth user the first time they sign in with Slack
+// Authenticate user when they click on "sign in with Slack" button
 const authUser = (req, res) => {
-  console.log('authenticating user!');
-  //check for error (perhaps they declined to sign in)
-  //if no error, extract code and swap for access token
-
-  console.log('this is the req.query:', req.query);
+  console.log('Authenticating user!');
+  console.log('This is the req.query object:', req.query);
 
   let options = {
     uri: 'https://slack.com/api/oauth.access',
@@ -33,42 +17,42 @@ const authUser = (req, res) => {
       client_secret: process.env.CLIENT_SECRET,
       code: req.query.code,
       redirect_uri: 'http://localhost:8080/slack/users/auth'
-    }
+    },
+    headers: {
+      'User-Agent': 'Request-Promise'
+    },
+    json: true
   }
 
+  // Make request to Slack Authorization Server to swap
+  // auth code for access token
   rp(options)
-    .then(body => {
-      body = JSON.parse(body);
-
-      if (body.ok) {
-        console.log('response body', body);
-        let teamId = body.team.id;
-
-        //TODO: Fix nested promise structure -- this is an antipattern (PM)
-        //Check for any team with the slack team id -- if this exists, find or create user
-        Team.findOne({ where: { slackTeamId: teamId} })
-        .then((team) => {
-          if (team !== null) {
-            console.log('team exists:', team);
-            findOrCreateUser(body, res);
-          } else {
-            // TODO: implement this with front end /oops page
-            // this is where we handle a user that signs in but their team
-            // has not yet installed bot to their slack
-            console.log('Team needs to add uncle bot first!');
-            res.redirect('/oops');
-          }
-        })
-        .catch((err) => {
-          console.log("Error finding team:", err);
+  .then(body => {
+    console.log('response body', body);
+    if (body.ok) {
+      //TODO: Fix nested promise structure -- this is an antipattern (PM)
+      //Check for any team with the slack team id -- if this exists, find or create user
+      Team.findOne({ where: { slackTeamId: body.team.id} })
+      .then((team) => {
+        if (team !== null) {
+          findOrCreateUser(body, res);
+        } else {
+          // TODO: implement this with front end /oops page
+          // this is where we handle a user that signs in but their team
+          // has not yet installed bot to their slack
+          console.log('Team needs to add uncle bot first!');
           res.redirect('/oops');
-        });
-      } else {
-        //redirect to handle error
-        console.log('Malformed body. Error: ', err);
-      }
-    })
-    .catch(err => res.redirect('/'));
+        }
+      });
+    } else {
+      //TODO: figure out what to do here if response is messed up
+      console.log('Network response is not ok');
+    }
+  })
+  .catch(err => {
+    console.log('There was an error with the GET request:', err)
+    res.redirect('/')
+  });
 }
 
 //moved findOrCreateUser into its own function
@@ -82,10 +66,11 @@ const findOrCreateUser = (body, res) => {
 
   //TODO: fix the duplicate user issue
   User.findOrCreate({
-    where: { name, accessToken, slackUserId, slackTeamId, email }
+    where: { name, slackUserId, slackTeamId, email }
   })
   .spread((user, created) => {
-    created ? console.log('New User created in the DB') : console.log('User already exists in DB.');
+    console.log('Created user?', created);
+    user.updateAttributes({ accessToken });
     // TODO: issue the JWT
     // TODO: and store it in the client
     // QUESTION: how do we send it to the client? 
