@@ -11,12 +11,12 @@ const addTeam = (req, res) => {
       client_secret: process.env.CLIENT_SECRET,
       code: code,
       redirect_uri: 'http://localhost:8080/slack/teams/auth'
-    }
+    },
+    json: true
   }
 
   rp(options)
   .then((body) => {
-    body = JSON.parse(body);
     if (body.ok) {
       let slackTeamData = {
         slackTeamToken: body.access_token,

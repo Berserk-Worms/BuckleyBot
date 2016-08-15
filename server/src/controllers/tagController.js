@@ -13,16 +13,19 @@ const addJobTags = (req, res) => {
     }
   })
   .then((foundJob) => {
-    tagsData.forEach((tag) => {
-      Tag.findOrCreate({ 
+    return Promise.all(tagsData.map((tag) => {
+      return Tag.findOrCreate({ 
         where: { name: tag }
       })
       .spread((tag, created) => {
         //Sequelize association that adds job and tag to JobTag join table
-        tag.addJob(foundJob)
-        res.end();
+        return tag.addJob(foundJob)
       })
-    })
+    }));
+  })
+  .then((results) => {
+    console.log(results);
+    res.end();
   })
   .catch((err) => {
     console.log('Error creating tag:', err);
