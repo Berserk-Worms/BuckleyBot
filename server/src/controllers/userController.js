@@ -4,6 +4,13 @@ import Team from '../models/teamModel';
 
 import rp from 'request-promise';
 
+import jwt from 'jwt-simple';
+
+const tokenForUser = (user) => {
+  const timestamp = new Date().getTime();
+  return jwt.encode({ sub: user.id, iat: timestamp }, process.env.JWT_SECRET);
+}
+
 // Authenticate user when they click on "sign in with Slack" button
 const authUser = (req, res) => {
   console.log('Authenticating user!');

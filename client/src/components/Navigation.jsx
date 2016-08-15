@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Navbar, NavItem, Nav } from 'react-bootstrap';
 
+const authUrl = "https://slack.com/oauth/authorize?scope=identity.basic,identity.email,identity.team,identity.avatar&client_id=66765912757.67864241282&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Fslack%2Fusers%2Fauth";
+
 class Navigation extends Component {
   render() {
     return (
@@ -13,7 +15,11 @@ class Navigation extends Component {
         </Navbar.Header>
         <Navbar.Collapse>
           <Nav pullRight>
-            <NavItem eventKey={1} href="https://slack.com/oauth/authorize?scope=identity.basic,identity.email,identity.team,identity.avatar&client_id=66765912757.67864241282&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Fslack%2Fusers%2Fauth">Sign In</NavItem>
+            <NavItem 
+              eventKey={1} 
+              href={authUrl}>
+              Sign In
+            </NavItem>
           </Nav>
         </Navbar.Collapse>
       </Navbar>

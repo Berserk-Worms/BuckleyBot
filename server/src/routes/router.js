@@ -6,7 +6,16 @@ import jobController from '../controllers/jobController';
 import tagController from '../controllers/tagController'
 import jobTagController from '../controllers/jobTagController';
 
+// Passport stuff
+import passportConfig from '../utils/passport';
+import passport from 'passport';
+
+const requireAuth = passport.authenticate('jwt', { session: false });
+
 export default (app, express) => {
+
+  // API ROUTES
+
   //////////////////////////////////////////////
   //Handling Team Oauth
   //////////////////////////////////////////////
@@ -41,6 +50,13 @@ export default (app, express) => {
   //Handling Tag
   //////////////////////////////////////////////
   app.post('/api/tags/job', tagController.addJobTags);
+
+  // CLIENT SIDE ROUTES
+
+  // Dummy page to test JWT authorization
+  app.get('/securepage', requireAuth, (req, res) => {
+    res.send('Hi there, you are authorized :)');
+  });
 
   //////////////////////////////////////////////
   //Handling Error
