@@ -52,7 +52,7 @@ const addTeamBot = (createdTeam) => {
 }
 
 //Handle different bot listeners
-connection.hears("jobs", ['direct_message'], function(bot, message) {
+connection.hears(["jobs", "job"], ['direct_message'], function(bot, message) {
   console.log('this is the message, ', message )
 
   //this function continues to check if profile (name/location)
@@ -134,13 +134,13 @@ connection.on('interactive_message_callback', (bot, message) => {
         attachment_type: 'default',
         actions: [
           {
-            "name":"yes",
+            "name": "yes",
             "text": "Yes!",
             "value": "yes",
             "type": "button",
           },
           {
-           "text": "No!",
+            "text": "No!",
             "name": "no",
             "value": "delete",
             "style": "danger",

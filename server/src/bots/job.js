@@ -39,11 +39,51 @@ let userJobsListener = {
 
           //Set attachment to message to be three random jobs
           let reply_with_attachments = {
-            attachments: _.sample(attachments, 1)
+            text: 'Some Jobs',
+            attachments: _.sample(attachments, 3)
           }
 
           //reply with jobs
-          bot.reply(message, reply_with_attachments)
+          //current reply with 3 jobs
+
+          // { attachments:
+          //   [ 
+          //     { title: ':computer: Drupal Developer for Nonprofit Projects at Giant Rabbit, LLC (Berkeley, CA)',
+          //       text: ':office: Giant Rabbit, LLC - Berkeley, CA \n :link: https://stackoverflow.com/jobs/122644/drupal-developer-for-nonprofit-projects-giant-rabbit-llc',
+          //       callback_id: 'clickSaveJobs',
+          //       attachment_type: 'default',
+          //       actions: [Object] },
+          //     { title: ':computer: Front End Engineering Guru at Lyra Health (Burlingame, CA)',
+          //       text: ':office: Lyra Health - Burlingame, CA \n :link: https://stackoverflow.com/jobs/120874/front-end-engineering-guru-lyra-health',
+          //       callback_id: 'clickSaveJobs',
+          //       attachment_type: 'default',
+          //       actions: [Object] },
+          //     { title: ':computer: Full Stack Engineer at Keen IO (San Francisco, CA) (allows remote)',
+          //       text: ':office: Keen IO - San Francisco, CA \n :link: https://stackoverflow.com/jobs/95978/full-stack-engineer-keen-io',
+          //       callback_id: 'clickSaveJobs',
+          //       attachment_type: 'default',
+          //       actions: [Object] } ] }
+
+          // let botReply = [
+          //   {
+          //     attachments: reply_with_attachments.attachments[0]
+          //   },
+          //   {
+          //     attachments: reply_with_attachments.attachments[1]
+          //   },
+          //   {
+          //     attachments: reply_with_attachments.attachments[2]
+          //   }
+          // ];
+
+          // let n = 2;
+          // while (n > -1) {
+          //   console.log(`this is inside while loop @${n}, `, reply_with_attachments.attachments[n])
+          //   bot.reply(message, botReply[n])
+          //   n--;
+          // }
+
+          bot.reply(message, reply_with_attachments);
         })
       }
     })

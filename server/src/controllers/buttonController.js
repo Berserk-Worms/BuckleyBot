@@ -3,9 +3,9 @@ import UserJob from '../models/userJobModel';
 import User from '../models/userModel';
 import Job from '../models/jobModel';
 
+
 const test = (req, res) => {
-  let parsed = JSON.parse(req.body.payload);
-  // console.log(JSON.stringify(parsed.original_message));
+
   //receive a req.body with the below format
   // {
   //   payload: {
@@ -33,14 +33,12 @@ const test = (req, res) => {
   //     response_url: 'https:\\/\\/hooks.slack.com\\/actions\\/T208LE2V9\\/69214087047\\/JbU5aJyPTMvWW5z2eHtCSFIg'
   //   }
   // }
+  let parsed = JSON.parse(req.body.payload);
+  console.log(parsed.original_message.attachments[0]);
 
-  //upon the save button from the user
-  //we should find the user, then append
-  //to their user_jobs database
-
-  //Need to ensure no duplicates
-  //if already saved, need to ensure job doesn't display on userJobsListener
-  //currently 
+  //TODO: if already saved, need to ensure job doesn't display on userJobsListener
+  //TODO: Also can add a button to show more jobs, instead of typing jobs again
+  //Note: The job id is being passed into the value
   User.find({
     where: { slackUserId: parsed.user.id }
   })
@@ -58,28 +56,43 @@ const test = (req, res) => {
       console.log('not nice')
     })
 
-    res.json({
-      type: "message",
-      user: parsed.original_message.user,
-      bot_id: parsed.original_message.bot_id,
-      attachments: [
-        {
-          callback_id: "something else",
-          text: parsed.original_message.attachments[0].text,
-          title: parsed.original_message.attachments[0].title,
-          actions: [
-            {
-              id: '1',
-              name: "saved",
-              text: "Saved!",
-              type: "button",
-              value: "saved",
-              style: "primary"
-            }
-          ]
-        }
-      ]
-    });
+    let reply_saved = {
+      type: 'message',
+      text: 'Some Jobs',
+      attachments: parsed.original_message.attachments
+    }
+    // //change the button style to 'primary' to display green
+    // //change the button text to Saved! to indicate saved
+    // reply_saved.attachments[0].actions[0].text = 'Saved!';
+    // reply_saved.attachments[0].actions[0].style = 'primary';
+    // //give it a new callback_id so it wont make a slack button interaction
+    // reply_saved.attachments[0].callback_id = 'something else';
+
+    res.json(reply_saved);
+    //below is a message format that is required to look exactly
+    //like previous message, except the button
+    // res.json({
+    //   type: "message",
+    //   // user: parsed.original_message.user,
+    //   // bot_id: parsed.original_message.bot_id,
+    //   attachments: [
+    //     {
+    //       callback_id: "something else",
+    //       text: parsed.original_message.attachments[0].text,
+    //       title: parsed.original_message.attachments[0].title,
+    //       actions: [
+    //         {
+    //           id: '1',
+    //           name: "saved",
+    //           text: "Saved!",
+    //           type: "button",
+    //           value: "saved",
+    //           style: "primary"
+    //         }
+    //       ]
+    //     }
+    //   ]
+    // });
   })
   .catch(err => {
     res.send('Error')
