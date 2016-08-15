@@ -1,8 +1,11 @@
 import Profile from '../models/profileModel';
+import UserJob from '../models/userJobModel';
+import User from '../models/userModel';
+import Job from '../models/jobModel';
 
 const test = (req, res) => {
   let parsed = JSON.parse(req.body.payload);
-  console.log('this is req body, ', parsed.original_message);
+  // console.log(JSON.stringify(parsed.original_message));
   //receive a req.body with the below format
   // {
   //   payload: {
@@ -35,23 +38,68 @@ const test = (req, res) => {
   //we should find the user, then append
   //to their user_jobs database
 
-  Profile.find({
-    where: { id: 2 }
+  //Need to ensure no duplicates
+  //if already saved, need to ensure job doesn't display on userJobsListener
+  //currently 
+  User.find({
+    where: { slackUserId: parsed.user.id }
   })
-  .then(profile => {
-    //update database, 
+  .then((user) => {
+    UserJob.findOrCreate({
+      where: {
+        userId: user.dataValues.id,
+        jobId: `${parsed.actions[0].value}`
+      }
+    })
+    .spread((userJob, created) => {
+      created ? console.log('User saved job!') : console.log('User already has this job saved');
+    })
+    .catch((err) => {
+      console.log('not nice')
+    })
 
-    //we should send the original message
-    //except with visual ques to show the 
-    //job has been saved
-    profile.updateAttributes({ location: parsed.original_message.attachments[0].title})
-    res.send('Save jobs!'
-    //above is the original message modified
-    );
+    res.json({
+      type: "message",
+      user: parsed.original_message.user,
+      bot_id: parsed.original_message.bot_id,
+      attachments: [
+        {
+          callback_id: "something else",
+          text: parsed.original_message.attachments[0].text,
+          title: parsed.original_message.attachments[0].title,
+          actions: [
+            {
+              id: '1',
+              name: "saved",
+              text: "Saved!",
+              type: "button",
+              value: "saved",
+              style: "primary"
+            }
+          ]
+        }
+      ]
+    });
   })
   .catch(err => {
-    res.send('Error saving job.')
+    res.send('Error')
   })
+
+  // Profile.find({
+  //   where: { id: 2 }
+  // })
+  // .then(profile => {
+  //   //update database, 
+
+  //   //we should send the original message
+  //   //except with visual ques to show the 
+  //   //job has been saved
+  //   profile.updateAttributes({ location: 'earth' })
+  //   res.send('Save jobs!');
+  // })
+  // .catch(err => {
+  //   res.send('Error saving job.')
+  // })
 }
 
 export default { test };

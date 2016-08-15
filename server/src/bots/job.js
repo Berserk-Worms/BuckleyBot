@@ -25,20 +25,21 @@ let userJobsListener = {
           console.log(filterJobs.length)
           //Format job data for Slack message attachment 
           let attachments = _.map(filterJobs, (job) => {
+            // console.log(job);
             return {
               title: `:computer: ${job.dataValues.title}`,
               text: `:office: ${job.dataValues.company} - ${job.dataValues.location} \n :link: ${job.dataValues.link}`,
               callback_id: `clickSaveJobs`,
               attachment_type: `default`,
               actions: [
-                {name: `saveJob`, text: `Save`, value: `saveJob`, type: `button`, style: `default`}
+                {name: `saveJob`, text: `Save`, value: job.dataValues.id, type: `button`, style: `default`}
               ]
             }
           })
 
           //Set attachment to message to be three random jobs
           let reply_with_attachments = {
-            attachments: _.sample(attachments, 3)
+            attachments: _.sample(attachments, 1)
           }
 
           //reply with jobs
