@@ -83,7 +83,6 @@ const findOrCreateUser = (body, res) => {
   let slackTeamId = body.team.id;
   let email = body.user.email;
 
-  //TODO: fix the duplicate user issue
   User.findOrCreate({
     where: { name, slackUserId, slackTeamId, email }
   })
