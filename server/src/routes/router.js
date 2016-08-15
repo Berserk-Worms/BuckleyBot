@@ -30,7 +30,7 @@ export default (app, express) => {
   //////////////////////////////////////////////
   //Handling Oauth
   //////////////////////////////////////////////
-  app.get('/slack/users/auth', userController.authUser);
+  app.get('/slack/users/auth', userController.checkAuthCode);
 
   //////////////////////////////////////////////
   //Handling Job
