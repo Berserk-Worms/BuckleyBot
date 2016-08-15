@@ -14,7 +14,7 @@ const checkAuthCode = (req, res) => {
   console.log('This is the req.query object:', req.query);
 
   if (req.query.code) {
-    console.log('Received authorization code, will attempt to swap for access token');
+    console.log('Received authorization code, will attempt to swap for access token.');
     authenticateUser(req, res);
   } else if (req.query.error) {
     console.log('User denied authorization. Error:', req.query.error);
@@ -74,7 +74,7 @@ const authenticateUser = (req, res) => {
 
 //moved findOrCreateUser into its own function
 const findOrCreateUser = (body, res) => {
-  console.log('-------------- Checking DB for user!')
+  console.log('-------------- Checking DB for user!');
   // find or create user using access token and the info from body
   let name = body.user.name;
   let accessToken = body.access_token;
