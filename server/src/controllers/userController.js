@@ -4,19 +4,28 @@ import Team from '../models/teamModel';
 
 import rp from 'request-promise';
 
-//some logic to query slack for slack_id and team_id
-//need to register app to receive client id and client secret
-let generateInfo = (token) => {
+// Authenticate user when they click on "sign in with Slack" button
+//
+// TODO: This method could be moved into a different module that deals
+// purely with slack oauth. This doesn't necessarily need to live in
+// the userController module.
+const checkAuthCode = (req, res) => {
+  console.log('-------------- Checking authorization code sent by Slack!');
+  console.log('This is the req.query object:', req.query);
 
+  if (req.query.code) {
+    console.log('Received authorization code, will attempt to swap for access token.');
+    authenticateUser(req, res);
+  } else if (req.query.error) {
+    console.log('User denied authorization. Error:', req.query.error);
+    // TODO: show an error here that tells the user that they need to
+    // authorize slackbot in order for it to be added on Slack
+    res.redirect('/');
+  }
 }
 
-//auth user the first time they sign in with Slack
-const authUser = (req, res) => {
-  console.log('authenticating user!');
-  //check for error (perhaps they declined to sign in)
-  //if no error, extract code and swap for access token
-
-  console.log('this is the req.query:', req.query);
+const authenticateUser = (req, res) => {
+  console.log('-------------- Authenticating user!')
 
   let options = {
     uri: 'https://slack.com/api/oauth.access',
@@ -26,45 +35,46 @@ const authUser = (req, res) => {
       client_secret: process.env.CLIENT_SECRET,
       code: req.query.code,
       redirect_uri: 'http://localhost:8080/slack/users/auth'
-    }
+    },
+    headers: {
+      'User-Agent': 'Request-Promise'
+    },
+    json: true
   }
 
+  // Make request to Slack Authorization Server to swap
+  // auth code for access token
   rp(options)
-    .then(body => {
-      body = JSON.parse(body);
-
-      if (body.ok) {
-        console.log('response body', body);
-        let teamId = body.team.id;
-
-        //TODO: Fix nested promise structure -- this is an antipattern (PM)
-        //Check for any team with the slack team id -- if this exists, find or create user
-        Team.findOne({ where: { slackTeamId: teamId} })
-        .then((team) => {
-          if (team !== null) {
-            console.log('team exists:', team);
-            findOrCreateUser(body, res);
-          } else {
-            // TODO: implement this with front end /oops page
-            // this is where we handle a user that signs in but their team
-            // has not yet installed bot to their slack
-            console.log('Team needs to add uncle bot first!');
-            res.redirect('/oops');
-          }
-        })
-        .catch((err) => {
-          console.log("Error finding team:", err);
-        });
-      } else {
-        //redirect to handle error
-        console.log('Error: ', err);
-      }
-    })
-    .catch(err => res.redirect('/'));
+  .then(body => {
+    console.log('response body', body);
+    if (body.ok) {
+      //Check for any team with the slack team id -- if this exists, find or create user
+      return Team.findOne({ where: { slackTeamId: body.team.id} });
+    } else {
+      console.log('Response body NOT OK. Error:', body.error);
+      res.redirect('/');
+    }
+  })
+  .then(team => {
+    if (team !== null) {
+      findOrCreateUser(body, res);
+    } else {
+      // TODO: implement this with front end /oops page
+      // this is where we handle a user that signs in but their team
+      // has not yet installed bot to their slack
+      console.log('Team needs to add uncle bot first!');
+      res.redirect('/oops');
+    }
+  })
+  .catch(err => {
+    console.log('There was an error with the GET request:', err)
+    res.redirect('/')
+  });
 }
 
 //moved findOrCreateUser into its own function
 const findOrCreateUser = (body, res) => {
+  console.log('-------------- Checking DB for user!');
   // find or create user using access token and the info from body
   let name = body.user.name;
   let accessToken = body.access_token;
@@ -72,13 +82,16 @@ const findOrCreateUser = (body, res) => {
   let slackTeamId = body.team.id;
   let email = body.user.email;
 
-  //TODO:
   User.findOrCreate({
-    where: { name, accessToken, slackUserId, slackTeamId, email }
+    where: { name, slackUserId, slackTeamId, email }
   })
   .spread((user, created) => {
-    created ? console.log('User created') : console.log('User already exists.');
-    res.redirect('/profile');
+    console.log('Created user?', created);
+    user.updateAttributes({ accessToken });
+    // TODO: issue the JWT
+    // TODO: and store it in the client
+    // QUESTION: how do we send it to the client? 
+    res.redirect(`/profile`);
   })
   .catch(err => res.send(err));
 }
@@ -148,4 +161,4 @@ const deleteUser = (req, res) => {
 }
 
 
-export default { findUser, addUser, deleteUser, authUser };
+export default { findUser, addUser, deleteUser, checkAuthCode };
