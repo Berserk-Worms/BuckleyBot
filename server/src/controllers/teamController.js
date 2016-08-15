@@ -27,23 +27,22 @@ const addTeam = (req, res) => {
       }
       return slackTeamData;
     } else {
+      console.log('Error obtaing tokens from Slack');
       //TODO: redirect to error page due to failed respone request to slack
       res.redirect('/');
     }
   })
   .then((slackTeamData) => {
-    Team.create(slackTeamData)
-    .then((team) => {
-      findTeamUsers(team);
-      res.redirect('/');
-    })
-    .catch(err => {
-      console.log('error creating a team:', err);
-      //TODO: redirect to error page due to bad data base request
-      res.redirect('/');
-    })
-  })  
-  .catch(err => res.redirect('/') /* due to failed request to slack */ );
+    return Team.create(slackTeamData)
+  }) 
+  .then((team) => {
+    findTeamUsers(team);
+    res.redirect('/');
+  })
+  .catch((err) => {
+    console.log("Error while adding Slack Team:", err);
+    res.redirect('/') /* due to failed request to slack */ 
+  });
 
 } 
 
@@ -68,13 +67,12 @@ const findTeamUsers = (team) => {
         method: 'POST',
         json: { users, teamId } 
       }
-      return usersData
+      return rp(usersData);
     } else {
       //TODO: redirect to error page
       res.redirect('/');
     }
   }) 
-  .then(rp)
   .catch(err => console.log(err));
 }
 

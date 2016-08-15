@@ -25,7 +25,7 @@ const addJobTags = (req, res) => {
     })
   })
   .catch((err) => {
-    throw err;
+    console.log('Error creating tag:', err);
   });
   //Loop through array of tags
 }

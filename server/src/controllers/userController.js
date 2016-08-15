@@ -115,7 +115,7 @@ const addUser = (req, res) => {
       name, accessToken, slackUserId, slackTeamId, email 
     })
     .then((user) => {
-      return {
+      return rp({
         url: 'http://localhost:8080/slack/users/profile',
         method: 'POST',
         json: { 
@@ -123,9 +123,8 @@ const addUser = (req, res) => {
           name: user.name, 
           location: 'San Francisco' 
         }
-      }
+      });
     })
-    .then(rp)
     .catch(err => console.log(err));   
     
   });
@@ -145,7 +144,7 @@ const deleteUser = (req, res) => {
   .catch(err => {
     console.log('Error: ', err);
     done(err);
-  })
+  });
 }
 
 

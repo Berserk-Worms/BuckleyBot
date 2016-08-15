@@ -23,7 +23,7 @@ const addJob = (req, res) => {
         url: 'http://localhost:8080/api/tags/job',
         method: 'POST',
         json: { job, tagsData }
-      })
+      });
     } else {
       console.log('we already have that job in the database');
       res.end();
@@ -34,7 +34,7 @@ const addJob = (req, res) => {
   })
   .catch((err) => {
     console.log('error creating job', err);
-  })
+  });
 }
 
 export default { addJob }
