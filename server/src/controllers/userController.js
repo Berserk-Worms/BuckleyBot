@@ -48,24 +48,23 @@ const authenticateUser = (req, res) => {
   .then(body => {
     console.log('response body', body);
     if (body.ok) {
-      //TODO: Fix nested promise structure -- this is an antipattern (PM)
       //Check for any team with the slack team id -- if this exists, find or create user
-      Team.findOne({ where: { slackTeamId: body.team.id} })
-      .then((team) => {
-        if (team !== null) {
-          findOrCreateUser(body, res);
-        } else {
-          // TODO: implement this with front end /oops page
-          // this is where we handle a user that signs in but their team
-          // has not yet installed bot to their slack
-          console.log('Team needs to add uncle bot first!');
-          res.redirect('/oops');
-        }
-      });
+      return Team.findOne({ where: { slackTeamId: body.team.id} });
     } else {
-      //TODO: figure out what to do here if response is messed up
-      console.log('Network response is not ok');
+      console.log('Response body NOT OK. Error:', body.error);
+      res.redirect('/');
     }
+  })
+  .then(team => {
+    if (team !== null) {
+      findOrCreateUser(body, res);
+    } else {
+      // TODO: implement this with front end /oops page
+      // this is where we handle a user that signs in but their team
+      // has not yet installed bot to their slack
+      console.log('Team needs to add uncle bot first!');
+      res.redirect('/oops');
+    }
   })
   .catch(err => {
     console.log('There was an error with the GET request:', err)
