@@ -5,9 +5,27 @@ import Team from '../models/teamModel';
 import rp from 'request-promise';
 
 // Authenticate user when they click on "sign in with Slack" button
-const authUser = (req, res) => {
-  console.log('Authenticating user!');
+//
+// TODO: This method could be moved into a different module that deals
+// purely with slack oauth. This doesn't necessarily need to live in
+// the userController module.
+const checkAuthCode = (req, res) => {
+  console.log('-------------- Checking authorization code sent by Slack!');
   console.log('This is the req.query object:', req.query);
+
+  if (req.query.code) {
+    console.log('Received authorization code, will attempt to swap for access token');
+    authenticateUser(req, res);
+  } else if (req.query.error) {
+    console.log('User denied authorization. Error:', req.query.error);
+    // TODO: show an error here that tells the user that they need to
+    // authorize slackbot in order for it to be added on Slack
+    res.redirect('/');
+  }
+}
+
+const authenticateUser = (req, res) => {
+  console.log('-------------- Authenticating user!')
 
   let options = {
     uri: 'https://slack.com/api/oauth.access',
@@ -57,6 +75,7 @@ const authUser = (req, res) => {
 
 //moved findOrCreateUser into its own function
 const findOrCreateUser = (body, res) => {
+  console.log('-------------- Checking DB for user!')
   // find or create user using access token and the info from body
   let name = body.user.name;
   let accessToken = body.access_token;
@@ -148,4 +167,4 @@ const deleteUser = (req, res) => {
 }
 
 
-export default { findUser, addUser, deleteUser, authUser };
+export default { findUser, addUser, deleteUser, checkAuthCode };
