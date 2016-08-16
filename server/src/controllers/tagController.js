@@ -6,27 +6,32 @@ import request from 'request';
 const addJobTags = (req, res) => {
   let job = req.body.job;
   let tagsData = req.body.tagsData;
+  let jobData = null;
 
   Job.findOne({
     where: {
       id: job.id
     }
   })
-    .then( (foundJob) => {
-      tagsData.forEach((tag) => {
-        Tag.findOrCreate({ 
-          where: { name: tag }
-        })
-        .spread((tag, created) => {
-          //Sequelize association that adds job and tag to JobTag join table
-          tag.addJob(foundJob)
-          res.end();
-        })
-      })
-    })
-    .catch((err) => {
-      throw err;
-    });
+  .then((foundJob) => {
+    jobData = foundJob;
+    return Promise.all(tagsData.map((name) => {
+      return Tag.findOrCreate({ 
+        where: { name: name }
+      });
+    }));
+  })
+  .then((tagsArray) => {
+    return Promise.all(tagsArray.map((tag) => {
+      return tag[0].addJob(jobData);
+    }));
+  })
+  .then(() => {
+    res.end();
+  })
+  .catch((err) => {
+    console.log('Error creating tag:', err);
+  });
   //Loop through array of tags
 }
 

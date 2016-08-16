@@ -123,27 +123,26 @@ const addUser = (req, res) => {
   let accessToken = null;
 
   users.forEach( ({ name, slackUserId, slackTeamId, email }) => {
-    
-    User.findOrCreate({
-      where: { name, accessToken, slackUserId, slackTeamId, email, teamId }
-    })
-    .spread ((user, created) => {
-      let userId = user.id;
-      let name = user.name;
-      let location = 'San Francisco';
 
-      if(created) {
-        console.log(user.name + ' added');
-        Profile.findOrCreate({ where: { userId, name, location } })
-          .spread((profile, created) => {
-            created ? console.log('profile created') : console.log('profile already exists'); 
-          })
-          .catch(err => console.log(err));
-      } else {
-        console.log(user.name + ' exists');
-      }
+    User.create({
+      name, accessToken, slackUserId, slackTeamId, email 
     })
-    .catch(err => console.log(err));   
+    .then((user) => {
+      return rp({
+        url: 'http://localhost:8080/slack/users/profile',
+        method: 'POST',
+        json: { 
+          userId: user.id, 
+          name: user.name, 
+          location: 'San Francisco' 
+        }
+      });
+    })
+    .catch((err) => {
+      console.log(err)
+      res.end();
+    });   
+    
   });
 }
 
@@ -161,7 +160,7 @@ const deleteUser = (req, res) => {
   .catch(err => {
     console.log('Error: ', err);
     done(err);
-  })
+  });
 }
 
 
