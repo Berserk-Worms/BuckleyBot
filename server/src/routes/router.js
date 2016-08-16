@@ -26,11 +26,12 @@ export default (app, express) => {
   //////////////////////////////////////////////
 
   // TODO: fix this so that it is in the userController!
-  app.get('/slack/users', requireAuth, (req, res) => {
-        res.send(req.user.name);
-    });
+  app.get('/slack/users', userController.findUser);
   app.post('/slack/users', userController.addUser);
   app.delete('/slack/users', userController.deleteUser);
+
+  // Grabbing user data
+  app.get('/slack/users/data', requireAuth, userController.getUserData);
 
   //////////////////////////////////////////////
   //Handling Profile

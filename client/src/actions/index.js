@@ -8,7 +8,7 @@ const ROOT_URL = 'http://localhost:8080';
 export function getUserData() {
   return function(dispatch) {
     // Submit jwt to the server
-    axios.get(`${ROOT_URL}/slack/users`, {
+    axios.get(`${ROOT_URL}/slack/users/data`, {
       headers: { authorization: localStorage.getItem('jwt') }
     })
     .then(response => {

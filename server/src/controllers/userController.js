@@ -6,11 +6,6 @@ import rp from 'request-promise';
 
 import jwt from 'jwt-simple';
 
-const tokenForUser = (slackUserId) => {
-  const timestamp = new Date().getTime();
-  return jwt.encode({ sub: slackUserId, iat: timestamp }, process.env.JWT_SECRET);
-}
-
 // Authenticate user when they click on "sign in with Slack" button
 //
 // TODO: This method could be moved into a different module that deals
@@ -29,7 +24,7 @@ const checkAuthCode = (req, res) => {
     // authorize slackbot in order for it to be added on Slack
     res.redirect('/');
   }
-}
+};
 
 const authenticateUser = (req, res) => {
   console.log('-------------- Authenticating user!')
@@ -107,6 +102,26 @@ const findOrCreateUser = (body, res) => {
     res.redirect(`/?token=${token}`);
   })
   .catch(err => res.send(err));
+};
+
+const tokenForUser = (slackUserId) => {
+  const timestamp = new Date().getTime();
+  return jwt.encode({ sub: slackUserId, iat: timestamp }, process.env.JWT_SECRET);
+};
+
+// This is called after passport middleware that finds user
+const getUserData = (req, res) => {
+  // Check if error
+  if (req.error) {
+    console.log('Error getting user data:', error);
+    res.send(req.error);
+  }
+  // Otherwise, send the relevant user data as an object
+  let userData = {
+    name: req.user.name,
+    email: req.user.email
+  }
+  res.send(userData);
 }
 
 //we have a database of users based on slack bot interaction
@@ -178,4 +193,4 @@ const deleteUser = (req, res) => {
 }
 
 
-export default { findUser, addUser, deleteUser, checkAuthCode };
+export default { findUser, addUser, deleteUser, checkAuthCode, getUserData };

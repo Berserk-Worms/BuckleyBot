@@ -34,7 +34,7 @@ class Profile extends Component {
 }
 
 function mapStateToProps(state) {
-  return { name: state.user.data };
+  return { name: state.user.name };
 }
 
 export default connect(mapStateToProps, actions)(Profile);
