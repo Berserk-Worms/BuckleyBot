@@ -8,19 +8,20 @@ import { connect } from 'react-redux';
 class Navigation extends Component {
 
   renderLinks() {
-    if (this.props.authenticated) {
-      return (
-        <LinkContainer to="/signout">
-          <NavItem eventKey={1}>Sign Out</NavItem>
-        </LinkContainer>
-      );
-    } else {
-      return (
-        <LinkContainer to="/signin">
-          <NavItem eventKey={1}>Sign In</NavItem>
-        </LinkContainer>
-      );
+    let route = '/signin';
+    let text = 'Sign in';
+
+    if (this.props.authenticated) { 
+      route = '/signout';
+      text = 'Sign Out';
     }
+
+    return (
+      <LinkContainer to={route}>
+        <NavItem eventKey={1}>{text}</NavItem>
+      </LinkContainer>
+    );
+    
   }
 
   render() {
