@@ -29,8 +29,11 @@ export function getUserData() {
   }
 }
 
+export function signInUser() {
+  return { type: AUTH_USER };
+}
+
 export function signoutUser() {
   localStorage.removeItem('jwt');
-
   return { type: UNAUTH_USER };
 }
