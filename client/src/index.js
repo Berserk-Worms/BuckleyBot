@@ -14,7 +14,7 @@ import routes from './routes';
 const createStoreWithMiddleware = applyMiddleware(reduxThunk)(createStore);
 const store = createStoreWithMiddleware(reducers);
 
-const token = localStorage.getItem('token');
+const token = localStorage.getItem('jwt');
 
 // if user has a token in local storage update reducer
 if (token) { store.dispatch({ type: AUTH_USER }) };

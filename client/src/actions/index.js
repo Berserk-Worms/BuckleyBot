@@ -30,7 +30,7 @@ export function getUserData() {
 }
 
 export function signoutUser() {
-  localStorage.removeItem('token');
+  localStorage.removeItem('jwt');
 
   return { type: UNAUTH_USER };
 }

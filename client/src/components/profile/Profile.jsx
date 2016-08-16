@@ -5,7 +5,7 @@ import UserInfo from './UserInfo';
 import JobList from './JobList';
 
 import { connect } from 'react-redux';
-import * as actions from '../actions';
+import * as actions from '../../actions';
 
 class Profile extends Component {
 
