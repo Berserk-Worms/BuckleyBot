@@ -73,7 +73,11 @@ const findTeamUsers = (team) => {
       res.redirect('/');
     }
   }) 
-  .catch(err => console.log(err));
+  .catch((err) => {
+    console.log(err)
+    //TODO: redirect to error page
+    res.redirect('/');
+  });
 }
 
 const parseUsersInfo = (users) => {

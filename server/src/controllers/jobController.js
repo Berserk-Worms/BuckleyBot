@@ -34,6 +34,7 @@ const addJob = (req, res) => {
   })
   .catch((err) => {
     console.log('error creating job', err);
+    res.end();
   });
 }
 
