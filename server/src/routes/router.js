@@ -58,13 +58,6 @@ export default (app, express) => {
   //////////////////////////////////////////////
   app.post('/api/tags/job', tagController.addJobTags);
 
-  // CLIENT SIDE ROUTES
-
-  // Dummy page to test JWT authorization
-  app.get('/securepage', requireAuth, (req, res) => {
-    res.send('Hi there, you are authorized :)');
-  });
-
   //////////////////////////////////////////////
   //Handling Interactive Buttons
   //////////////////////////////////////////////
