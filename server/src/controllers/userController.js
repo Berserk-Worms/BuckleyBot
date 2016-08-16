@@ -6,9 +6,9 @@ import rp from 'request-promise';
 
 import jwt from 'jwt-simple';
 
-const tokenForUser = (userId) => {
+const tokenForUser = (slackUserId) => {
   const timestamp = new Date().getTime();
-  return jwt.encode({ sub: userId, iat: timestamp }, process.env.JWT_SECRET);
+  return jwt.encode({ sub: slackUserId, iat: timestamp }, process.env.JWT_SECRET);
 }
 
 // Authenticate user when they click on "sign in with Slack" button

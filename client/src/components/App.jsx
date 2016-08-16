@@ -11,8 +11,9 @@ class App extends Component {
     if (token) {
       localStorage.setItem('jwt', token);
     }
-    // Now check if localstorage has jwt -- if so, then do clientside redirect to profile page
+    // Now check if localstorage has jwt
     if (localStorage.getItem('jwt')) {
+      // if so, then do clientside redirect to profile page
       browserHistory.push('/profile');
     }
   }
