@@ -5,12 +5,12 @@ import Job from '../models/jobModel';
 
 
 //master dispatcher to check the callback_id of incoming requests
-const test = (req, res) => {
-  let parsed = JSON.parse(req.body.payload);
+const buttonDispatcher = (req, res) => {
+  let parsedPayload = JSON.parse(req.body.payload);
 
   //dispatch to the responsible function based on the callback_id
-  if (parsed.callback_id === 'clickSaveJobs') {
-    saveJob(req, res, parsed);
+  if (parsedPayload.callback_id === 'clickSaveJobs') {
+    saveJob(req, res, parsedPayload);
   }
 
   //BELOW is the format of incoming req.body//////////////////////////
@@ -68,14 +68,12 @@ const saveJob = (req, res, data) => {
     }
     let clickedInt = `${parseInt(data.attachment_id, 10) - 1}`;
 
-    //Self-invoking Function to modify button style and text
-    (() => {
-      //Note: 1st array is the attachment, 2nd is the button
-      reply_saved.attachments[clickedInt].actions[0].text = 'Saved!';
-      reply_saved.attachments[clickedInt].actions[0].style = 'primary';
-      //give it a new callback_id so it wont make a slack button interaction
-      reply_saved.attachments[clickedInt].callback_id = 'something else';
-    })();
+    //Functions to change the button text and color
+    //Note: 1st array is the attachment, 2nd is the button
+    reply_saved.attachments[clickedInt].actions[0].text = 'Saved!';
+    reply_saved.attachments[clickedInt].actions[0].style = 'primary';
+    //give it a new callback_id so it wont make a slack button interaction
+    reply_saved.attachments[clickedInt].callback_id = 'something else';
 
     res.json(reply_saved);
   })
@@ -111,4 +109,4 @@ const saveJob = (req, res, data) => {
     ////////////////////////////////////////////////////////////////////
 }
 
-export default { test };
+export default { buttonDispatcher };

@@ -47,8 +47,7 @@ export default (app, express) => {
   //////////////////////////////////////////////
   //Handling Interactive Buttons
   //////////////////////////////////////////////
-  app.get('/slack/receive', buttonController.test)
-  app.post('/slack/receive', buttonController.test);
+  app.post('/slack/receive', buttonController.buttonDispatcher);
   
   //////////////////////////////////////////////
   //Handling Error
