@@ -1,19 +1,40 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router';
 import { Navbar, NavItem, Nav } from 'react-bootstrap';
+import { LinkContainer } from 'react-router-bootstrap';
+import { connect } from 'react-redux';
+
 
 class Navigation extends Component {
+
+  renderLinks() {
+    if (this.props.authenticated) {
+      return (
+        <LinkContainer to="/signout">
+          <NavItem eventKey={1}>Sign Out</NavItem>
+        </LinkContainer>
+      );
+    } else {
+      return (
+        <LinkContainer to="/signin">
+          <NavItem eventKey={1}>Sign In</NavItem>
+        </LinkContainer>
+      );
+    }
+  }
+
   render() {
     return (
       <Navbar className="nav-size" inverse>
         <Navbar.Header>
           <Navbar.Brand>
-            <a href="/">BuckleyBot</a>
+            <Link to={'/'}>BuckleyBot</Link>
           </Navbar.Brand>
           <Navbar.Toggle />
         </Navbar.Header>
         <Navbar.Collapse>
           <Nav pullRight>
-            <NavItem eventKey={1} href="https://slack.com/oauth/authorize?scope=identity.basic,identity.email,identity.team,identity.avatar&client_id=66765912757.67864241282&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Fslack%2Fusers%2Fauth">Sign In</NavItem>
+            {this.renderLinks()}
           </Nav>
         </Navbar.Collapse>
       </Navbar>
@@ -21,6 +42,10 @@ class Navigation extends Component {
   }
 }
 
-export default Navigation;
+function mapStateToProps(state) {
+  return {
+    authenticated: state.auth.authenticated
+  };
+}
 
-// NOTE: the a tag that goes to home may need to be a link tag through react router
+export default connect(mapStateToProps)(Navigation);
