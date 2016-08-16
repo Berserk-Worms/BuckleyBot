@@ -53,11 +53,7 @@ const addTeamBot = (createdTeam) => {
 
 //Handle different bot listeners
 connection.hears(["jobs", "job"], ['direct_message'], function(bot, message) {
-  console.log('this is the message, ', message )
-
-  //this function continues to check if profile (name/location)
-  //has been completed, in case the original websocket was closed
-  //prior to completing onboarding
+  //checkStage checks if profile has been completed
   helper.checkStage(bot, message);
   userJobsListener.replyWithJobs(bot, message);
 });
@@ -69,9 +65,13 @@ connection.hears(["jobs", "job"], ['direct_message'], function(bot, message) {
 
 // BUCKLEY.startRTM();
 
-connection.hears("hello", ['direct_message'], (bot, message) => {
+connection.hears("weather", ['direct_message'], (bot, message) => {
   console.log('replying to message');
   bot.reply(message, 'Great weather today huh?');
+});
+
+connection.hears("", ['direct_message'], (bot, message) => {
+  bot.reply(message, `I didn't quite get that. Try asking me about jobs!`);
 });
 
 connection.on('rtm_open', (bot) => {
@@ -91,87 +91,6 @@ connection.on('rtm_close', (bot) => {
 connection.on('rtm_reconnect_failed', (bot) => {
   console.log(`** The RTM api retry attempts have been exhausted at ${Date.now()}`);
 })
-
-/////////////////////////////////////////////////////////
-//This section is for interactive buttons
-
-connection.hears('interactive', 'direct_message', function(bot, message) {
-  bot.reply(message, {
-    attachments:[
-      {
-        title: 'Do you want to interact with my buttons?',
-        callback_id: '123',
-        attachment_type: 'default',
-        actions: [
-          {
-            "name":"yes",
-            "text": "Yes",
-            "value": "some_data_for_yes",
-            "type": "button",
-            "style": "primary"
-          },
-          {
-            "name":"no",
-            "text": "No",
-            "value": "some_data_for_no",
-            "type": "button",
-            "stype": "default"
-          }
-        ]
-      }
-    ]
-  });
-});
-
-
-connection.on('interactive_message_callback', (bot, message) => {
-  bot.replyInteractive(message, {
-    text: '...',
-    attachments: [
-      {
-        title: 'My buttons',
-        callback_id: '123',
-        attachment_type: 'default',
-        actions: [
-          {
-            "name": "yes",
-            "text": "Yes!",
-            "value": "yes",
-            "type": "button",
-          },
-          {
-            "text": "No!",
-            "name": "no",
-            "value": "delete",
-            "style": "danger",
-            "type": "button",
-            "confirm": {
-              "title": "Are you sure?",
-              "text": "This will do something!",
-              "ok_text": "Yes",
-              "dismiss_text": "No"
-            }
-          }
-        ]
-      }
-    ]
-  });
-});
-
-const jobs = (response, convo) => {
-  convo.ask('Jobs Jobs Jobs Jobs Jobs', (response, convo) => {
-    convo.say('Is that all...?');
-    convo.next();
-  })
-}
-
-const no = (response, convo) => {
-  convo.ask('Alright, is that your final answer?', (response, convo) => {
-    convo.say(`That's too bad. Try again.`);
-    convo.next();
-  })
-}
-/////////////////////////////////////////////////////////
 
 export { store, teams, addTeamBot, connection };
 
