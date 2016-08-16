@@ -51,19 +51,16 @@ const saveJob = (req, res, data) => {
     where: { slackUserId: data.user.id }
   })
   .then((user) => {
-    UserJob.findOrCreate({
-      where: {
-        userId: user.dataValues.id,
-        jobId: `${data.actions[0].value}`
-      }
-    })
-    .spread((userJob, created) => {
-      created ? console.log('User saved job!') : console.log('User already has this job saved');
-    })
-    .catch((err) => {
-      console.log('not nice')
-    })
 
+    let userJob = {
+      userId: user.dataValues.id,
+      jobId : `${data.actions[0].value}`
+    }
+
+    return UserJob.findOrCreate({ where: userJob })
+  })
+  .then(created => {
+    console.log('Success');
     let reply_saved = {
       type: 'message',
       text: 'Some Jobs',
@@ -81,6 +78,10 @@ const saveJob = (req, res, data) => {
     })();
 
     res.json(reply_saved);
+  })
+  .catch(err => {
+    console.log('Error saving data');
+  })
 
     //BELOW is a return format required to look exactly the same////////
     //Except for the button, which changes to a green Saved! button
@@ -108,10 +109,6 @@ const saveJob = (req, res, data) => {
     //   ]
     // });
     ////////////////////////////////////////////////////////////////////
-  })
-  .catch(err => {
-    res.send('Error')
-  })
 }
 
 export default { test };
