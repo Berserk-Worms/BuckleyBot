@@ -6,6 +6,7 @@ import request from 'request';
 const addJobTags = (req, res) => {
   let job = req.body.job;
   let tagsData = req.body.tagsData;
+  let jobData = null;
 
   Job.findOne({
     where: {
@@ -13,17 +14,19 @@ const addJobTags = (req, res) => {
     }
   })
   .then((foundJob) => {
-    return Promise.all(tagsData.map((tag) => {
+    jobData = foundJob;
+    return Promise.all(tagsData.map((name) => {
       return Tag.findOrCreate({ 
-        where: { name: tag }
-      })
-      .spread((tag, created) => {
-        //Sequelize association that adds job and tag to JobTag join table
-        return tag.addJob(foundJob);
+        where: { name: name }
       });
     }));
   })
-  .then((results) => {
+  .then((tagsArray) => {
+    return Promise.all(tagsArray.map((tag) => {
+      return tag[0].addJob(jobData);
+    }));
+  })
+  .then(() => {
     res.end();
   })
   .catch((err) => {
