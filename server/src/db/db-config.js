@@ -9,7 +9,7 @@ let db = new Sequelize(databaseUrl, {
   protocol: 'postgres',
   dialect: 'postgres',
   pool: {
-    max: 5,
+    max: 10,
     min: 0,
     idle: 10000
   },

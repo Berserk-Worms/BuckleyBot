@@ -22,3 +22,4 @@ app.listen(port, () => {
   teams();
   console.log('Server started on port ' + port);
 });
+
