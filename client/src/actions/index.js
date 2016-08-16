@@ -17,7 +17,7 @@ export function getUserData() {
     })
     .then(response => {
       console.log('Response to getting user data:', response.data);
-      // If response is good
+      // If response is good then load the user data
       dispatch({
         type: LOAD_USER_DATA,
         payload: response.data
@@ -25,6 +25,10 @@ export function getUserData() {
     })
     .catch(err => {
       console.log('There was an error:', err);
+      // remove jwt and redirect to / if there was an error 
+      // (this might be ungraceful error handling)
+      signoutUser();
+      browserHistory.push('/');
     });
   }
 }

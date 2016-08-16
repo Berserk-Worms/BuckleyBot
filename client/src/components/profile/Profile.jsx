@@ -14,7 +14,8 @@ class Profile extends Component {
     // This is where we emit an action creator to grab jwt from localstorage, check which user it is
     this.props.getUserData();
     // If proper user, then make API request to slack with user's access token
-    // Else messed up jwt -- maybe need to clear jwt and redirect to splash page
+    // Else messed up jwt -- maybe need to clear jwt and redirect to splash page 
+    // --> handling this in getUserData action
 
     // Get response data and populate components with that data
     // If data doesn't respond properly, then that means we have a faulty access token

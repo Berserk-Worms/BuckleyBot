@@ -7,6 +7,9 @@ import { connect } from 'react-redux';
 class Navigation extends Component {
 
   renderLinks() {
+
+    console.log('What is the state of authenticated?', this.props.authenticated);
+
     let route = '/signin';
     let text = 'Sign in';
 
@@ -28,7 +31,7 @@ class Navigation extends Component {
       <Navbar className="nav-size" inverse>
         <Navbar.Header>
           <Navbar.Brand>
-            <Link to={'/'}>BuckleyBot</Link>
+            <a href='/'>BuckleyBot</a>
           </Navbar.Brand>
           <Navbar.Toggle />
         </Navbar.Header>
