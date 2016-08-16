@@ -5,6 +5,8 @@ import profileController from '../controllers/profileController';
 import jobController from '../controllers/jobController';
 import tagController from '../controllers/tagController'
 import jobTagController from '../controllers/jobTagController';
+import buttonController from '../controllers/buttonController';
+import userJobController from '../controllers/userJobController';
 
 // Passport stuff
 import passportConfig from '../utils/passport';
@@ -63,6 +65,11 @@ export default (app, express) => {
     res.send('Hi there, you are authorized :)');
   });
 
+  //////////////////////////////////////////////
+  //Handling Interactive Buttons
+  //////////////////////////////////////////////
+  app.post('/slack/receive', buttonController.buttonDispatcher);
+  
   //////////////////////////////////////////////
   //Handling Error
   //////////////////////////////////////////////
