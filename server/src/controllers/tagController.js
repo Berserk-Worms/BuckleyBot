@@ -19,7 +19,7 @@ const addJobTags = (req, res) => {
       })
       .spread((tag, created) => {
         //Sequelize association that adds job and tag to JobTag join table
-        return tag.addJob(foundJob)
+        return tag.addJob(foundJob);
       });
     }));
   })
