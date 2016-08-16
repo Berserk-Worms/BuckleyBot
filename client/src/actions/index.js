@@ -1,6 +1,10 @@
 import axios from 'axios';
+import { browserHistory } from 'react-router';
+
 import {
-  LOAD_USER_DATA
+  LOAD_USER_DATA,
+  AUTH_USER,
+  UNAUTH_USER,
 } from './types';
 
 const ROOT_URL = 'http://localhost:8080';
@@ -23,4 +27,10 @@ export function getUserData() {
       console.log('There was an error:', err);
     });
   }
+}
+
+export function signoutUser() {
+  localStorage.removeItem('token');
+
+  return { type: UNAUTH_USER };
 }

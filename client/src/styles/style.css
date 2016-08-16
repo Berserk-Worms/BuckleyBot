@@ -2,11 +2,33 @@
   font-family: 'Open Sans', sans-serif;
 }
 
-.app-background {    
+.splash-bg {    
   position:absolute; 
   height:100%; 
   width:100%; 
-  background: url('https://hd.unsplash.com/photo-1432821596592-e2c18b78144f') no-repeat center center fixed; 
+  background: url('../../assets/desk1.jpeg') no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+.signin-bg {
+  position:absolute; 
+  height:100%; 
+  width:100%; 
+  background: url('../../assets/desk2.jpeg') no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+.signout-bg {
+  position:absolute; 
+  height:100%; 
+  width:100%; 
+  background: url('../../assets/pencil.jpeg') no-repeat center center fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -32,7 +54,7 @@
 }
 
 .title {
-  color: #212121;
+  color: #222;
 }
 
 .robo-big-head-img {

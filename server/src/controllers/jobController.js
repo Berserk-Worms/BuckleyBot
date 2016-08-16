@@ -1,5 +1,5 @@
 import Job from '../models/jobModel';
-import request from 'request';
+import rp from 'request-promise';
 
 //Post method for the api route /api/job
 const addJob = (req, res) => {
@@ -15,25 +15,27 @@ const addJob = (req, res) => {
   //  publishDate: item['pubDate']
   //}
   Job.findOrCreate({ where: jobData })
-    .spread( (job, created) => {
-      //Create tags if it's a new job
-      if (created) {
-        console.log('created new job', job.dataValues.title);
-        request({
-          url: 'http://localhost:8080/api/tags/job',
-          method: 'POST',
-          json: { job, tagsData }
-        }, (err, resp, body) => {
-          //TODO check the resp status and body
-          //If the job and tags save successfully we should expect a status of 200
-          //If we turn this into a microservice into the future we should have a proper response with the user and tag data being sent back
-          res.end()
-        })
-      } else {
-        console.log('we already have that job in the database');
-        res.end();
-      }
-    })
+  .spread( (job, created) => {
+    //Create tags if it's a new job
+    if (created) {
+      console.log('created new job', job.dataValues.title);
+      return rp({
+        url: 'http://localhost:8080/api/tags/job',
+        method: 'POST',
+        json: { job, tagsData }
+      });
+    } else {
+      console.log('we already have that job in the database');
+      res.end();
+    }
+  })
+  .then(() => {
+    res.end();
+  })
+  .catch((err) => {
+    console.log('error creating job', err);
+    res.end();
+  });
 }
 
 export default { addJob }

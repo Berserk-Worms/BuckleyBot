@@ -7,11 +7,16 @@ import intro from '../bots/introduction';
 let Profile = db.define('profile', {
   name: Sequelize.STRING, 
   location: Sequelize.STRING,
-  stage: Sequelize.STRING
+  stage: Sequelize.STRING,
+  userId: {
+    type: Sequelize.INTEGER,
+    references: {
+      model: User,
+      key: 'id'
+    },
+    unique: 'compositeIndex'
+  }
 });
-
-//Add userId to the profile as a foreign key
-Profile.belongsTo(User);
 
 //Create a hook that will be call after a profile has been created
 Profile.hook('afterCreate', (profile, options) => {
