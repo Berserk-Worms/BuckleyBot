@@ -16,8 +16,6 @@ const addJob = (req, res) => {
   //}
   Job.findOrCreate({ where: jobData })
   .spread( (job, created) => {
-    //Create tags if it's a new job
-    // if (created) {
     console.log(job.dataValues.title);
     console.log('new entry for job', created);
     return rp({
@@ -25,10 +23,6 @@ const addJob = (req, res) => {
       method: 'POST',
       json: { job, tagsData }
     });
-    // } else {
-    //   console.log('we already have that job in the database');
-    //   res.end();
-    // }
   })
   .then(() => {
     res.end();

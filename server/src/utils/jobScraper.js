@@ -38,34 +38,34 @@ let getJobsFromStackOverflow = () => {
 
     //Do something when there is data being piped in
     parser.on('readable', function() {
-      let item;
+      let stackJob;
       //While there are things to read from the request stream
-      while(item = this.read()) {
-        console.log('boba', item);
+      while(stackJob = this.read()) {
+        
         //Check if job has the following properites
-        if (item['title'] && item['permalink'] && item['categories'].includes(tagName) && item['rss:location']['#'] && item['pubDate'] && item['a10:author']['a10:name']['#']) {  
+        if (stackJob['title'] && stackJob['permalink'] && stackJob['categories'].includes(tagName) && stackJob['rss:location']['#'] && stackJob['pubDate'] && stackJob['a10:author']['a10:name']['#']) {  
 
           //Setup job object with database columns
           let jobData = {
-            title: item['title'],
-            link: item['permalink'],
-            location: item['rss:location']['#'],
-            company: item['a10:author']['a10:name']['#'],
-            publishDate: item['pubDate']
+            title: stackJob['title'],
+            link: stackJob['permalink'],
+            location: stackJob['rss:location']['#'],
+            company: stackJob['a10:author']['a10:name']['#'],
+            publishDate: stackJob['pubDate']
           }
 
           let tagsData = tagName;
 
-          let options = { 
+          let stackOptions = { 
             url: 'http://localhost:8080/api/job',
             method: 'POST',
             json: { jobData, tagsData } 
           }
           // send data to server
-          request(options, (err, resp, body) => {
-            //Throw error if we are unable to save jobs tags into database
+          request(stackOptions, (err, resp, body) => {
+            //Log error if we are unable to save jobs tags into database
             if (err) {
-              throw err;
+              console.log(err);
             }
           });
         }
