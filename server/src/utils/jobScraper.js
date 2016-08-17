@@ -56,18 +56,11 @@ let getJobsFromStackOverflow = () => {
 
           let tagsData = tagName;
 
-          let stackOptions = { 
-            url: 'http://localhost:8080/api/job',
-            method: 'POST',
-            json: { jobData, tagsData } 
-          }
           // send data to server
-          request(stackOptions, (err, resp, body) => {
-            //Log error if we are unable to save jobs tags into database
-            if (err) {
-              console.log(err);
-            }
-          });
+          postJobData(jobData, tagsData)
+          .catch((err) => {
+            console.log(err);
+          })
         }
       }
     });
@@ -110,20 +103,23 @@ let getJobsFromIndeed = () => {
           company: indeedJob.company,
           publishDate: new Date(indeedJob.date)
         }
-        return rp({
-          url: 'http://localhost:8080/api/job',
-          method: 'POST',
-          json: { jobData, tagsData } 
-        })
+
+        return postJobData(jobData, tagsData);
       }))
-    })
-    .then(() => {
-      console.log('finished:', tagName);
     })
     .catch((err) => {
       console.log(err);
     })
   });
+}
+
+
+let postJobData = (jobData, tagsData) => {
+  return rp({
+    url: 'http://localhost:8080/api/job',
+    method: 'POST',
+    json: { jobData, tagsData } 
+  })
 }
 
 getJobsFromStackOverflow();
