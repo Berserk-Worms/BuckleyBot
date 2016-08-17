@@ -1,12 +1,14 @@
-import FeedParser from 'feedparser';
-import request from 'request';
+import { parseString } from 'xml2js';
 import rp from 'request-promise';
+import Promise from 'bluebird';
+let parseStringAsync = Promise.promisify(parseString);
 
 let getJobsFromStackOverflow = () => {
   // make a request to Stack Overflow for jobs data
   let tags = ['javascript', 'react', 'node.js', 'node', 'angular', 'es6', 'backbone'];
+
   tags.forEach((tagName) => {
-    let req = request({
+    rp({
       url:'https://stackoverflow.com/jobs/feed',
       qs: {
         searchTerm: tagName,
@@ -16,56 +18,38 @@ let getJobsFromStackOverflow = () => {
         distanceUnits: 'Miles',
         type: 'permanent'
       }
-    });
-    //Instantiate RSS feedparser
-    let parser = new FeedParser();
-
-    req.on('error', function(err) {
-      throw err;
-    });
-
-    req.on('response', function(res) {
-      if (res.statusCode !== 200) {
-        return this.emit('error', new Error('Bad status code'));
-      } 
-      //Pipe data from request stream to feedparser
-      this.pipe(parser);
     })
+    .then((body) => {
+      // Parse the rss feed returned by Stack Overflow
+      return parseStringAsync(body);
+    })
+    .then((result) => {
+      let stackOverflowJobs = result['rss']['channel'][0]['item'];
+      //Iterate over each job returned from Stack Overflow
+      return Promise.all(stackOverflowJobs.map((job) => {
+        //Check to see if job is from last 24 hours
+        let pubDate = new Date(job['pubDate'][0]);
+        let oneDayAgo = new Date() - (1000 * 60 * 60 * 24);
 
-    parser.on('error', function(err) {
-      throw err;
-    });
-
-    //Do something when there is data being piped in
-    parser.on('readable', function() {
-      let stackJob;
-      //While there are things to read from the request stream
-      while(stackJob = this.read()) {
-        
-        //Check if job has the following properites
-        if (stackJob['title'] && stackJob['permalink'] && stackJob['categories'].includes(tagName) && stackJob['rss:location']['#'] && stackJob['pubDate'] && stackJob['a10:author']['a10:name']['#']) {  
-
-          //Setup job object with database columns
+        //If the job was published within the last day
+        if (pubDate > oneDayAgo) {
           let jobData = {
-            title: stackJob['title'],
-            link: stackJob['permalink'],
-            location: stackJob['rss:location']['#'],
-            company: stackJob['a10:author']['a10:name']['#'],
-            publishDate: stackJob['pubDate']
+            title: job['title'][0],
+            link: job['link'][0],
+            location: job['location'][0]['_'],
+            company: job['a10:author'][0]['a10:name'][0],
+            publishDate: new Date(job['pubDate'][0])
           }
-
           let tagsData = tagName;
-
           // send data to server
-          postJobData(jobData, tagsData)
-          .catch((err) => {
-            console.log(err);
-          })
-        }
-      }
-    });
+          return postJobData(jobData, tagsData);
+        } 
+      }));
+    })
+    .catch((err) => {
+      console.log(err);
+    })
   });
-  
 }
 
 let getJobsFromIndeed = () => {
@@ -93,15 +77,16 @@ let getJobsFromIndeed = () => {
     }
     rp(indeedOptions)
     .then((body) => {
-      let tagsData = tagName
+      let tagsData = tagName;
+      let indeedJobs = body.results;
       //Return once the array of promises is resolved
-      return Promise.all(body.results.map((indeedJob) => {
+      return Promise.all(indeedJobs.map((job) => {
         let jobData = {
-          title: indeedJob.jobtitle,
-          link: indeedJob.url.split('&')[0],
-          location: indeedJob.formattedLocation,
-          company: indeedJob.company,
-          publishDate: new Date(indeedJob.date)
+          title: job.jobtitle,
+          link: job.url.split('&')[0],
+          location: job.formattedLocation,
+          company: job.company,
+          publishDate: new Date(job.date)
         }
 
         return postJobData(jobData, tagsData);

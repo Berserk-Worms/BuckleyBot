@@ -16,8 +16,7 @@ const addJob = (req, res) => {
   //}
   Job.findOrCreate({ where: jobData })
   .spread( (job, created) => {
-    console.log(job.dataValues.title);
-    console.log('new entry for job', created);
+    created ? console.log('new job created:', job.dataValues.title) : console.log('adding tag to job:', job.dataValues.title);
     return rp({
       url: 'http://localhost:8080/api/tags/job',
       method: 'POST',

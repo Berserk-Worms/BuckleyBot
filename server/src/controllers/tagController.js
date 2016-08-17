@@ -20,7 +20,6 @@ const addJobTags = (req, res) => {
     });
   })
   .spread((tag, created) => {
-    console.log('the tag is new:', created);
     return tag.addJob(jobData);
   })
   .then(() => {
