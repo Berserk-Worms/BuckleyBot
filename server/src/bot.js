@@ -15,6 +15,7 @@ const connection = Botkit.slackbot({
   debug: false,
 })
 
+
 //allow you to do RTM without having to create a new team
 //note this is imported to server.js first
 //then to teamModel (for hook afterCreate)
@@ -31,8 +32,8 @@ const teams = () => {
           retry: 20
         });
         //dangerous! slack team tokens....
-        store[data.slackTeamId] = temp;
-        store[data.slackTeamId].startRTM();
+        store[data.slackTeamId] = temp.startRTM();
+        // store[data.slackTeamId].startRTM();
 
         // console.log(store[data.slackTeamId])
       }
