@@ -20,17 +20,16 @@ let Profile = db.define('profile', {
 
 //Create a hook that will be call after a profile has been created
 Profile.hook('afterCreate', (profile, options) => {
-//   //invoke the buckley conversation bot
+  // invoke the BUCKLEY conversation bot
   intro(profile);
 });
 
 Profile.sync()
-  .then(() => {
-    console.log('Profile table is connected');
-  }, (err) => {
-    console.log(err);
-    console.log('An error occured while generating the Profile table')
-  });
+.then(() => {
+  console.log('Profile table is connected');
+}, (err) => {
+  console.log('An error occured while generating the Profile table:', err);
+});
 
 export default Profile;
 

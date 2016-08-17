@@ -16,7 +16,6 @@ const intro = (createdProfile) => {
 
     // console.log('this is the user, ', user)
     const BUCKLEY = store[user.dataValues.slackTeamId];
-
     // console.log('this is buckley, ', BUCKLEY)
 
     BUCKLEY.startPrivateConversation({ user: id }, (err, convo) => {
@@ -31,7 +30,6 @@ const intro = (createdProfile) => {
   })
 };
 
-//
 //TODO: parse response.text before updating profile
 const askName = (response, convo) => {
   convo.ask("Sweet! Nice to meet you. My Name is Buckley, What's yours?", (response, convo) => {

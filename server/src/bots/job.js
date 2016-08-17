@@ -25,8 +25,8 @@ let userJobsListener = {
               job.dataValues.title.toLowerCase().indexOf('senior') === -1 && 
               job.dataValues.title.toLowerCase().indexOf('manager') === -1 &&
               job.dataValues.title.toLowerCase().indexOf('sr.') === -1
-          })
-          console.log(filterJobs.length)
+          });
+          console.log(filterJobs.length);
 
 
           //Format job data for Slack message attachment 
@@ -40,20 +40,19 @@ let userJobsListener = {
                 {name: `saveJob`, text: `Save`, value: job.dataValues.id, type: `button`, style: `default`}
               ]
             }
-          })
+          });
 
           //Set attachment to message to be three random jobs
           let reply_with_attachments = {
-            text: 'Some Jobs',
+            text: 'Here are some jobs:',
             attachments: _.sample(attachments, 3)
-          }
+          };
 
           bot.reply(message, reply_with_attachments);
         })
       }
     })
   }
-}
-
+};
 
 export default userJobsListener 

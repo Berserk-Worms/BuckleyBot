@@ -33,7 +33,6 @@ const teams = () => {
         //dangerous! slack team tokens....
         store[data.slackTeamId] = temp;
         store[data.slackTeamId].startRTM();
-
         // console.log(store[data.slackTeamId])
       }
       // console.log('this is the store of teams: ', store)
@@ -76,7 +75,7 @@ connection.hears("", ['direct_message'], (bot, message) => {
 
 connection.on('rtm_open', (bot) => {
   console.log(`** The RTM api just opened at ${Date.now()}`);
-})
+});
 
 connection.on('rtm_close', (bot) => {
   console.log(`** The RTM api just closed at ${Date.now()}`);
@@ -90,7 +89,7 @@ connection.on('rtm_close', (bot) => {
 
 connection.on('rtm_reconnect_failed', (bot) => {
   console.log(`** The RTM api retry attempts have been exhausted at ${Date.now()}`);
-})
+});
 
 export { store, teams, addTeamBot, connection };
 
