@@ -64,7 +64,7 @@ let getJobsFromStackOverflow = () => {
         }
       }
     });
-  })
+  });
   
 }
 
@@ -105,11 +105,11 @@ let getJobsFromIndeed = () => {
         }
 
         return postJobData(jobData, tagsData);
-      }))
+      }));
     })
     .catch((err) => {
       console.log(err);
-    })
+    });
   });
 }
 
@@ -119,7 +119,7 @@ let postJobData = (jobData, tagsData) => {
     url: 'http://localhost:8080/api/job',
     method: 'POST',
     json: { jobData, tagsData } 
-  })
+  });
 }
 
 getJobsFromStackOverflow();
