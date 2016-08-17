@@ -11,7 +11,7 @@ let getJobsFromStackOverflow = () => {
     rp({
       url:'https://stackoverflow.com/jobs/feed',
       qs: {
-        searchTerm: tagName,
+        searchTerm: `${tagName} posted:1d`,
         location: 'San Francisco',
         sort: 'p',
         range: '50',
@@ -24,26 +24,21 @@ let getJobsFromStackOverflow = () => {
       return parseStringAsync(body);
     })
     .then((result) => {
-      let stackOverflowJobs = result['rss']['channel'][0]['item'];
+      //If there are no jobs, assign an empty array
+      let stackOverflowJobs = result['rss']['channel'][0]['item'] || [];
       //Iterate over each job returned from Stack Overflow
       return Promise.all(stackOverflowJobs.map((job) => {
         //Check to see if job is from last 24 hours
-        let pubDate = new Date(job['pubDate'][0]);
-        let oneDayAgo = new Date() - (1000 * 60 * 60 * 24);
-
-        //If the job was published within the last day
-        if (pubDate > oneDayAgo) {
-          let jobData = {
-            title: job['title'][0],
-            link: job['link'][0],
-            location: job['location'][0]['_'],
-            company: job['a10:author'][0]['a10:name'][0],
-            publishDate: new Date(job['pubDate'][0])
-          }
-          let tagsData = tagName;
-          // send data to server
-          return postJobData(jobData, tagsData);
-        } 
+        let jobData = {
+          title: job['title'][0],
+          link: job['link'][0],
+          location: job['location'][0]['_'],
+          company: job['a10:author'][0]['a10:name'][0],
+          publishDate: new Date(job['pubDate'][0])
+        }
+        let tagsData = tagName;
+        // send data to server
+        return postJobData(jobData, tagsData);
       }));
     })
     .catch((err) => {
@@ -107,5 +102,5 @@ let postJobData = (jobData, tagsData) => {
   });
 }
 
-getJobsFromStackOverflow();
+// getJobsFromStackOverflow();
 getJobsFromIndeed();
