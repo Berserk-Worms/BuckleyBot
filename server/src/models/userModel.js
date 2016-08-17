@@ -1,6 +1,7 @@
 import db from '../db/db-config';
 import Sequelize from 'sequelize';
 import Team from './teamModel';
+// import intro from '../bots/introduction';
 
 //Generates User model
 //TODO Add unique constraints to slackUserId
@@ -16,7 +17,12 @@ let User = db.define('user', {
       key: 'slackTeamId'
     }
   }
+  // location: Sequelize.STRING
 });
+
+// User.hook('afterCreate', (user, options) => {
+//   intro(user);
+// });
 
 User.sync()
   .then(() => {
