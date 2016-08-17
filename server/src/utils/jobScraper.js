@@ -4,15 +4,17 @@ import rp from 'request-promise';
 
 let getJobsFromStackOverflow = () => {
   // make a request to Stack Overflow for jobs data
-  let tags = ['reactjs', 'javascript', 'react', 'node', 'node.js', 'angular', 'angularjs', 'es6', 'backbone'];
-  // let tags = ['reactjs'];
+  let tags = ['javascript', 'react', 'node.js', 'node', 'angular', 'es6', 'backbone'];
   tags.forEach((tagName) => {
     let req = request({
       url:'https://stackoverflow.com/jobs/feed',
       qs: {
         searchTerm: tagName,
         location: 'San Francisco',
-        sort: 'p'
+        sort: 'p',
+        range: '50',
+        distanceUnits: 'Miles',
+        type: 'permanent'
       }
     });
     //Instantiate RSS feedparser
@@ -74,8 +76,7 @@ let getJobsFromStackOverflow = () => {
 }
 
 let getJobsFromIndeed = () => {
-  let tags = ['reactjs', 'javascript', 'react', 'node', 'node.js', 'angular', 'angularjs', 'es6', 'backbone'];
-  // let tags = ['reactjs']
+  let tags = ['javascript', 'react', 'node', 'node.js', 'node', 'angular', 'es6', 'backbone'];
   tags.forEach((tagName) => {
     let indeedOptions = {
       url: 'http://api.indeed.com/ads/apisearch',
@@ -86,7 +87,9 @@ let getJobsFromIndeed = () => {
         format: 'json',
         q: tagName,
         l: 'San Francisco',
+        radius: '50',
         sort: 'date',
+        jt: 'fulltime',
         limit: '25',
         fromage: '1',
         co: 'us',
@@ -97,10 +100,8 @@ let getJobsFromIndeed = () => {
     }
     rp(indeedOptions)
     .then((body) => {
-      // console.log('test', body);
-      // console.log('length', body.results.length);
-      console.log('boba', body);
       let tagsData = tagName
+      //Return once the array of promises is resolved
       return Promise.all(body.results.map((indeedJob) => {
         let jobData = {
           title: indeedJob.jobtitle,
