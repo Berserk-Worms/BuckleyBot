@@ -15,13 +15,11 @@ const addJobTags = (req, res) => {
   })
   .then((foundJob) => {
     jobData = foundJob;
-    console.log('the data from the request:', tagsData);
     return Tag.findOrCreate({ 
       where: { name: tagsData }
     });
   })
   .spread((tag, created) => {
-    // console.log('the tag is:', tag);
     console.log('the tag is new:', created);
     return tag.addJob(jobData);
   })
