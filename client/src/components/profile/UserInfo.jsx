@@ -10,7 +10,7 @@ class UserInfo extends Component {
           <Image  src="../assets/robo_head.png" responsive rounded />
         </Col>
         <Col sm={7}>
-          <h1>@Username</h1>
+          <h1>{this.props.name}</h1>
           <h3>Location</h3>
         </Col>
       </Row>

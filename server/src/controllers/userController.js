@@ -4,6 +4,8 @@ import Team from '../models/teamModel';
 
 import rp from 'request-promise';
 
+import jwt from 'jwt-simple';
+
 // Authenticate user when they click on "sign in with Slack" button
 //
 // TODO: This method could be moved into a different module that deals
@@ -22,7 +24,7 @@ const checkAuthCode = (req, res) => {
     // authorize slackbot in order for it to be added on Slack
     res.redirect('/');
   }
-}
+};
 
 const authenticateUser = (req, res) => {
   console.log('-------------- Authenticating user!')
@@ -42,6 +44,8 @@ const authenticateUser = (req, res) => {
     json: true
   }
 
+  // Stupid closure variable that helps store body from the 1st .then block
+  let userData = null;
   // Make request to Slack Authorization Server to swap
   // auth code for access token
   rp(options)
@@ -49,6 +53,7 @@ const authenticateUser = (req, res) => {
     console.log('response body', body);
     if (body.ok) {
       //Check for any team with the slack team id -- if this exists, find or create user
+      userData = body;
       return Team.findOne({ where: { slackTeamId: body.team.id} });
     } else {
       console.log('Response body NOT OK. Error:', body.error);
@@ -57,7 +62,7 @@ const authenticateUser = (req, res) => {
   })
   .then(team => {
     if (team !== null) {
-      findOrCreateUser(body, res);
+      findOrCreateUser(userData, res);
     } else {
       // TODO: implement this with front end /oops page
       // this is where we handle a user that signs in but their team
@@ -90,10 +95,35 @@ const findOrCreateUser = (body, res) => {
     user.updateAttributes({ accessToken });
     // TODO: issue the JWT
     // TODO: and store it in the client
-    // QUESTION: how do we send it to the client? 
-    res.redirect(`/profile`);
+    // QUESTION: how do we send it to the client?
+    // Create JWT
+    let token = tokenForUser(slackUserId);
+    // TODO: This feels like jank, there must be a better way to send token with a redirect:
+    res.redirect(`/?token=${token}`);
   })
   .catch(err => res.send(err));
+};
+
+const tokenForUser = (slackUserId) => {
+  const timestamp = new Date().getTime();
+  return jwt.encode({ sub: slackUserId, iat: timestamp }, process.env.JWT_SECRET);
+};
+
+// This is called after passport middleware that finds user
+const getUserData = (req, res) => {
+  // Check if error
+  if (req.error) {
+    console.log('Error getting user data:', error);
+    res.send(req.error);
+  }
+  // Otherwise, send the relevant user data as an object
+  let userData = {
+    name: req.user.name,
+    email: req.user.email,
+    // picture url
+    // jobs
+  }
+  res.send(userData);
 }
 
 //we have a database of users based on slack bot interaction
@@ -155,7 +185,7 @@ const deleteUser = (req, res) => {
   })
   .then(user => {
     console.log('deleted user: ', user);
-    res.end()
+    res.end();
   })
   .catch(err => {
     console.log('Error: ', err);
@@ -164,4 +194,4 @@ const deleteUser = (req, res) => {
 }
 
 
-export default { findUser, addUser, deleteUser, checkAuthCode };
+export default { findUser, addUser, deleteUser, checkAuthCode, getUserData };

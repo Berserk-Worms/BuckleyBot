@@ -1,17 +1,43 @@
 import axios from 'axios';
 import { browserHistory } from 'react-router';
+
 import {
+  LOAD_USER_DATA,
   AUTH_USER,
-  UNAUTH_USER
+  UNAUTH_USER,
 } from './types';
 
-export function signoutUser() {
-  localStorage.removeItem('token');
+const ROOT_URL = 'http://localhost:8080';
 
-  return { type: UNAUTH_USER };
+export function getUserData() {
+  return function(dispatch) {
+    // Submit jwt to the server
+    axios.get(`${ROOT_URL}/slack/users/data`, {
+      headers: { authorization: localStorage.getItem('jwt') }
+    })
+    .then(response => {
+      console.log('Response to getting user data:', response.data);
+      // If response is good then load the user data
+      dispatch({
+        type: LOAD_USER_DATA,
+        payload: response.data
+      });
+    })
+    .catch(err => {
+      console.log('There was an error:', err);
+      // remove jwt and redirect to / if there was an error 
+      // (this might be ungraceful error handling)
+      signoutUser();
+      browserHistory.push('/');
+    });
+  }
 }
 
+export function signInUser() {
+  return { type: AUTH_USER };
+}
 
-//TODO:
-  //Sign in 
-    //Need to set token on localstorage
+export function signoutUser() {
+  localStorage.removeItem('jwt');
+  return { type: UNAUTH_USER };
+}

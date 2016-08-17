@@ -8,7 +8,16 @@ import jobTagController from '../controllers/jobTagController';
 import buttonController from '../controllers/buttonController';
 import userJobController from '../controllers/userJobController';
 
+// Passport stuff
+import passportConfig from '../utils/passport';
+import passport from 'passport';
+
+const requireAuth = passport.authenticate('jwt', { session: false });
+
 export default (app, express) => {
+
+  // API ROUTES
+
   //////////////////////////////////////////////
   //Handling Team Oauth
   //////////////////////////////////////////////
@@ -17,9 +26,14 @@ export default (app, express) => {
   //////////////////////////////////////////////
   //Handling Users
   //////////////////////////////////////////////
+
+  // TODO: fix this so that it is in the userController!
   app.get('/slack/users', userController.findUser);
   app.post('/slack/users', userController.addUser);
   app.delete('/slack/users', userController.deleteUser);
+
+  // Grabbing user data
+  app.get('/slack/users/data', requireAuth, userController.getUserData);
 
   //////////////////////////////////////////////
   //Handling Profile
