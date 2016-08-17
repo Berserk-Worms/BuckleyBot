@@ -2,6 +2,7 @@ import { connection } from '../bot.js';
 import User from '../models/userModel';
 import Team from '../models/teamModel';
 import Profile from '../models/profileModel';
+import Tag from '../models/tagModel';
 import { updateProfile } from './introduction';
 
 //we want to check if the user on the team has been
@@ -25,7 +26,7 @@ const helper =  {
         where: { userId }
       })
       .then(profile => {
-        console.log('this is inside helper.checkstage, profile: ', profile.dataValues);
+        // console.log('this is inside helper.checkstage, profile: ', profile.dataValues);
         let stage = profile.dataValues.stage;
         //depending on the stage, would have to give different respones
         routeOnStage(stage, bot, message);
@@ -54,6 +55,35 @@ const helper =  {
           .catch(() => console.log('Could not update profile.'))
       })
     })
+  },
+  findTags: (message) => {
+    //given a string of text, split the string by spaces
+    //loop through the array and check if the tag exists
+    //for now we will not consider new tags that the users 
+    //want to add 
+
+    //with splitting, how would be handle .js
+    let words = message.text.split(/[\\.,\\ !;?:]/);
+
+    return Tag.findAll()
+    .then(tag => {
+      let res = [];
+      let tagArr = tag.map(item => {
+        return item.name;
+      });
+
+      words.forEach(word => {
+        if (tagArr.indexOf(word) !== -1) {
+          res.push(word);
+        }
+      })
+      console.log('this is res, ', res);
+      return res;
+    })
+    .catch(err => {
+      console.log('Error: ', err);
+    })
+
   }
 };
 
