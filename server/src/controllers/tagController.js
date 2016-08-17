@@ -15,16 +15,15 @@ const addJobTags = (req, res) => {
   })
   .then((foundJob) => {
     jobData = foundJob;
-    return Promise.all(tagsData.map((name) => {
-      return Tag.findOrCreate({ 
-        where: { name: name }
-      });
-    }));
+    console.log('the data from the request:', tagsData);
+    return Tag.findOrCreate({ 
+      where: { name: tagsData }
+    });
   })
-  .then((tagsArray) => {
-    return Promise.all(tagsArray.map((tag) => {
-      return tag[0].addJob(jobData);
-    }));
+  .spread((tag, created) => {
+    // console.log('the tag is:', tag);
+    console.log('the tag is new:', created);
+    return tag.addJob(jobData);
   })
   .then(() => {
     res.end();
