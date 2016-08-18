@@ -14,7 +14,7 @@ const buttonDispatcher = (req, res) => {
   }
 
   //BELOW is the format of incoming req.body//////////////////////////
-  //
+  //Note req.body.payload is stringified JSON
   // {
   //   payload: {
   //     actions: [{name: "yes", value: "yes"}],
