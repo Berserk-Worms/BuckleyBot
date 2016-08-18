@@ -10,7 +10,7 @@ let Team = db.define('team', {
   slackBotToken: Sequelize.STRING,
   slackTeamId: { 
     type: Sequelize.STRING,
-    unique: 'compositeIndex'
+    unique: true
   }
 });
 
