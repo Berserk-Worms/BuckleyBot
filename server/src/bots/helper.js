@@ -72,6 +72,8 @@ const helper =  {
         return item.name;
       });
 
+      console.log(tagArr);
+
       words.forEach(word => {
         if (tagArr.indexOf(word) !== -1) {
           res.push(word);
