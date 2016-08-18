@@ -54,7 +54,7 @@ let userJobsListener = {
         actions: [
           {name: `saveJob`, text: `Save`, value: job.dataValues.id, type: `button`, style: `default`}
         ]
-      }
+      };
     });
 
     let sample = _.sample(attachments, numberOfJobs);
