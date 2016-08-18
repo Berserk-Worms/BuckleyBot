@@ -50,7 +50,7 @@ let userJobsListener = {
             //Set attachment to message to be three random jobs
             let reply_with_attachments = {
               text: 'Some Jobs',
-              attachments: _.sample(attachments, 3)
+              attachments: _.sample(attachments, 15)
             }
 
             bot.reply(message, reply_with_attachments);

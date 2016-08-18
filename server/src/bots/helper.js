@@ -64,24 +64,19 @@ const helper =  {
 
     //with splitting, how would be handle .js
     let words = message.text.split(/[\\.,\\ !;?:]/);
+    let match = [];
 
     return Tag.findAll()
     .then(tags => {
-      let res = [];
-      let tagArr = tags.map(item => {
-        return item.name;
-      });
-
-      console.log(tagArr);
 
       tags.forEach(item => {
         if (words.indexOf(item.dataValues.name) !== -1) {
-          res.push(item.dataValues.name)
+          match.push(item.dataValues.name)
         }
       })
-      
-      console.log('this is res, ', res);
-      return res;
+  
+      console.log('this is match, ', match);
+      return match;
     })
     .catch(err => {
       console.log('Error: ', err);
