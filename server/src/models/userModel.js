@@ -17,9 +17,13 @@ let User = db.define('user', {
       key: 'slackTeamId'
     }
   }
+  //TODO: Refactor profile location, and maybe default query
+  //to user. Profile to be removed
   // location: Sequelize.STRING
 });
 
+//TODO: move bot intro conversation to after user create
+//currently in after profile
 // User.hook('afterCreate', (user, options) => {
 //   intro(user);
 // });

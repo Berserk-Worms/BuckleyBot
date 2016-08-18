@@ -66,19 +66,20 @@ const helper =  {
     let words = message.text.split(/[\\.,\\ !;?:]/);
 
     return Tag.findAll()
-    .then(tag => {
+    .then(tags => {
       let res = [];
-      let tagArr = tag.map(item => {
+      let tagArr = tags.map(item => {
         return item.name;
       });
 
       console.log(tagArr);
 
-      words.forEach(word => {
-        if (tagArr.indexOf(word) !== -1) {
-          res.push(word);
+      tags.forEach(item => {
+        if (words.indexOf(item.dataValues.name) !== -1) {
+          res.push(item.dataValues.name)
         }
       })
+      
       console.log('this is res, ', res);
       return res;
     })
