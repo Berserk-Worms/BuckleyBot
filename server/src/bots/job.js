@@ -9,6 +9,7 @@ let userJobsListener = {
   replyWithJobs: function(bot, message) {
     //let userId = message.user
     Tag.findOne({
+      // TODO: Figure out how to make this a join table
       where: { name: 'javascript' }
     })
     .then((tag) => {
@@ -50,8 +51,13 @@ let userJobsListener = {
 
           bot.reply(message, reply_with_attachments);
         })
+      } else {
+        bot.reply(message, "Sorry, I couldn't find any new jobs -- please check back soon :)");
       }
     })
+  },
+  findJobs: () => {
+
   }
 };
 
