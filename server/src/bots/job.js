@@ -5,11 +5,11 @@ import _ from 'underscore';
 import UserJob from '../models/userJobModel';
 import helper from '../bots/helper';
 
-
 let userJobsListener = {
   replyWithJobs: function(bot, message) {
     helper.findTags(message)
     .then(tags => {
+      console.log('tags', tags);
       let query = (tags.length === 0) ? 'javascript' : tags[0];
       return Tag.findOne({ where: { name: query} });
     })
