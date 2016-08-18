@@ -42,7 +42,7 @@ let getJobsFromStackOverflow = () => {
       }));
     })
     .catch((err) => {
-      console.log(err);
+      console.log('Error collecting jobs from Stack Overflow:', err);
     })
   });
 }
@@ -87,7 +87,7 @@ let getJobsFromIndeed = () => {
       }));
     })
     .catch((err) => {
-      console.log(err);
+      console.log('Error collecting jobs from Indeed:', err);
     });
   });
 }
