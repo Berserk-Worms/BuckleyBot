@@ -1,7 +1,8 @@
 import Job from '../models/jobModel';
 import rp from 'request-promise';
 
-//Post method for the api route /api/job
+// Triggered from 'POST /api/job'
+// Add Job data and Tag data from jobscraper to the database 
 const addJob = (req, res) => {
   let jobData = req.body.jobData;
   let tagsData = req.body.tagsData;
