@@ -101,5 +101,5 @@ let postJobData = (jobData, tagsData) => {
   });
 }
 
-// getJobsFromStackOverflow();
+getJobsFromStackOverflow();
 getJobsFromIndeed();
