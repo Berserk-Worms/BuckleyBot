@@ -11,7 +11,10 @@ let userJobsListener = {
     .then(tags => {
       console.log('tags', tags);
       let query = (tags.length === 0) ? 'javascript' : tags[0];
-      return Tag.findOne({ where: { name: query} });
+      return Tag.findOne({ 
+        where: { name: query},
+        include: [{ model: Job }], 
+      });
     })
     .then((tag) => {
       if (tag) {
