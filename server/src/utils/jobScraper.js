@@ -3,10 +3,10 @@ import rp from 'request-promise';
 import Promise from 'bluebird';
 let parseStringAsync = Promise.promisify(parseString);
 
+const tags = ['javascript', 'react', 'node.js', 'node', 'angular', 'es6', 'backbone'];
+
 let getJobsFromStackOverflow = () => {
   // make a request to Stack Overflow for jobs data
-  let tags = ['javascript', 'react', 'node.js', 'node', 'angular', 'es6', 'backbone'];
-
   tags.forEach((tagName) => {
     rp({
       url:'https://stackoverflow.com/jobs/feed',
@@ -48,7 +48,6 @@ let getJobsFromStackOverflow = () => {
 }
 
 let getJobsFromIndeed = () => {
-  let tags = ['javascript', 'react', 'node', 'node.js', 'node', 'angular', 'es6', 'backbone'];
   tags.forEach((tagName) => {
     let indeedOptions = {
       url: 'http://api.indeed.com/ads/apisearch',
