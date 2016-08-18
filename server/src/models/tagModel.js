@@ -3,7 +3,10 @@ import Sequelize from 'sequelize';
 
 //generate a Tag model
 let Tag = db.define('tag', {
-  name: Sequelize.STRING
+  name: { 
+    type: Sequelize.STRING,
+    unique: 'compositeIndex'
+  }
 });
 
 Tag.sync()

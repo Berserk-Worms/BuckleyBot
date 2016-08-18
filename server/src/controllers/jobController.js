@@ -16,18 +16,12 @@ const addJob = (req, res) => {
   //}
   Job.findOrCreate({ where: jobData })
   .spread( (job, created) => {
-    //Create tags if it's a new job
-    if (created) {
-      console.log('created new job', job.dataValues.title);
-      return rp({
-        url: 'http://localhost:8080/api/tags/job',
-        method: 'POST',
-        json: { job, tagsData }
-      });
-    } else {
-      console.log('we already have that job in the database');
-      res.end();
-    }
+    created ? console.log('new job created and adding tags:', job.dataValues.title) : console.log('exsting job found adding tags:', job.dataValues.title);
+    return rp({
+      url: 'http://localhost:8080/api/tags/job',
+      method: 'POST',
+      json: { job, tagsData }
+    });
   })
   .then(() => {
     res.end();

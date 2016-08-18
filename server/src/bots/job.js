@@ -2,16 +2,16 @@ import { connection } from '../bot.js';
 import Tag from '../models/tagModel';
 import Job from '../models/jobModel';
 import _ from 'underscore';
-import UserJob from '../models/userJobModel'
+import UserJob from '../models/userJobModel';
+import helper from '../bots/helper';
 
 
 let userJobsListener = {
   replyWithJobs: function(bot, message) {
-    //let userId = message.user
-    Tag.findOne({
-      // TODO: Figure out how to make this a join table
-      where: { name: 'javascript' },
-      include: [{ model: Job }],
+    helper.findTags(message)
+    .then(tags => {
+      let query = (tags.length === 0) ? 'javascript' : tags[0];
+      return Tag.findOne({ where: { name: query} });
     })
     .then((tag) => {
       if (tag) {

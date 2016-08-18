@@ -13,56 +13,41 @@ const connection = Botkit.slackbot({
   //the convo.ask function
   interactive_replies: true,
   debug: false,
-})
+});
 
-//allow you to do RTM without having to create a new team
-//note this is imported to server.js first
-//then to teamModel (for hook afterCreate)
-const teams = () => {
-  console.log('starting instances of bots in database')
-  Team.findAll()
-    .then(teams => {
-      for (let i = 0; i < teams.length; i++) {
-        let data = teams[i].dataValues;
-        let temp = connection.spawn({
-          token: data.slackBotToken,
-          //add a retry to count to let the bot reconnect 
-          //automatic retries are disabled by default
-          retry: 20
-        });
-        //dangerous! slack team tokens....
-        store[data.slackTeamId] = temp;
-        store[data.slackTeamId].startRTM();
-        // console.log(store[data.slackTeamId])
-      }
-      // console.log('this is the store of teams: ', store)
-    });
-}
-
-const addTeamBot = (createdTeam) => {
-  let data = createdTeam.dataValues;
+const spawnBot = (team) => {
+  let data = team.dataValues;
   let temp = connection.spawn({
     token: data.slackBotToken,
     retry: 20
   });
+  store[data.slackTeamId] = temp.startRTM();
+};
 
-  store[data.slackTeamId] = temp;
-  store[data.slackTeamId].startRTM();
-}
+//allow you to do RTM without having to create a new team
+//note this is imported to server.js first on server start
+//then to teamModel after any team is created
+const teams = () => {
+  console.log('starting instances of bots in database')
+  Team.findAll()
+    .then(teams => {
+      teams.forEach((team) => {
+        spawnBot(team); 
+      });
+    });
+};
 
+const addTeamBot = (createdTeam) => {
+  spawnBot(createdTeam);
+};
+
+//Adding key words bot responds to (hears) and event listeners (on)
 //Handle different bot listeners
 connection.hears(["jobs", "job"], ['direct_message'], function(bot, message) {
   //checkStage checks if profile has been completed
   helper.checkStage(bot, message);
   userJobsListener.replyWithJobs(bot, message);
 });
-
-// const BUCKLEY = connection.spawn({
-//   //Create .env file in the root directory and add SLACK_BOT_TOKEN
-//   token: process.env.SLACK_BOT_TOKEN
-// });
-
-// BUCKLEY.startRTM();
 
 connection.hears("weather", ['direct_message'], (bot, message) => {
   console.log('replying to message');
