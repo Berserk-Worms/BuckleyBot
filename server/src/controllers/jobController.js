@@ -23,7 +23,7 @@ const addJob = (req, res) => {
       json: { job, tagsData }
     });
   })
-  .then(() => {
+  .then((tagJob) => {
     res.end();
   })
   .catch((err) => {

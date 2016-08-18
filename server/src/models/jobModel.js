@@ -11,10 +11,10 @@ let Job = db.define('job', {
 });
 
 Job.sync()
-  .then(() => {
-    console.log('Job table is connected')
-  }, (err) => {
-    console.log('An error occured while generating the Job table')
-  });
+.then(() => {
+  console.log('Job table is connected')
+}, (err) => {
+  console.log('An error occured while generating the Job table')
+});
 
-export default Job;
+export default Job

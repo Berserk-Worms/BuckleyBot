@@ -22,7 +22,7 @@ const addJobTags = (req, res) => {
   .spread((tag, created) => {
     return tag.addJob(jobData);
   })
-  .then(() => {
+  .then((tagJob) => {
     res.end();
   })
   .catch((err) => {
