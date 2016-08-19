@@ -1,7 +1,6 @@
 import path from 'path';
 import teamController from '../controllers/teamController';
 import userController from '../controllers/userController';
-import profileController from '../controllers/profileController';
 import jobController from '../controllers/jobController';
 import tagController from '../controllers/tagController'
 import jobTagController from '../controllers/jobTagController';
