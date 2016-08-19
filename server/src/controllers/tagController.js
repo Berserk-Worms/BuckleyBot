@@ -5,7 +5,7 @@ import request from 'request';
 //Add Tags
 const addJobTags = (req, res) => {
   let job = req.body.job;
-  let tagsData = req.body.tagsData;
+  let tagData = req.body.tagData;
   let jobData = null;
 
   Job.findOne({
@@ -16,7 +16,7 @@ const addJobTags = (req, res) => {
   .then((foundJob) => {
     jobData = foundJob;
     return Tag.findOrCreate({ 
-      where: { name: tagsData }
+      where: { name: tagData }
     });
   })
   .spread((tag, created) => {

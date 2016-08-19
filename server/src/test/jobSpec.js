@@ -14,11 +14,11 @@ describe('jobController', () => {
       .catch(function(err) {
         done(err);
       });
-    })
+    });
 
   describe('Job Creation', () => {
 
-    it('should return 200 for a new job', (done) => {
+    it('should return 200 when successfully creating a new job', (done) => {
       let jobData = {
         title: 'Lead Engineer',
         link: 'http://example.com',
@@ -26,8 +26,6 @@ describe('jobController', () => {
         company: 'Keen.io',
         publishDate: new Date('2016-08-01')
       }
-
-      let tagsData = 'javascript'
 
       rp({
         url: 'http://localhost:8080/api/job',
@@ -37,6 +35,10 @@ describe('jobController', () => {
       })
       .then((res) => {
         expect(res.statusCode).to.equal(200);
+        done();
+      })
+      .catch((err) => {
+        console.log(err);
         done();
       });
     });
@@ -48,9 +50,13 @@ describe('jobController', () => {
       .then((job) => {
         expect(job.dataValues.title).to.equal('Lead Engineer');
         expect(job.dataValues.company).to.equal('Keen.io');
-        done()
+        done();
       })
-    })
+      .catch((err) => {
+        console.log(err);
+        done();
+      });
+    });
 
     it('should return 200 for an existing job', (done) => {
       let jobData = {
@@ -61,8 +67,6 @@ describe('jobController', () => {
         publishDate: new Date('2016-08-01')
       }
 
-      let tagsData = 'javascript'
-
       rp({
         url: 'http://localhost:8080/api/job',
         method: 'POST',
@@ -71,6 +75,10 @@ describe('jobController', () => {
       })
       .then((res) => {
         expect(res.statusCode).to.equal(200);
+        done();
+      })
+      .catch((err) => {
+        console.log(err);
         done();
       });
     })
@@ -88,7 +96,7 @@ describe('jobController', () => {
         done();
       });
 
-    })
+    });
 
     it('should return 500 when the job data is sent in the wrong format', (done) => {
       let jobData = {
@@ -106,7 +114,7 @@ describe('jobController', () => {
         done();
       });
 
-    })
+    });
 
     it('should not save the job data that is sent in the wrong format', (done) => {
       Job.findOne({ where: {title: 'Best Engineer'} })
@@ -114,6 +122,10 @@ describe('jobController', () => {
         expect(job).to.equal(null);
         done();
       })
-    })
+      .catch((err) => {
+        console.log(err)
+        done();
+      });
+    });
   });
-})
+});

@@ -36,10 +36,10 @@ let getJobsFromStackOverflow = () => {
           company: job['a10:author'][0]['a10:name'][0],
           publishDate: new Date(job['pubDate'][0])
         }
-        let tagsData = tagName;
+        let tagData = tagName;
 
         //Post Data to the Job and Tag Controller
-        return postJobTagData(jobData, tagsData);
+        return postJobTagData(jobData, tagData);
       }));
     })
     .catch((err) => {
@@ -72,7 +72,7 @@ let getJobsFromIndeed = () => {
     }
     rp(indeedOptions)
     .then((body) => {
-      let tagsData = tagName;
+      let tagData = tagName;
       let indeedJobs = body.results;
       //Return once the array of promises is resolved
       return Promise.all(indeedJobs.map((job) => {
@@ -85,7 +85,7 @@ let getJobsFromIndeed = () => {
         }
 
         //Post Data to the Job and Tag Controller
-        return postJobTagData(jobData, tagsData);
+        return postJobTagData(jobData, tagData);
       }));
     })
     .catch((err) => {
@@ -95,7 +95,7 @@ let getJobsFromIndeed = () => {
 }
 
 
-let postJobData = (jobData, tagsData) => {
+let postJobData = (jobData, tagData) => {
   return rp({
     url: 'http://localhost:8080/api/job',
     method: 'POST',
@@ -103,19 +103,19 @@ let postJobData = (jobData, tagsData) => {
   });
 }
 
-let postTagData = (job, tagsData) => {
+let postTagData = (job, tagData) => {
   return rp({
     url: 'http://localhost:8080/api/tags/job',
     method: 'post',
-    json: { job, tagsData }
+    json: { job, tagData }
   })
 }
 
-let postJobTagData = (jobData, tagsData) => {
+let postJobTagData = (jobData, tagData) => {
   return postJobData(jobData)
   .then((savedJob) => {
     console.log('the saved job', savedJob);
-    return postTagData(savedJob, tagsData)
+    return postTagData(savedJob, tagData)
   });
 }
 
