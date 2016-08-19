@@ -1,9 +1,9 @@
 import { connection } from '../bot.js';
 import User from '../models/userModel';
 import Team from '../models/teamModel';
-import Profile from '../models/profileModel';
 import Tag from '../models/tagModel';
 import { updateProfile } from './introduction';
+import rp from 'request-promise';
 
 //we want to check if the user on the team has been
 //onboard with introduction or not, in this case
@@ -13,48 +13,18 @@ import { updateProfile } from './introduction';
 //stage: completed -> name and location updated
 
 const helper =  {
-  checkStage: (bot, message) => {
-    //Want to shorten code below,
-    //however, when using eager loading for user (extend profile)
-    //receive an error that profile is not associated to the user
-    User.find({
-      where: { slackUserId: message.user }
-    })
-    .then(user => {
-      let userId = user.dataValues.id;
-      Profile.find({
-        where: { userId }
-      })
-      .then(profile => {
-        // console.log('this is inside helper.checkstage, profile: ', profile.dataValues);
-        let stage = profile.dataValues.stage;
-        //depending on the stage, would have to give different respones
-        routeOnStage(stage, bot, message);
-      })
-      .catch(err => {
-        console.log('Error with checking profile');
-      })
-    })
-    .catch(err => {
-      console.log('Error with checking users');
-    })
-  },
-  updateProfile: (response, profilePayload) => {
-    console.log('this is the response: ', response)
-    User.find({
-      where: {slackUserId: response.user}
-    })
-    .then(user => {
-      let userId = user.dataValues.id;
-      Profile.find({
-        where: { userId }
-      })
-      .then(profile => {
-        profile.updateAttributes(profilePayload)
-          .then(() => console.log('Profile has been updated!'))
-          .catch(() => console.log('Could not update profile.'))
-      })
-    })
+  updateUser: (response) => {
+    let slackUserId = response.user;
+    let location = response.text;
+    let usersData = { 
+      url: 'http://localhost:8080/slack/users',
+      method: 'PUT',
+      json: { slackUserId, location } 
+    }
+    
+    rp(usersData)
+      .catch(err => console.log(err))
+
   },
   findTags: (message) => {
     //given a string of text, split the string by spaces
