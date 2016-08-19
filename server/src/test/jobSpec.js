@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import rp from 'request-promise';
+import request from 'request';
 import db from '../db/db-config';
 import Job from '../models/jobModel';
 
@@ -27,20 +27,16 @@ describe('jobController', () => {
         publishDate: new Date('2016-08-01')
       }
 
-      rp({
+
+      request({
         url: 'http://localhost:8080/api/jobs',
         method: 'POST',
-        json: { jobData },
-        resolveWithFullResponse: true 
-      })
-      .then((res) => {
+        json: { jobData }
+      }, (err, res, body) => {
+        if (err) { done(err) }
         expect(res.statusCode).to.equal(201);
-        done();
+        done()
       })
-      .catch((err) => {
-        console.log(err);
-        done();
-      });
     });
 
     it('should save the job to the database', (done) => {
@@ -67,35 +63,31 @@ describe('jobController', () => {
         publishDate: new Date('2016-08-01')
       }
 
-      rp({
+      request({
         url: 'http://localhost:8080/api/jobs',
         method: 'POST',
         json: { jobData },
         resolveWithFullResponse: true 
-      })
-      .then((res) => {
+      }, (err, res, body) => {
+        if (err) { done(err) }
         expect(res.statusCode).to.equal(200);
         done();
       })
-      .catch((err) => {
-        console.log(err);
-        done();
-      });
     })
 
     it('should return 500 when there is no job data sent', (done) => {
 
-      rp({
+      request({
         url: 'http://localhost:8080/api/jobs',
         method: 'POST',
         json: {},
         resolveWithFullResponse: true 
-      })
-      .catch((err) => {
-        expect(err.statusCode).to.equal(500);
+      }, (err, res, body) => {
+        if (err) { done(err) }
+        expect(res.statusCode).to.equal(500);
         done();
-      });
-
+      })
+      
     });
 
     it('should return 500 when the job data is sent in the wrong format', (done) => {
@@ -103,16 +95,16 @@ describe('jobController', () => {
         title: 'Best Egineer'
       }
 
-      rp({
+      request({
         url: 'http://localhost:8080/api/jobs',
         method: 'POST',
         json: { jobData },
         resolveWithFullResponse: true 
-      })
-      .catch((err) => {
-        expect(err.statusCode).to.equal(500);
+      }, (err, res, body) => {
+        if (err) { done(err) }
+        expect(res.statusCode).to.equal(500);
         done();
-      });
+      })
 
     });
 

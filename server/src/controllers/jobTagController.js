@@ -16,7 +16,7 @@ const addJobTag = (req, res) => {
     return tag.addJob(foundJob)
   })
   .then((jobTag) => {
-    res.end();
+    res.sendStatus(201);
   })
   .catch((err) => {
     console.log('Error creating job tag association', err);

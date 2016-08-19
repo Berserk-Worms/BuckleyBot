@@ -21,24 +21,42 @@
         Tag.create({
           name: 'javascript'
         })
+        done();
+      })
+
+      after((done) => {
+        db.sync({force: true})
+        .then(() => {
+          done();
+        })
+        .catch(function(err) {
+          done(err);
+        });
+      });
+
+      it('should return 201 when successfully posting a new association to the job tag join table', (done) => {
+        // let jobId = 1;
+        // let tagId = 1;
+        // rp({
+        //   url: 'http://localhost:8080/api/jobs/tags',
+        //   method: 'POST',
+        //   json: { jobId, tagId },
+        //   resolveWithFullResponse: true 
+        // })
+        // .then((res) => {
+        //   expect(res.statusCode).to.equal(201);
+        //   done();
+        // })  
+        // .catch((err) => {
+        //   console.log(err);
+        //   done();
+        // });
+        done();
       })
     })
 
   })
     
-    // it('should create an association between the tag and the job', (done) => {
-    //   Tag.findById(1, {
-    //     include: [Job]
-    //   })
-    //   .then((tag) => {
-    //     expect(tag.jobs[0].dataValues.id).to.equal(1);
-    //     expect(tag.jobs[0].dataValues.title).to.equal('Lead Engineer');
-    //     done();
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
-    // })
     
     // it('should return 500 when incorrect job data is posted', (done) => {
     //   let job = { id: 'five' };
