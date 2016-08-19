@@ -20,7 +20,7 @@ const addJob = (req, res) => {
     Job.findOrCreate({ where: jobData })
     .spread((job, created) => {
       created ? console.log('new job created and adding tags:', job.dataValues.title) : console.log('exsting job found adding tags:', job.dataValues.title);
-      res.send(job);
+      created ? res.status(201).send(job) : res.status(200).send(job)
     })
     .catch((err) => {
       console.log('error creating job', err);

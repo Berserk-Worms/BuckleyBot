@@ -18,7 +18,7 @@ describe('jobController', () => {
 
   describe('Job Creation', () => {
 
-    it('should return 200 when successfully creating a new job', (done) => {
+    it('should return 201 when successfully creating a new job', (done) => {
       let jobData = {
         title: 'Lead Engineer',
         link: 'http://example.com',
@@ -28,13 +28,13 @@ describe('jobController', () => {
       }
 
       rp({
-        url: 'http://localhost:8080/api/job',
+        url: 'http://localhost:8080/api/jobs',
         method: 'POST',
         json: { jobData },
         resolveWithFullResponse: true 
       })
       .then((res) => {
-        expect(res.statusCode).to.equal(200);
+        expect(res.statusCode).to.equal(201);
         done();
       })
       .catch((err) => {
@@ -68,7 +68,7 @@ describe('jobController', () => {
       }
 
       rp({
-        url: 'http://localhost:8080/api/job',
+        url: 'http://localhost:8080/api/jobs',
         method: 'POST',
         json: { jobData },
         resolveWithFullResponse: true 
@@ -86,7 +86,7 @@ describe('jobController', () => {
     it('should return 500 when there is no job data sent', (done) => {
 
       rp({
-        url: 'http://localhost:8080/api/job',
+        url: 'http://localhost:8080/api/jobs',
         method: 'POST',
         json: {},
         resolveWithFullResponse: true 
@@ -104,7 +104,7 @@ describe('jobController', () => {
       }
 
       rp({
-        url: 'http://localhost:8080/api/job',
+        url: 'http://localhost:8080/api/jobs',
         method: 'POST',
         json: { jobData },
         resolveWithFullResponse: true 

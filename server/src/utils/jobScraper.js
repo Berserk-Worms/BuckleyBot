@@ -108,7 +108,7 @@ const getJobsFromIndeed = () => {
 
 const postJobData = (jobData, tagsData) => {
   return rp({
-    url: 'http://localhost:8080/api/job',
+    url: 'http://localhost:8080/api/jobs',
     method: 'POST',
     json: { jobData } 
   });
@@ -116,9 +116,9 @@ const postJobData = (jobData, tagsData) => {
 
 let postTagData = (job, tagData) => {
   return rp({
-    url: 'http://localhost:8080/api/tags/job',
+    url: 'http://localhost:8080/api/tags',
     method: 'post',
-    json: { job, tagData }
+    json: { tagData }
   })
 }
 

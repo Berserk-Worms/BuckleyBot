@@ -1,32 +1,18 @@
 import Tag from '../models/tagModel';
-import Job from '../models/jobModel';
 import request from 'request';
 
 //Add Tags
-const addJobTags = (req, res) => {
-  let job = req.body.job;
+const addTag = (req, res) => {
   let tagData = req.body.tagData;
   let jobData = null;
 
   //check to see if we have valid data
-  if (job && job.id && typeof job.id === 'number' && typeof tagData === 'string') {
-
-    Job.findOne({
-      where: {
-        id: job.id
-      }
-    })
-    .then((foundJob) => {
-      jobData = foundJob;
-      return Tag.findOrCreate({ 
-        where: { name: tagData }
-      });
+  if (typeof tagData === 'string') {
+    Tag.findOrCreate({ 
+      where: { name: tagData }
     })
     .spread((tag, created) => {
-      return tag.addJob(jobData);
-    })
-    .spread((tagJob) => {
-      res.send(tagJob);
+      created ? res.status(201).send(tag) : res.status(200).send(tag);
     })
     .catch((err) => {
       console.log('Error creating tag:', err);
@@ -38,4 +24,4 @@ const addJobTags = (req, res) => {
   //Loop through array of tags
 }
 
-export default { addJobTags }
+export default { addTag }
