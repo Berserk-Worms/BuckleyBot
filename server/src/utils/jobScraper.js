@@ -15,8 +15,8 @@ let jobScrape = new CronJob({
   timeZone: 'America/Los_Angeles'
 });
 
-const tags = ['javascript', 'react', 'node.js', 'node', 'angular', 'es6', 'backbone'];
-
+// const tags = ['javascript', 'react', 'node.js', 'node', 'angular', 'es6', 'backbone'];
+const tags = ['react', 'javascript', 'node.js', 'node', 'angular', 'es6', 'backbone'];
 const getJobsFromStackOverflow = () => {
   // make a request to Stack Overflow for jobs data
   tags.forEach((tagName) => {
@@ -51,7 +51,7 @@ const getJobsFromStackOverflow = () => {
         let tagData = tagName;
 
         //Post Data to the Job and Tag Controller
-        return postJobTagData(jobData, tagData);
+        return postData(jobData, tagData);
       }));
     })
     .catch((err) => {
@@ -97,7 +97,7 @@ const getJobsFromIndeed = () => {
         }
 
         //Post Data to the Job and Tag Controller
-        return postJobTagData(jobData, tagData);
+        return postData(jobData, tagData);
       }));
     })
     .catch((err) => {
@@ -114,19 +114,39 @@ const postJobData = (jobData, tagsData) => {
   });
 }
 
-let postTagData = (job, tagData) => {
+let postTagData = (tagData) => {
   return rp({
     url: 'http://localhost:8080/api/tags',
-    method: 'post',
+    method: 'POST',
     json: { tagData }
   })
 }
 
-let postJobTagData = (jobData, tagData) => {
+let postJobTagData = (jobId, tagId) => {
+  return rp({
+    url: 'http://localhost:8080/api/jobs/tags',
+    method: 'POST',
+    json: { jobId, tagId }
+  })
+}
+
+let postData = (jobData, tagData) => {
+  let jobId;
+  let tagId;
   return postJobData(jobData)
   .then((savedJob) => {
-    console.log('the saved job', savedJob);
-    return postTagData(savedJob, tagData)
+    jobId = savedJob.id;
+    return postTagData(tagData)
+  })
+  .then((savedTag) => {
+    tagId = savedTag.id;
+    return postJobTagData(jobId, tagId);
+  })
+  .then((jobTag) => {
+    console.log(jobTag);
+  })
+  .catch((err) => {
+    console.log(err);
   });
 }
 

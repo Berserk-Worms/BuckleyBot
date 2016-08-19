@@ -75,6 +75,28 @@ describe('jobController', () => {
       })
     })
 
+    it('should create a new job when the date is different', (done) => {
+      let jobData = {
+        title: 'Lead Engineer',
+        link: 'http://example.com',
+        location: 'San Francisco, CA',
+        company: 'Keen.io',
+        publishDate: new Date('2016-08-02')
+      }
+
+      request({
+        url: 'http://localhost:8080/api/jobs',
+        method: 'POST',
+        json: { jobData },
+        resolveWithFullResponse: true 
+      }, (err, res, body) => {
+        if (err) { done(err) }
+        //201 for newly created job
+        expect(res.statusCode).to.equal(201);
+        done();
+      })
+    })
+
     it('should return 500 when there is no job data sent', (done) => {
 
       request({

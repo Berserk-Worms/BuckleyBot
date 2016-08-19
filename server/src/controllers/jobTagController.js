@@ -7,22 +7,36 @@ const addJobTag = (req, res) => {
   let tagId = req.body.tagId;
   let foundJob;
 
-  Job.findById(jobId)
-  .then((job) => {
-    foundJob = job;
-    return Tag.findById(tagId)
-  })
-  .then((tag) => {
-    return tag.addJob(foundJob)
-  })
-  .then((jobTag) => {
-    res.sendStatus(201);
-  })
-  .catch((err) => {
-    console.log('Error creating job tag association', err);
-    res.end();
-  });
-
+  if (typeof jobId === 'number' && typeof tagId === 'number') {
+    Job.findById(jobId)
+    .then((job) => {
+      if (job) {
+        foundJob = job;
+        return Tag.findById(tagId)
+      } else {
+        throw new Error(`Could not find the job with ID ${jobId}`)
+      }
+    })
+    .then((tag) => {
+      if (tag) {
+        return JobTag.findOrCreate({ where: { jobId, tagId } })
+      } else {
+        throw new Error(`Could not find the job with ID ${tagId}`)
+      }
+    })
+    .spread((jobTag, created) => {
+      if (jobTag) {
+        console.log('association created');
+        created ? res.status(201).send(jobTag) : res.status(200).send(jobTag);
+      }
+    })
+    .catch((err) => {
+      console.log('Error creating job tag association', err);
+      res.status(500).send(err);
+    });
+  } else {
+    res.status(500).send('Invalid id types');
+  }
 }
 
 export default { addJobTag }

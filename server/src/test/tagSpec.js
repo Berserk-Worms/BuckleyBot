@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import rp from 'request-promise';
+import request from 'request';
 import db from '../db/db-config';
 import Tag from '../models/tagModel';
 
@@ -12,7 +12,7 @@ describe('tagController', () => {
       .then(() => {
         done();
       })
-      .catch(function(err) {
+      .catch((err) => {
         done(err);
       });
     });
@@ -20,20 +20,16 @@ describe('tagController', () => {
     it('should return 201 when successfully creating a new tag', (done) => {
       let tagData = 'javascript';
 
-      rp({
+      request({
         url: 'http://localhost:8080/api/tags',
         method: 'POST',
         json: { tagData },
         resolveWithFullResponse: true 
-      })
-      .then((res) => {
+      }, (err, res, body) => {
+        if (err) { done(err) }
         expect(res.statusCode).to.equal(201);
         done();
       })
-      .catch((err) => {
-        console.log(err);
-        done();
-      });
     });
 
     it('should successfully save the tag', (done) => {
@@ -50,48 +46,44 @@ describe('tagController', () => {
     it('should return 200 when posting an existing tag', (done) => {
       let tagData = 'javascript';
 
-      rp({
+      request({
         url: 'http://localhost:8080/api/tags',
         method: 'POST',
         json: { tagData },
         resolveWithFullResponse: true 
-      })
-      .then((res, tag) => {
+      }, (err, res, body) => {
+        if (err) { done(err) }
         expect(res.statusCode).to.equal(200);
         expect(res.body.id).to.equal(1);
         done();
       })
-      .catch((err) => {
-        console.log(err);
-        done();
-      });
+
     })
 
     it('should return 500 when incorrect tag data is posted', (done) => {
       let tagData = { incorrect: 'data' };
 
-      rp({
+      request({
         url: 'http://localhost:8080/api/tags',
         method: 'POST',
         json: { tagData },
         resolveWithFullResponse: true 
-      })
-      .catch((err) => {
-        expect(err.statusCode).to.equal(500);
+      }, (err, res, body) => {
+        if (err) { done(err) }
+        expect(res.statusCode).to.equal(500);
         done();
-      });
+      })
     })
 
     it('should return 500 when no data is posted', (done) => {
-      rp({
+      request({
         url: 'http://localhost:8080/api/tags',
         method: 'POST',
         resolveWithFullResponse: true 
-      })
-      .catch((err) => {
-        expect(err.statusCode).to.equal(500);
+      }, (err, res, body) => {
+        expect(res.statusCode).to.equal(500);
         done();
-      });
+      })
     })
 
   });

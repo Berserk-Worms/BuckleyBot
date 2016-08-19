@@ -3,11 +3,26 @@ import Sequelize from 'sequelize';
 
 //generate a profile model
 let Job = db.define('job', {
-  title: Sequelize.STRING, 
-  link: Sequelize.STRING,
-  location: Sequelize.STRING,
-  company: Sequelize.STRING,
-  publishDate: Sequelize.DATE 
+  title: {
+    type: Sequelize.STRING,
+    unique: 'compositeIndex'
+  }, 
+  link: {
+    type: Sequelize.STRING,
+    unique: 'compositeIndex'
+  },
+  location: {
+    type: Sequelize.STRING,
+    unique: 'compositeIndex'
+  },
+  company: {
+    type: Sequelize.STRING,
+    unique: 'compositeIndex'
+  },
+  publishDate: {
+    type: Sequelize.DATE,
+    unique: 'compositeIndex'
+  },
 });
 
 Job.sync()
