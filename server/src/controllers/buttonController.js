@@ -1,4 +1,3 @@
-import Profile from '../models/profileModel';
 import UserJob from '../models/userJobModel';
 import User from '../models/userModel';
 import Job from '../models/jobModel';
