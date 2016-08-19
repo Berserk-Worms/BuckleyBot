@@ -4,6 +4,7 @@ import { teams } from './bot';
 import Sequelize from 'sequelize';
 import routes from './routes/router';
 import jobCron from './utils/jobReminderCron';
+import jobScrape from './utils/jobScraper';
 
 const app = express();
 const port = process.env.PORT || 8080;
@@ -21,5 +22,6 @@ app.listen(port, () => {
   console.log('Server started on port ' + port);
   // start cron job to do daily job reminder
   jobCron.start();
+  jobScrape.start();
 });
 
