@@ -1,6 +1,6 @@
 import User from '../models/userModel';
 import { store } from '../bot';
-import helper from '../bots/helper'
+import helper from '../bots/helper';
 
 //Init convo by accepting an argument of created Profile
 const intro = (createdUser) => {
