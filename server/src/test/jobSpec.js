@@ -2,12 +2,10 @@ import { expect } from 'chai';
 import rp from 'request-promise';
 import db from '../db/db-config';
 import Job from '../models/jobModel';
-import tagController from '../controllers/tagController';
 
 describe('jobController', () => {
 
-  describe('Job Creation', () => {
-     //Clear Database after tests run
+    //Clear Database after tests run
     after((done) => {
       db.sync({force: true})
       .then(() => {
@@ -18,13 +16,15 @@ describe('jobController', () => {
       });
     })
 
-    it('should create a new job', (done) => {
+  describe('Job Creation', () => {
+
+    it('should return 200 for a new job', (done) => {
       let jobData = {
         title: 'Lead Engineer',
         link: 'http://example.com',
         location: 'San Francisco, CA',
         company: 'Keen.io',
-        publishDate: new Date()
+        publishDate: new Date('2016-08-01')
       }
 
       let tagsData = 'javascript'
@@ -32,7 +32,7 @@ describe('jobController', () => {
       rp({
         url: 'http://localhost:8080/api/job',
         method: 'POST',
-        json: { jobData, tagsData},
+        json: { jobData },
         resolveWithFullResponse: true 
       })
       .then((res) => {
@@ -49,6 +49,70 @@ describe('jobController', () => {
         expect(job.dataValues.title).to.equal('Lead Engineer');
         expect(job.dataValues.company).to.equal('Keen.io');
         done()
+      })
+    })
+
+    it('should return 200 for an existing job', (done) => {
+      let jobData = {
+        title: 'Lead Engineer',
+        link: 'http://example.com',
+        location: 'San Francisco, CA',
+        company: 'Keen.io',
+        publishDate: new Date('2016-08-01')
+      }
+
+      let tagsData = 'javascript'
+
+      rp({
+        url: 'http://localhost:8080/api/job',
+        method: 'POST',
+        json: { jobData },
+        resolveWithFullResponse: true 
+      })
+      .then((res) => {
+        expect(res.statusCode).to.equal(200);
+        done();
+      });
+    })
+
+    it('should return 500 when there is no job data sent', (done) => {
+
+      rp({
+        url: 'http://localhost:8080/api/job',
+        method: 'POST',
+        json: {},
+        resolveWithFullResponse: true 
+      })
+      .catch((res, err) => {
+        expect(res.statusCode).to.equal(500);
+        done();
+      });
+
+    })
+
+    it('should return 500 when the job data is sent in the wrong format', (done) => {
+      let jobData = {
+        title: 'Best Egineer'
+      }
+
+      rp({
+        url: 'http://localhost:8080/api/job',
+        method: 'POST',
+        json: { jobData },
+        resolveWithFullResponse: true 
+      })
+      .catch((res, err) => {
+        expect(res.statusCode).to.equal(500);
+        done();
+      });
+
+    })
+
+    it('should not save the job data that is sent in the wrong format', (done) => {
+      Job.findOne({ where: {title: 'Best Engineer'} })
+      .then((job) => {
+        expect(job).to.equal(null);
+        done();
       })
     })
   });

@@ -3,8 +3,8 @@ import rp from 'request-promise';
 import Promise from 'bluebird';
 let parseStringAsync = Promise.promisify(parseString);
 
-const tags = ['javascript', 'react', 'node.js', 'node', 'angular', 'es6', 'backbone'];
-
+// const tags = ['javascript', 'react', 'node.js', 'node', 'angular', 'es6', 'backbone'];
+const tags = ['react'];
 let getJobsFromStackOverflow = () => {
   // make a request to Stack Overflow for jobs data
   tags.forEach((tagName) => {
@@ -37,8 +37,9 @@ let getJobsFromStackOverflow = () => {
           publishDate: new Date(job['pubDate'][0])
         }
         let tagsData = tagName;
-        // send data to server
-        return postJobData(jobData, tagsData);
+
+        //Post Data to the Job and Tag Controller
+        return postJobTagData(jobData, tagsData);
       }));
     })
     .catch((err) => {
@@ -83,7 +84,8 @@ let getJobsFromIndeed = () => {
           publishDate: new Date(job.date)
         }
 
-        return postJobData(jobData, tagsData);
+        //Post Data to the Job and Tag Controller
+        return postJobTagData(jobData, tagsData);
       }));
     })
     .catch((err) => {
@@ -97,7 +99,23 @@ let postJobData = (jobData, tagsData) => {
   return rp({
     url: 'http://localhost:8080/api/job',
     method: 'POST',
-    json: { jobData, tagsData } 
+    json: { jobData } 
+  });
+}
+
+let postTagData = (job, tagsData) => {
+  return rp({
+    url: 'http://localhost:8080/api/tags/job',
+    method: 'post',
+    json: { job, tagsData }
+  })
+}
+
+let postJobTagData = (jobData, tagsData) => {
+  return postJobData(jobData)
+  .then((savedJob) => {
+    console.log('the saved job', savedJob);
+    return postTagData(savedJob, tagsData)
   });
 }
 
