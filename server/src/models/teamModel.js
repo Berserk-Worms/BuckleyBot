@@ -10,7 +10,7 @@ let Team = db.define('team', {
   slackBotToken: Sequelize.STRING,
   slackTeamId: { 
     type: Sequelize.STRING,
-    unique: 'compositeIndex'
+    unique: true
   }
 });
 
@@ -28,7 +28,7 @@ Team.sync()
   .then(() => {
     console.log('Team table is connected');
   }, (err) => {
-    console.log('An error occured while generating the Team table');
+    console.log('An error occured while generating the Team table:', err);
   });
 
 export default Team;

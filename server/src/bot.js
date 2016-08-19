@@ -44,10 +44,23 @@ const addTeamBot = (createdTeam) => {
 //Adding key words bot responds to (hears) and event listeners (on)
 //Handle different bot listeners
 connection.hears(["jobs", "job"], ['direct_message'], function(bot, message) {
-  //checkStage checks if profile has been completed
-  helper.checkStage(bot, message);
   userJobsListener.replyWithJobs(bot, message);
 });
+
+connection.hears(["change", "update"], ['direct_message'], function(bot, message) {
+  bot.startConversation(message, (err, convo) => {
+    convo.ask("Where do you want to change your job search location to?", (response, convo) => {
+      askLocation(response,convo);
+      convo.next();
+    })
+  })
+});
+
+const askLocation = (response, convo) => {
+  helper.updateUser(response);
+  convo.say(`Great, your location has been updated to ${response.text}!`);
+  convo.next();
+}
 
 connection.hears("weather", ['direct_message'], (bot, message) => {
   console.log('replying to message');

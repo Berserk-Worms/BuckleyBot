@@ -1,11 +1,23 @@
 import { parseString } from 'xml2js';
 import rp from 'request-promise';
 import Promise from 'bluebird';
+import { CronJob } from 'cron';
 let parseStringAsync = Promise.promisify(parseString);
 
-// const tags = ['javascript', 'react', 'node.js', 'node', 'angular', 'es6', 'backbone'];
-const tags = ['react'];
-let getJobsFromStackOverflow = () => {
+let jobScrape = new CronJob({
+  cronTime: '00 00 * * * *',
+  onTick: () => {
+    console.log('Running jobScrape Cron Task');
+    getJobsFromStackOverflow();
+    getJobsFromIndeed();
+  },
+  start: false,
+  timeZone: 'America/Los_Angeles'
+});
+
+const tags = ['javascript', 'react', 'node.js', 'node', 'angular', 'es6', 'backbone'];
+
+const getJobsFromStackOverflow = () => {
   // make a request to Stack Overflow for jobs data
   tags.forEach((tagName) => {
     rp({
@@ -48,7 +60,7 @@ let getJobsFromStackOverflow = () => {
   });
 }
 
-let getJobsFromIndeed = () => {
+const getJobsFromIndeed = () => {
   tags.forEach((tagName) => {
     let indeedOptions = {
       url: 'http://api.indeed.com/ads/apisearch',
@@ -94,8 +106,7 @@ let getJobsFromIndeed = () => {
   });
 }
 
-
-let postJobData = (jobData, tagData) => {
+const postJobData = (jobData, tagsData) => {
   return rp({
     url: 'http://localhost:8080/api/job',
     method: 'POST',
@@ -119,5 +130,4 @@ let postJobTagData = (jobData, tagData) => {
   });
 }
 
-getJobsFromStackOverflow();
-getJobsFromIndeed();
+export default jobScrape;
