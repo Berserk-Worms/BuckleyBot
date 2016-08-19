@@ -143,9 +143,8 @@ const addUsers = (req, res) => {
     })
   }))
   .then((users) => res.send(users))
-  .catch((err) => {
-    res.send('Error adding user', err);
-  });  
+  .catch(err => res.send(err) )
+  .catch((err) => res.send('Error adding user', err));  
 }
 
 // Triggred from 'PUT /slack/users' 
@@ -165,4 +164,4 @@ const updateLocation = (req, res) => {
 }
 
 
-export default { addUser, checkAuthCode, getUserData };
+export default { addUsers, updateLocation, checkAuthCode, getUserData };
