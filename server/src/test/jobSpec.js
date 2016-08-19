@@ -2,33 +2,19 @@ import { expect } from 'chai';
 import rp from 'request-promise';
 import db from '../db/db-config';
 import Job from '../models/jobModel';
+import tagController from '../controllers/tagController';
 
 describe('jobController', () => {
 
   describe('Job Creation', () => {
-
-     //Clear Database before tests run
-    before((done) => {
+     //Clear Database after tests run
+    after((done) => {
       db.sync({force: true})
-      .then(done())
+      .then(() => {
+        done();
+      })
       .catch(function(err) {
         done(err);
-      });
-
-      let jobData = {
-        title: 'Software Engineer',
-        link: 'http://example.com',
-        location: 'San Francisco, CA',
-        company: 'Keen.io',
-        publishDate: new Date()
-      }
-
-      let tagsData = 'javascript';
-
-      rp({
-        url: 'http://localhost:8080/api/job',
-        method: 'POST',
-        json: { jobData, tagsData}
       });
     })
 
@@ -58,10 +44,9 @@ describe('jobController', () => {
     it('should save the job to the database', (done) => {
       //Check to see if the job created in the before action 
       //is in the database
-
       Job.findById(1)
       .then((job) => {
-        expect(job.dataValues.title).to.equal('Software Engineer');
+        expect(job.dataValues.title).to.equal('Lead Engineer');
         expect(job.dataValues.company).to.equal('Keen.io');
         done()
       })
