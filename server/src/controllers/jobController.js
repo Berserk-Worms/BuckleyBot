@@ -26,7 +26,7 @@ const addJob = (req, res) => {
       res.end()
     });
   } else {
-    res.status(500).send('Job Data is incorrectly formatted')
+    res.status(500).send('Job data is incorrect')
   }
 }
 

@@ -11,27 +11,23 @@ describe('tagController', () => {
     //Clear database after tests run
 
     before((done) => {
-      let jobData = {
+      Job.create({
         title: 'Lead Engineer',
         link: 'http://example.com',
         location: 'San Francisco, CA',
         company: 'Keen.io',
         publishDate: new Date('2016-08-01')
-      }
-
-      rp({
-        url: 'http://localhost:8080/api/job',
-        method: 'POST',
-        json: { jobData },
-        resolveWithFullResponse: true 
-      })
-      .then((res) => {
-        done();
-      })
-      .catch((err) => {
-        console.log(err);
-        done();
       });
+
+      Job.create({
+        title: 'Software Engineer',
+        link: 'http://example.com',
+        location: 'San Francisco, CA',
+        company: 'Keen.io',
+        publishDate: new Date('2016-08-01')
+      });
+
+      done();
     })
 
     after((done) => {
@@ -71,6 +67,9 @@ describe('tagController', () => {
         expect(tag.dataValues.name).to.equal('javascript');
         done();
       })
+      .catch((err) => {
+        console.log(err);
+      });
     })
 
     it('should create an association between the tag and the job', (done) => {
@@ -82,7 +81,78 @@ describe('tagController', () => {
         expect(tag.jobs[0].dataValues.title).to.equal('Lead Engineer');
         done();
       })
+      .catch((err) => {
+        console.log(err);
+      });
     })
+
+    it('should return 200 when posting an existing tag to a job', (done) => {
+      //Add the existing javascript tag to the second job
+      let job = { id: 2 };
+      let tagData = 'javascript';
+
+      rp({
+        url: 'http://localhost:8080/api/tags/job',
+        method: 'POST',
+        json: { job, tagData },
+        resolveWithFullResponse: true 
+      })
+      .then((res, tag) => {
+        expect(res.statusCode).to.equal(200);
+        expect(res.body[0].tagId).to.equal(1);
+        expect(res.body[0].jobId).to.equal(2);
+        done();
+      })
+      .catch((err) => {
+        console.log(err);
+        done();
+      });
+    })
+
+    it('should return 500 when incorrect tag data is posted', (done) => {
+      let job = { id: 1 };
+      let tagData = { incorrect: 'data' };
+
+      rp({
+        url: 'http://localhost:8080/api/tags/job',
+        method: 'POST',
+        json: { job, tagData },
+        resolveWithFullResponse: true 
+      })
+      .catch((err) => {
+        expect(err.statusCode).to.equal(500);
+        done();
+      });
+    })
+
+    it('should return 500 when incorrect job data is posted', (done) => {
+      let job = { id: 'five' };
+      let tagData = 'angular';
+
+      rp({
+        url: 'http://localhost:8080/api/tags/job',
+        method: 'POST',
+        json: { job, tagData },
+        resolveWithFullResponse: true 
+      })
+      .catch((err) => {
+        expect(err.statusCode).to.equal(500);
+        done();
+      });
+    })
+
+    it('should return 500 when no data is posted', (done) => {
+      rp({
+        url: 'http://localhost:8080/api/tags/job',
+        method: 'POST',
+        resolveWithFullResponse: true 
+      })
+      .catch((err) => {
+        expect(err.statusCode).to.equal(500);
+        done();
+      });
+    })
+
   });
 
 });

@@ -91,8 +91,8 @@ describe('jobController', () => {
         json: {},
         resolveWithFullResponse: true 
       })
-      .catch((res, err) => {
-        expect(res.statusCode).to.equal(500);
+      .catch((err) => {
+        expect(err.statusCode).to.equal(500);
         done();
       });
 
@@ -109,8 +109,8 @@ describe('jobController', () => {
         json: { jobData },
         resolveWithFullResponse: true 
       })
-      .catch((res, err) => {
-        expect(res.statusCode).to.equal(500);
+      .catch((err) => {
+        expect(err.statusCode).to.equal(500);
         done();
       });
 
