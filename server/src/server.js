@@ -3,6 +3,7 @@ import bodyParser from 'body-parser';
 import { teams } from './bot';
 import Sequelize from 'sequelize';
 import routes from './routes/router';
+import jobCron from './utils/jobReminderCron';
 
 //server config for middleware later
 // import server-config from './server-config';
@@ -21,5 +22,7 @@ app.listen(port, () => {
   //which exist in the database
   teams();
   console.log('Server started on port ' + port);
+  // start cron job to do daily job reminder
+  jobCron.start();
 });
 
