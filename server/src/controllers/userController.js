@@ -1,16 +1,13 @@
 import User from '../models/userModel';
-import Profile from '../models/profileModel';
 import Team from '../models/teamModel';
-
 import rp from 'request-promise';
-
 import jwt from 'jwt-simple';
 
-// Authenticate user when they click on "sign in with Slack" button
-//
 // TODO: This method could be moved into a different module that deals
 // purely with slack oauth. This doesn't necessarily need to live in
 // the userController module.
+// Triggered from 'GET /slack/users/auth' after bot was added to team
+// Authenticate user when they click on "sign in with Slack" button
 const checkAuthCode = (req, res) => {
   console.log('-------------- Checking authorization code sent by Slack!');
   console.log('This is the req.query object:', req.query);
@@ -22,10 +19,11 @@ const checkAuthCode = (req, res) => {
     console.log('User denied authorization. Error:', req.query.error);
     // TODO: show an error here that tells the user that they need to
     // authorize slackbot in order for it to be added on Slack
-    res.redirect('/');
+    res.redirect('/oops');
   }
 };
 
+// Triggered from checkAuthCode
 const authenticateUser = (req, res) => {
   console.log('-------------- Authenticating user!')
 
@@ -77,7 +75,7 @@ const authenticateUser = (req, res) => {
   });
 }
 
-//moved findOrCreateUser into its own function
+// Triggered from authenticated user
 const findOrCreateUser = (body, res) => {
   console.log('-------------- Checking DB for user!');
   // find or create user using access token and the info from body
@@ -104,12 +102,13 @@ const findOrCreateUser = (body, res) => {
   .catch(err => res.send(err));
 };
 
+// Triggered from findOrCreateUser
 const tokenForUser = (slackUserId) => {
   const timestamp = new Date().getTime();
   return jwt.encode({ sub: slackUserId, iat: timestamp }, process.env.JWT_SECRET);
 };
 
-// This is called after passport middleware that finds user
+// Triggered from 'GET /slack/users/data' after passport middleware finds user
 const getUserData = (req, res) => {
   // Check if error
   if (req.error) {
@@ -126,72 +125,43 @@ const getUserData = (req, res) => {
   res.send(userData);
 }
 
-//we have a database of users based on slack bot interaction
-//we should be able to find, addUser, deleteUser
-const findUser = (req, res) => {
-  User.findOne({
-    where: {
-      name: req.body.username,
-      slackId: req.body.slack_id
-    }
-  })
-  .then(user => {
-    res.json(user);
-  })
-  .catch(err => {
-    console.log('Error: ', err);
-    done(err);
-  });
-};
 
-//Adduser if not created, otherwise will return user info
-//users need to passed as a array even if it's a single user
-//accessToken is set to null initially 
-const addUser = (req, res) => {
+// Triggered from 'POST /slack/users'
+// Create user and make request to profile controller
+// NOTE: users need to be passed as a array even if it's a single user
+// NOTE: accessToken is set to null until user signs in
+// NOTE: location is set to San Francisco for default 
+const addUsers = (req, res) => {
   let users = req.body.users;
   let teamId = req.body.teamId;
   let accessToken = null;
+  let location = 'San Francisco';
 
-  users.forEach( ({ name, slackUserId, slackTeamId, email }) => {
-
-    User.create({
-      name, accessToken, slackUserId, slackTeamId, email 
+  Promise.all(users.map( ({ name, email, photo, slackUserId, slackTeamId }) => {
+    return User.create({
+      name, email, location, photo, accessToken, slackUserId, slackTeamId 
     })
-    .then((user) => {
-      return rp({
-        url: 'http://localhost:8080/slack/users/profile',
-        method: 'POST',
-        json: { 
-          userId: user.id, 
-          name: user.name, 
-          location: 'San Francisco' 
-        }
-      });
-    })
-    .catch((err) => {
-      console.log(err)
-      res.end();
-    });   
-    
-  });
+  }))
+  .then((users) => res.send(users))
+  .catch(err => res.send(err) )
+  .catch((err) => res.send('Error adding user', err));  
 }
 
-const deleteUser = (req, res) => {
-  User.destroy({
-    where: {
-      name: req.body.username,
-      slackUserId: req.body.slack_id
-    }
+// Triggred from 'PUT /slack/users' 
+// Updates location when an user interacts with the bot
+const updateLocation = (req, res) => {
+  let slackUserId = req.body.slackUserId;
+  let location = req.body.location;
+
+  User.findOne({
+    where: { slackUserId }
   })
   .then(user => {
-    console.log('deleted user: ', user);
-    res.end();
+    user.updateAttributes({ location });
+    res.send('User location updated')
   })
-  .catch(err => {
-    console.log('Error: ', err);
-    done(err);
-  });
+  .catch(err => res.send('Error when updating location', err))
 }
 
 
-export default { findUser, addUser, deleteUser, checkAuthCode, getUserData };
+export default { addUsers, updateLocation, checkAuthCode, getUserData };

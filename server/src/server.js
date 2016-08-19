@@ -5,9 +5,6 @@ import Sequelize from 'sequelize';
 import routes from './routes/router';
 import jobCron from './utils/jobReminderCron';
 
-//server config for middleware later
-// import server-config from './server-config';
-
 const app = express();
 const port = process.env.PORT || 8080;
 
