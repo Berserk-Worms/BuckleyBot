@@ -125,7 +125,17 @@ const getUserData = (req, res) => {
   res.send(userData);
 }
 
+// Trigger from '/slack/users:slackUserId'
+// Query for single user
+const findUser = (req, res) => {
+  let slackUserId = req.params.slackUserId;
 
+  User.findOne( {where: {slackUserId}} )
+  .then(user => res.send(user))
+  .catch(err => res.send('No user found: ', err));
+
+}
+ 
 // Triggered from 'POST /slack/users'
 // Create user and make request to profile controller
 // NOTE: users need to be passed as a array even if it's a single user
@@ -164,4 +174,4 @@ const updateLocation = (req, res) => {
 }
 
 
-export default { addUsers, updateLocation, checkAuthCode, getUserData };
+export default { findUser, addUsers, updateLocation, checkAuthCode, getUserData };
