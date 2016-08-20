@@ -19,26 +19,24 @@ export default (app, express) => {
   // API ROUTES
 
   //////////////////////////////////////////////
-  //Handling Team Oauth
+  //Handling Oauth
   //////////////////////////////////////////////
+  // TODO: fix this so that it is in the authController!
   app.get('/slack/teams/auth', teamController.addTeam);
+  app.get('/slack/users/auth', userController.checkAuthCode);
+  app.get('/slack/users/data', requireAuth, userController.getUserData);
+
+  //////////////////////////////////////////////
+  //Handling Team
+  //////////////////////////////////////////////
+  app.get('/api/teams', teamController.findAllTeams);
 
   //////////////////////////////////////////////
   //Handling Users
   //////////////////////////////////////////////
-
-  // TODO: fix this so that it is in the userController!
   app.get('/slack/users/:slackUserId', userController.findUser);
   app.post('/slack/users', userController.addUsers);
-  app.put('/slack/users', userController.updateLocation)
-
-  // Grabbing user data
-  app.get('/slack/users/data', requireAuth, userController.getUserData);
-
-  //////////////////////////////////////////////
-  //Handling Oauth
-  //////////////////////////////////////////////
-  app.get('/slack/users/auth', userController.checkAuthCode);
+  app.put('/slack/users', userController.updateLocation);
 
   //////////////////////////////////////////////
   //Handling Job
