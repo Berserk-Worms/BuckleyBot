@@ -1,6 +1,17 @@
 import Team from '../models/teamModel';
 import rp from 'request-promise';
 
+// Triggered from 'GET /api/teams'
+// Find all teams
+const findAllTeams = (req, res) => {
+
+  Team.findAll()
+  .then(teams => res.send(teams))
+  .catch(err => res.send('No teams were found', err));
+  
+}
+
+
 // Triggered from 'GET /slack/teams/auth' after bot was added to team
 // Queries Slack and adds Team to database
 const addTeam = (req, res) => {
@@ -89,4 +100,4 @@ const parseUsersInfo = (users) => {
     });
 }
 
-export default { addTeam };
+export default { findAllTeams, addTeam };
