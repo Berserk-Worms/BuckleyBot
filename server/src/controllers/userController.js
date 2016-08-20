@@ -125,6 +125,12 @@ const getUserData = (req, res) => {
   res.send(userData);
 }
 
+////////////////// Above can be separate auth file //////////////////
+
+
+
+
+
 // Trigger from 'GET /slack/users:slackUserId'
 // Query for single user
 const findUser = (req, res) => {
