@@ -2,9 +2,9 @@ import Sequelize from 'sequelize';
 
 //make path for production environment
 let databaseUrl;
-if (process.env.NODE_ENV = 'test') {
+if (process.env.NODE_ENV === 'test') {
   databaseUrl = 'postgres://localhost:5432/uncle_test';
-} else if (process.env.NODE_ENV = 'production') {
+} else if (process.env.NODE_ENV === 'production') {
   databaseUrl = process.env.DATABASE_URL 
 } else {
   databaseUrl = 'postgres://localhost:5432/uncle'
