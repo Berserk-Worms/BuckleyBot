@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import request from 'request';
+import request from 'request-promise';
 import db from '../db/db-config';
 import Tag from '../models/tagModel';
 
@@ -17,73 +17,64 @@ describe('tagController', () => {
       });
     });
 
-    it('should return 201 when successfully creating a new tag', (done) => {
+    it('should return 201 when successfully creating a new tag', () => {
       let tagData = 'javascript';
 
-      request({
+      return request({
         url: 'http://localhost:8080/api/tags',
         method: 'POST',
         json: { tagData },
         resolveWithFullResponse: true 
-      }, (err, res, body) => {
-        if (err) { done(err) }
-        expect(res.statusCode).to.equal(201);
-        done();
       })
+      .then(res => expect(res.statusCode).to.equal(201));
+
     });
 
-    it('should successfully save the tag', (done) => {
-      Tag.findById(1)
-      .then((tag) => {
-        expect(tag.dataValues.name).to.equal('javascript');
-        done();
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    it('should successfully save the tag', () => {
+     
+     return Tag.findById(1)
+      .then((tag) => expect(tag.dataValues.name).to.equal('javascript'));
+
     })
 
-    it('should return 200 when posting an existing tag', (done) => {
+    it('should return 200 when posting an existing tag', () => {
       let tagData = 'javascript';
 
-      request({
+      return request({
         url: 'http://localhost:8080/api/tags',
         method: 'POST',
         json: { tagData },
         resolveWithFullResponse: true 
-      }, (err, res, body) => {
-        if (err) { done(err) }
+      })
+      .then(res => {
         expect(res.statusCode).to.equal(200);
         expect(res.body.id).to.equal(1);
-        done();
-      })
+      });
 
     })
 
-    it('should return 500 when incorrect tag data is posted', (done) => {
+    it('should return 500 when incorrect tag data is posted', () => {
       let tagData = { incorrect: 'data' };
 
-      request({
+      return request({
         url: 'http://localhost:8080/api/tags',
         method: 'POST',
         json: { tagData },
         resolveWithFullResponse: true 
-      }, (err, res, body) => {
-        if (err) { done(err) }
-        expect(res.statusCode).to.equal(500);
-        done();
       })
+      .catch(err => expect(err.statusCode).to.equal(500));
+
     })
 
-    it('should return 500 when no data is posted', (done) => {
-      request({
+    it('should return 500 when no data is posted', () => {
+      
+      return request({
         url: 'http://localhost:8080/api/tags',
         method: 'POST',
         resolveWithFullResponse: true 
-      }, (err, res, body) => {
-        expect(res.statusCode).to.equal(500);
-        done();
       })
+      .catch(err => expect(err.statusCode).to.equal(500));
+
     })
 
   });
