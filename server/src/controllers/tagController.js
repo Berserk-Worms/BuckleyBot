@@ -1,7 +1,6 @@
 import Tag from '../models/tagModel';
-import request from 'request';
 
-//Add Tags
+// Triggered from '/api/tags'
 const addTag = (req, res) => {
   let tagData = req.body.tagData;
   let jobData = null;
@@ -16,12 +15,12 @@ const addTag = (req, res) => {
     })
     .catch((err) => {
       console.log('Error creating tag:', err);
+      res.status(500).send('Error creating tag:', err);
     });
 
   } else {
     res.status(500).send('Tag data is incorrect');
   }
-  //Loop through array of tags
 }
 
 export default { addTag }

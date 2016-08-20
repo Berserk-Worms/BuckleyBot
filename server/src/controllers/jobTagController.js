@@ -2,6 +2,7 @@ import Job from '../models/jobModel';
 import Tag from '../models/tagModel';
 import JobTag from '../models/jobTagModel';
 
+// Triggered from '/api/jobs/tags'
 const addJobTag = (req, res) => {
   let jobId = req.body.jobId;
   let tagId = req.body.tagId;
