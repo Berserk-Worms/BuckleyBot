@@ -15,8 +15,8 @@ let jobScrape = new CronJob({
   timeZone: 'America/Los_Angeles'
 });
 
-// const tags = ['javascript', 'react', 'node.js', 'node', 'angular', 'es6', 'backbone'];
-const tags = ['react', 'javascript', 'node.js', 'node', 'angular', 'es6', 'backbone'];
+const tags = ['javascript', 'react', 'node.js', 'node', 'angular', 'es6', 'backbone'];
+
 const getJobsFromStackOverflow = () => {
   // make a request to Stack Overflow for jobs data
   tags.forEach((tagName) => {
@@ -141,9 +141,6 @@ let postData = (jobData, tagData) => {
   .then((savedTag) => {
     tagId = savedTag.id;
     return postJobTagData(jobId, tagId);
-  })
-  .then((jobTag) => {
-    console.log(jobTag);
   })
   .catch((err) => {
     console.log(err);

@@ -1,7 +1,8 @@
 import db from '../db/db-config';
 import Sequelize from 'sequelize';
 
-//generate a profile model
+//generate a Job model
+//Create a composite index of all the fields
 let Job = db.define('job', {
   title: {
     type: Sequelize.STRING,

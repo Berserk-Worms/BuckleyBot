@@ -26,7 +26,6 @@ const addJobTag = (req, res) => {
     })
     .spread((jobTag, created) => {
       if (jobTag) {
-        console.log('association created');
         created ? res.status(201).send(jobTag) : res.status(200).send(jobTag);
       }
     })
