@@ -27,6 +27,7 @@ export default (app, express) => {
   //////////////////////////////////////////////
 
   // TODO: fix this so that it is in the userController!
+  app.get('/slack/users/:slackUserId', userController.findUser);
   app.post('/slack/users', userController.addUsers);
   app.put('/slack/users', userController.updateLocation)
 
