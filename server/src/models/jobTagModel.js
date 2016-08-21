@@ -17,4 +17,4 @@ JobTag.sync()
   });
 
 
-export default JobTag
+export default JobTag;
