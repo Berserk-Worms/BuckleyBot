@@ -33,4 +33,4 @@ Job.sync()
   console.log('An error occured while generating the Job table')
 });
 
-export default Job
+export default Job;
