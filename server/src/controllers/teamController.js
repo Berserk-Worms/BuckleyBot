@@ -1,5 +1,4 @@
 import Team from '../models/teamModel';
-import rp from 'request-promise';
 
 // Triggered from 'GET /api/teams'
 // Find all teams in teams table
