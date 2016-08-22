@@ -79,14 +79,11 @@ const respondWithTags = (bot, message) => {
   //find all tags
   helper.listAllTags()
   .then(allTags => {
-    let tags = _.map(JSON.parse(allTags), item => {
-      return item.name;
-    });
     //find all user tags
     helper.listUserTags(message)
     .then(res => {
       //all user tags
-      let userTag = _.map(JSON.parse(res), item => {
+      let userTag = _.map(res, item => {
         return item.tagId;
       });
       let attachments = [];
@@ -95,18 +92,18 @@ const respondWithTags = (bot, message) => {
       //if the user has the tag, have a delete button
       //otherwise, have a button to add
 
-      tags.forEach(tag => {
+      allTags.forEach(({name}) => {
         let addButton =  {
           name: `addTag`,
           text: `Add Tag`,
-          value: tag,
+          value: name,
           type: `button`,
           style: `primary`
         }; 
         let deleteButton = {
           name: `deleteTag`, 
           text: `Delete Tag`, 
-          value: tag, 
+          value: name, 
           type: `button`, 
           style: `danger`,
           confirm: {
@@ -117,10 +114,10 @@ const respondWithTags = (bot, message) => {
           } 
         };
         //does tag(user tag) exist in tags(tag table)
-        let button = (userTag.indexOf(tag) !== -1) ? deleteButton : addButton;
+        let button = (userTag.indexOf(name) !== -1) ? deleteButton : addButton;
             
         let attachment = {
-          text: `${tag}`,
+          text: `${name}`,
           callback_id: `userTag`,
           attachment_type: `default`,
           color: `#3AA3E3`,

@@ -153,13 +153,18 @@ const locationButtons = (req, res, data) => {
 };
 
 const deleteUserTag = (req, res, data) => {
-  console.log('deleteUserTag: ', data.user.id, data.actions[0].value)
+  let clickedInt = `${parseInt(data.attachment_id, 10) - 1}`;
+
   let userTagData = {
     url: `http://localhost:8080/slack/users/tags/${data.user.id}/${data.actions[0].value}`,
     method: `DELETE`
   }
 
   let reply = buttonUpdater(data, 'Add Tag', 0, 'primary', 'userTag')
+  //update the button name to 'addTag'
+  //remove the confirm functionality
+  reply.attachments[clickedInt].actions[0].name = 'addTag';
+  delete reply.attachments[clickedInt].actions[0].confirm;
 
   rp(userTagData)
   .then(success => console.log('Success deleting user tag: ', success.dataValues))
@@ -169,7 +174,8 @@ const deleteUserTag = (req, res, data) => {
 };
 
 const addUserTag = (req, res, data) => {
-  console.log('addUserTag: ', data.user.id, data.actions[0].value);
+  let clickedInt = `${parseInt(data.attachment_id, 10) - 1}`;
+
   let userId = data.user.id;
   let tagId = data.actions[0].value;
 
@@ -180,6 +186,15 @@ const addUserTag = (req, res, data) => {
   }
 
   let reply = buttonUpdater(data, 'Delete Tag', 0, 'danger', 'userTag');
+  //update the button name to 'deleteTag'
+  //add a confirm
+  reply.attachments[clickedInt].actions[0].name = 'deleteTag';
+  reply.attachments[clickedInt].actions[0].confirm = {
+    title: `Are you sure?`,
+    text: `Confirmation to delete tag?`,
+    ok_text: `Yes, delete it!`,
+    dismiss_text: `No, don't delete!`
+  }
 
   rp(userTagData)
   .then(success => console.log('Sucess adding user tag: ', success.dataValues))

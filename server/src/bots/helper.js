@@ -47,14 +47,16 @@ const helper =  {
 
     let userData = {
       url: `http://localhost:8080/slack/users/tags/${message.user}`,
-      method: 'GET'
+      method: 'GET',
+      json: true
     }
     return rp(userData);
   },
   listAllTags: () => {
     let tagData = {
       url: `http://localhost:8080/api/tags`,
-      method: `GET`
+      method: `GET`,
+      json: true
     }
 
     return rp(tagData);
