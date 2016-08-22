@@ -72,15 +72,10 @@ const askLocation = (response, convo) => {
 }
 
 connection.hears("tag", ['direct_message'], (bot, message) => {
-  bot.startConversation(message, (err, convo) => {
-    convo.ask(`I heard someone say tag!`, (response, convo) => {
-      respondWithTags(response, convo);
-      convo.next();
-    });
-  });
+  respondWithTags(bot, message);
 });
 
-const respondWithTags = (response, convo) => {
+const respondWithTags = (bot, message) => {
   //find all tags
   helper.listAllTags()
   .then(allTags => {
@@ -88,7 +83,7 @@ const respondWithTags = (response, convo) => {
       return item.name;
     });
     //find all user tags
-    helper.listUserTags(response)
+    helper.listUserTags(message)
     .then(res => {
       //all user tags
       let userTag = _.map(JSON.parse(res), item => {
@@ -134,15 +129,14 @@ const respondWithTags = (response, convo) => {
         attachments.push(attachment);
       });
 
-      let message = {
+      let response = {
         text: `Here are a list of your tags: `,
         fallback: `Unable to show tags`,
         color: `#3AA3E3`,
         attachments: attachments
       };
 
-      convo.say(message);
-      convo.next();
+      bot.reply(message, response);
     });
   });
 };
