@@ -20,7 +20,7 @@ app.listen(port, () => {
   console.log('Server started on port ' + port);
   db.sync()
   .then(() => {
-    console.log('Database synced');
+    console.log(`${process.env.NODE_ENV} database synced`);
     //invoking teams to generate all instances of bots
     //which exist in the database
     teams();

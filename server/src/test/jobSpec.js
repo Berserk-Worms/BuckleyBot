@@ -6,7 +6,7 @@ import Job from '../models/jobModel';
 describe('jobController', () => {
 
     //Clear Database after tests run
-    before((done) => {
+    after((done) => {
       db.sync({force: true})
       .then(() => {
         done();
