@@ -15,13 +15,12 @@ const connection = Botkit.slackbot({
   debug: false,
 });
 
-const spawnBot = (team) => {
-  let data = team.dataValues;
+const spawnBot = (slackBotToken, slackTeamId) => {
   let temp = connection.spawn({
-    token: data.slackBotToken,
+    token: slackBotToken,
     retry: 20
   });
-  store[data.slackTeamId] = temp.startRTM();
+  store[slackTeamId] = temp.startRTM();
 };
 
 //allow you to do RTM without having to create a new team
@@ -29,16 +28,23 @@ const spawnBot = (team) => {
 //then to teamModel after any team is created
 const teams = () => {
   console.log('starting instances of bots in database')
-  rp('/api/teams')
+  rp({
+    url: 'http://localhost:8080/api/teams',
+    json: true
+  })
   .then((teams) => {
     teams.forEach((team) => {
-      spawnBot(team); 
+      console.log('spanwing bot for', team.slackTeamName);
+      spawnBot(team.slackBotToken, team.slackTeamId);
     });
+  })
+  .catch((err) => {
+    console.log('Error fetching all teams from /api/teams', err);
   })
 };
 
 const addTeamBot = (createdTeam) => {
-  spawnBot(createdTeam);
+  spawnBot(createdTeam.dataValues.slackBotToken, createdTeam.dataValues.slackTeamId);
 };
 
 //Adding key words bot responds to (hears) and event listeners (on)

@@ -1,9 +1,19 @@
 import Tag from '../models/tagModel';
+import Job from '../models/jobModel';
 
 // Triggered from 'GET /api/tags'
 const findAllTags = (req, res) => {
 
-  Tag.findAll()
+  Tag.findAll({ 
+    include: [{
+      model: Job,
+      where: { 
+        createdAt: {
+          $gt: new Date(new Date() - 24 * 60 * 60 * 1000)
+        }
+      }
+    }]
+  })
   .then(tags => res.send(tags))
   .catch(err => res.send('No tags were found', err));
 
