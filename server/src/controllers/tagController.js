@@ -5,7 +5,7 @@ const findAllTags = (req, res) => {
 
   Tag.findAll()
   .then(tags => res.send(tags))
-  .catch(err => res.send('No teams were found', err));
+  .catch(err => res.send('No tags were found', err));
 
 }
 
