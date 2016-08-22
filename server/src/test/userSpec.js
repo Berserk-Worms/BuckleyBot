@@ -1,11 +1,11 @@
-//import request from 'supertest';
+// import request from 'supertest';
 // import { expect } from 'chai';
 // import db from '../db/db-config';
 // import Team from '../models/teamModel';
-// import User from '../models/userModel';
+// // import User from '../models/userModel';
 
 
-//const server = 'http://localhost:8080';
+// const server = 'http://localhost:8080';
 
 // describe('userController', () => {
 
@@ -34,7 +34,7 @@
   // describe('User Creation', () => {
 
 
-    // it('expect 1 to equal 1', () => expect(1).to.equal(1))
+  //   it('expect 1 to equal 1', () => expect(1).to.equal(1))
 
   //   it('expects 201 on successful job creation', () => {
   //     let userData = {
@@ -67,7 +67,7 @@
 
   //   })
 
-//    })
+  //  })
 
 
 

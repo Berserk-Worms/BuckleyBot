@@ -9,11 +9,4 @@ let Tag = db.define('tag', {
   }
 });
 
-Tag.sync()
-.then(() => {
-  console.log('Tag table is connected')
-}, (err) => {
-  console.log('An error occured while generating the Tag table')
-});
-
 export default Tag;

@@ -29,12 +29,4 @@ User.hook('afterCreate', (user, options) => {
   intro(user);
 });
 
-User.sync()
-  .then(() => {
-    console.log('User table is connected');
-  }, (err) => {
-    console.log('failed in the users table:', err);
-    console.log('An error occured while generating the User table.');
-  });
-
 export default User;
