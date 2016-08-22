@@ -7,7 +7,7 @@ let userJobsListener = {
   replyWithJobs: function(bot, message) {
     helper.findTags(message)
     .then(tags => {
-      if (tags[0]) {
+      if (tags.length > 0) {
         //TODO Filter with sequelize rather than _.filter
         let sample = this.returnJobSample(tags[0].jobs, 3);
 
