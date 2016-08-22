@@ -19,8 +19,8 @@ const intro = (createdUser) => {
 
 const askLocation = (response, convo) => {
   convo.ask("Awesome! Which *CITY* do you want to look for jobs?", (response, convo) => {
-    convo.say(`I heard that ${response.text} is a great place! If you want to look for *JOBS* ` +
-      `just let me know! \nIf you have any questions, you can type *HELP* and I will be here to help you!`);
+    convo.say(`I heard that ${response.text} is a great place! If you want to look for *jobs* ` +
+      `just let me know! \nIf you have any questions, you can type *help* and I will be here to help you!`);
     helper.updateUser(response);
     convo.next();
   });

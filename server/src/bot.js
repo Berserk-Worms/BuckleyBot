@@ -71,7 +71,7 @@ const askLocation = (response, convo) => {
   convo.next();
 }
 
-connection.hears("tag", ['direct_message'], (bot, message) => {
+connection.hears(["tag", "filter"], ['direct_message'], (bot, message) => {
   respondWithTags(bot, message);
 });
 
@@ -168,6 +168,12 @@ connection.hears("location", ['direct_message'], (bot, message) => {
       }
     ]
   });
+});
+
+connection.hears("help", ['direct_message'], (bot, message) => {
+  bot.reply(message, `If you would like to change your location, you can type *location*!\n` +
+    `If you would like to add filters for you search, type *tags* and toggle the button to add or ` +
+    `remove tags!`);
 });
 
 connection.hears("weather", ['direct_message'], (bot, message) => {

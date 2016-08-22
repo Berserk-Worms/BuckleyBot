@@ -1,7 +1,6 @@
 import { connection } from '../bot.js';
 import Tag from '../models/tagModel';
 import rp from 'request-promise';
-import _ from 'underscore';
 
 const server = 'http://localhost:8080';
 

@@ -35,4 +35,4 @@ const deleteUserTags = (req, res) => {
   .catch(err => console.log('Error destrying user tag: ', err))
 };
 
-export default { getUserTags, addUserTags, updateUserTags, deleteUserTags };
+export default { getUserTags, addUserTags, deleteUserTags };
