@@ -14,9 +14,11 @@ const buttonDispatcher = (req, res) => {
     saveJob(req, res, parsedPayload);
   } else if (parsedPayload.callback_id === 'location') {
     locationButtons(req, res, parsedPayload);
-  } else if (parsedPayload.callback_id === 'deleteUserTag') {
+  } else if (parsedPayload.callback_id === 'userTag' && parsedPayload.actions[0].name === 'deleteTag') {
+    console.log('============ DELETE ============')
     deleteUserTag(req, res, parsedPayload);
-  } else if (parsedPayload.callback_id === 'addUserTag') {
+  } else if (parsedPayload.callback_id === 'userTag' && parsedPayload.actions[0].name === 'addTag') {
+    console.log('============ ADD ============');
     addUserTag(req, res, parsedPayload);
   } else {
     res.end();
@@ -67,7 +69,7 @@ const saveJob = (req, res, data) => {
     return UserJob.findOrCreate({ where: userJob })
   })
   .then(created => {    
-    let reply = buttonUpdater(data, "Saved!", 0, 'primary');
+    let reply = buttonUpdater(data, "Saved!", 0, 'primary', 'something else');
 
     res.json(reply);
   })
@@ -133,7 +135,7 @@ const locationButtons = (req, res, data) => {
     } else {
       //if the button clicked was update, update the location
       //and notify user the location was updated!
-      reply = buttonUpdater(data, "Update", 1, 'primary');
+      reply = buttonUpdater(data, "Update", 1, 'primary', 'something else');
       reply.attachments[0].text = 'Respond to Buckleybot to update search location',
       // bot asks user where they want to change location
       store[teamId].startPrivateConversation({ user: id }, (err, convo) => {
@@ -157,38 +159,36 @@ const deleteUserTag = (req, res, data) => {
     method: `DELETE`
   }
 
-  let reply = buttonUpdater(data, 'Add Tag', 0, 'primary')
+  let reply = buttonUpdater(data, 'Add Tag', 0, 'primary', 'userTag')
 
   rp(userTagData)
-  .then(success => res.json(reply))
-  .catch(err => console.log(err));
+  .then(success => console.log('Success deleting user tag: ', success.dataValues))
+  .catch(err => console.log('Error deleting user tag: ', err));
+
+  res.json(reply);
 };
 
 const addUserTag = (req, res, data) => {
-  let id = data.user.id;
-  let teamId = data.team.id;
+  console.log('addUserTag: ', data.user.id, data.actions[0].value);
+  let userId = data.user.id;
+  let tagId = data.actions[0].value;
 
-  store[teamId].startPrivateConversation({ user: id }, (err, convo) => {
-    convo.ask(`What tags would you like to add? Please type them out in the ` + 
-      `following format\ntags: _exampleTag1_, _exampleTag2_, _exampleTag3_`, (response, convo) => {
-        //function to add the user tags
-        botHelper.addUserTags(response);
-        convo.say(`Great, you tags have been added!`);
-        convo.next();
-      })
-  })
+  let userTagData = {
+    url: `http://localhost:8080/slack/users/tags`,
+    method: `POST`,
+    json: { userId, tagId }
+  }
 
-  res.send();
+  let reply = buttonUpdater(data, 'Delete Tag', 0, 'danger', 'userTag');
 
-  // let userTagData = {
-  //   url: `http://localhost:8080/slack/user/tags/${data.user.name}`,
-  //   method: `POST`,
-  //   json: { userId: data.user.name, tagId: }
-  // }
+  rp(userTagData)
+  .then(success => console.log('Sucess adding user tag: ', success.dataValues))
+  .catch(err => console.log('Error adding user tags: ', err));
 
+  res.json(reply);
 }
 
-const buttonUpdater = (data, buttonText, buttonInt, buttonStyle) => {
+const buttonUpdater = (data, buttonText, buttonInt, buttonStyle, callbackId) => {
   let message = {
     type: 'message',
     text: data.original_message.text,
@@ -205,7 +205,7 @@ const buttonUpdater = (data, buttonText, buttonInt, buttonStyle) => {
   message.attachments[clickedInt].actions[buttonInt].text = buttonText;
   message.attachments[clickedInt].actions[buttonInt].style = buttonStyle;
   //give it a new callback_id so it wont make a slack button interaction
-  message.attachments[clickedInt].callback_id = 'something else';
+  message.attachments[clickedInt].callback_id = callbackId;
 
   return message;
 }

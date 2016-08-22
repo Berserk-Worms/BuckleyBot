@@ -84,65 +84,66 @@ const respondWithTags = (response, convo) => {
   //find all tags
   helper.listAllTags()
   .then(allTags => {
-    console.log(allTags)
-  })
-
-  helper.listUserTags(response)
-  .then(userTag => {
-    let data = JSON.parse(userTag);
-    let tags = _.map(data, (item) => {
-      return item.tagId;
+    let tags = _.map(JSON.parse(allTags), item => {
+      return item.name;
     });
-    console.log('this is the userTag, ', tags)
-    let attachments = [];
+    //find all user tags
+    helper.listUserTags(response)
+    .then(res => {
+      //all user tags
+      let userTag = _.map(JSON.parse(res), item => {
+        return item.tagId;
+      });
+      let attachments = [];
 
-    //how can i loop through the user tags
-    //if the user has the tag, have a delete button
-    //otherwise, have a button to add
+      //how can i loop through the user tags
+      //if the user has the tag, have a delete button
+      //otherwise, have a button to add
 
-    data.forEach(tag => {
-      console.log(tags, tag.tagId);
-      let addButton =  {
-        name: `addTag`,
-        text: `Add Tag`,
-        value: tag.tagId,
-        type: `button`
-      }; 
-      let deleteButton = {
-        name: `deleteTag`, 
-        text: `Delete Tag`, 
-        value: tag.tagId, 
-        type: `button`, 
-        style: `danger`,
-        confirm: {
-          title: `Are you sure?`,
-          text: `Confirmation to delete tag?`,
-          ok_text: `Yes, delete it!`,
-          dismiss_text: `No, don't delete!`
-        } 
+      tags.forEach(tag => {
+        let addButton =  {
+          name: `addTag`,
+          text: `Add Tag`,
+          value: tag,
+          type: `button`,
+          style: `primary`
+        }; 
+        let deleteButton = {
+          name: `deleteTag`, 
+          text: `Delete Tag`, 
+          value: tag, 
+          type: `button`, 
+          style: `danger`,
+          confirm: {
+            title: `Are you sure?`,
+            text: `Confirmation to delete tag?`,
+            ok_text: `Yes, delete it!`,
+            dismiss_text: `No, don't delete!`
+          } 
+        };
+        //does tag(user tag) exist in tags(tag table)
+        let button = (userTag.indexOf(tag) !== -1) ? deleteButton : addButton;
+            
+        let attachment = {
+          text: `${tag}`,
+          callback_id: `userTag`,
+          attachment_type: `default`,
+          color: `#3AA3E3`,
+          actions: [button]
+        };
+        attachments.push(attachment);
+      });
+
+      let message = {
+        text: `Here are a list of your tags: `,
+        fallback: `Unable to show tags`,
+        color: `#3AA3E3`,
+        attachments: attachments
       };
 
-      let button = (tagArr.indexOf(tag.tagId) !== -1) ? deleteButton : addButton;
-          
-      let attachment = {
-        text: `${tag.tagId}`,
-        callback_id: `deleteUserTag`,
-        attachment_type: `default`,
-        color: `#3AA3E3`,
-        actions: [button]
-      }
-      attachments.push(attachment);
-    })
-
-    let message = {
-      text: `Here are a list of your tags: `,
-      fallback: `Unable to show tags`,
-      color: `#3AA3E3`,
-      attachments: attachments
-    }
-
-    convo.say(message);
-    convo.next();
+      convo.say(message);
+      convo.next();
+    });
   });
 };
 
