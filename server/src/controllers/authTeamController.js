@@ -89,8 +89,9 @@ const findTeamUsers = (team) => {
 const parseUsersInfo = (users) => {
   return users.filter((user) => user.is_bot === false && user.id !== 'USLACKBOT')
     .map((user) => {
+      console.log(user);
       return { 
-        name: user.name,
+        name: user.real_name,
         email: user.profile.email,
         photo: user.profile.image_192,
         slackUserId : user.id,
