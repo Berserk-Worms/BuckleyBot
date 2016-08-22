@@ -7,6 +7,7 @@ import rp from 'request-promise';
 dotenv.config();
 
 const store = {};
+const server = 'http://localhost:8080';
 
 const connection = Botkit.slackbot({
   //this will make it possible to be interactive with
@@ -30,7 +31,7 @@ const spawnBot = (team) => {
 const teams = () => {
   console.log('starting instances of bots in database')
   rp({
-    url: 'http://localhost:8080/api/teams',
+    url: `${server}/api/teams`,
     json: true
   })
   .then((teams) => {
