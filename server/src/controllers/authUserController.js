@@ -80,10 +80,10 @@ const findOrCreateUser = (body, res) => {
   }
 
   let userPayload = { 
-        url: `${server}/api/users/user`,
-        method: 'POST',
-        json: { user } 
-      }
+    url: `${server}/api/users/user`,
+    method: 'POST',
+    json: { user } 
+  }
 
   rp(userPayload)
   .then(user => {
