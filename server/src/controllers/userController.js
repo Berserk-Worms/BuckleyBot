@@ -1,4 +1,42 @@
 import User from '../models/userModel';
+import Job from '../models/jobModel';
+
+// Triggered from 'GET /slack/users/data' after passport middleware finds user
+const getUserData = (req, res) => {
+  // Check if error
+  if (req.error) {
+    console.log('Error getting user data:', error);
+    res.send(req.error);
+  } 
+
+  // Otherwise, send the relevant user data as an object
+  User.findById(req.user.id, {
+    include: [Job]
+  })
+  .then(user => {
+
+    let jobs = user.jobs.map(job => {
+      return {
+        title: job.dataValues.title,
+        link: job.dataValues.link,
+        location: job.dataValues.location,
+        company: job.dataValues.company,
+        publishDate: job.dataValues.publishDate
+      }
+    });
+
+    let userData = {
+      name: user.dataValues.name,
+      location: user.dataValues.location,
+      photo: user.dataValues.photo,
+      jobs: jobs
+    }
+    
+    res.send(userData);
+  })
+  .catch(err => res.send('Error retrieving user data', err))
+
+}
 
 // Triggered from 'GET /slack/users:slackUserId'
 // Query for single user
@@ -78,4 +116,4 @@ const updateLocation = (req, res) => {
   .catch(err => res.send('Error when updating location', err))
 }
 
-export default { findUser, addUsers, addUser, updateLocation };
+export default { getUserData, findUser, addUsers, addUser, updateLocation };
