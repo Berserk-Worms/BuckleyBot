@@ -68,7 +68,6 @@ export default (app, express) => {
   //////////////////////////////////////////////
   app.get('/slack/users/tags/:userId', userTagController.getUserTags);
   app.post('/slack/users/tags', userTagController.addUserTags);
-  app.put('/slack/users/tags', userTagController.updateUserTags);
   app.delete('/slack/users/tags/:userId/:tagId', userTagController.deleteUserTags);
 
   //////////////////////////////////////////////

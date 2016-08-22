@@ -21,10 +21,6 @@ const addUserTags = (req, res) => {
   .catch(err => res.send(err));
 };
 
-const updateUserTags = (req, res) => {
-  
-};
-
 const deleteUserTags = (req, res) => {
   UserTag.find({
     where: {
