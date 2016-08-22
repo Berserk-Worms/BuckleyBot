@@ -8,7 +8,6 @@ let userJobsListener = {
     helper.findTags(message)
     .then(tags => {
       if (tags[0]) {
-        console.log('boba', tags[0]);
         //TODO Filter with sequelize rather than _.filter
         let sample = this.returnJobSample(tags[0].jobs, 3);
 
@@ -56,4 +55,4 @@ let userJobsListener = {
   }
 };
 
-export default userJobsListener 
+export default userJobsListener; 

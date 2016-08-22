@@ -4,6 +4,8 @@ import Job from '../models/jobModel';
 // Triggered from 'GET /api/tags'
 const findAllTags = (req, res) => {
 
+  //Return all tags
+  //Include associated jobs that have been added in the last 24 hours
   Tag.findAll({ 
     include: [{
       model: Job,

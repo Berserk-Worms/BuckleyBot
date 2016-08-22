@@ -15,6 +15,8 @@ const connection = Botkit.slackbot({
   debug: false,
 });
 
+
+//Spawn a bot connection for a specific team
 const spawnBot = (team) => {
   let temp = connection.spawn({
     token: team.slackBotToken,
@@ -25,7 +27,6 @@ const spawnBot = (team) => {
 
 //allow you to do RTM without having to create a new team
 //note this is imported to server.js first on server start
-//then to teamModel after any team is created
 const teams = () => {
   console.log('starting instances of bots in database')
   rp({
@@ -40,7 +41,7 @@ const teams = () => {
   })
   .catch((err) => {
     console.log('Error fetching all teams from /api/teams', err);
-  })
+  });
 };
 
 const addTeamBot = (createdTeam) => {
@@ -58,8 +59,8 @@ connection.hears(["change", "update"], ['direct_message'], function(bot, message
     convo.ask("Where do you want to change your job search location to?", (response, convo) => {
       askLocation(response,convo);
       convo.next();
-    })
-  })
+    });
+  });
 });
 
 const askLocation = (response, convo) => {

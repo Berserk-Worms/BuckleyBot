@@ -34,17 +34,14 @@ const helper =  {
     })
     .then(tags => {
       match = tags.filter((tag) => {
-        return words.indexOf(tag.name) !== -1
-      })
-  
+        return words.indexOf(tag.name) !== -1;
+      });
       console.log('this is match, ', match);
       return match.length > 0 ? match : tags;
     })
-
-    
     .catch(err => {
       console.log('Error: ', err);
-    })
+    });
 
   }
 };
