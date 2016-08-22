@@ -6,6 +6,7 @@ import tagController from '../controllers/tagController'
 import jobTagController from '../controllers/jobTagController';
 import buttonController from '../controllers/buttonController';
 import userJobController from '../controllers/userJobController';
+import userTagController from '../controllers/userTagController';
 
 // Passport stuff
 import passportConfig from '../utils/passport';
