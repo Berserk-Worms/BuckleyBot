@@ -11,7 +11,7 @@ class UserInfo extends Component {
         </Col>
         <Col sm={7}>
           <h1>{this.props.name}</h1>
-          <h3>Location</h3>
+          <h3>{this.props.location}</h3>
         </Col>
       </Row>
     );
