@@ -31,6 +31,7 @@ export default (app, express) => {
   //Handling Team
   //////////////////////////////////////////////
   app.get('/api/teams', teamController.findAllTeams);
+  app.get('/api/teams/:slackTeamId', teamController.findTeam);
   app.post('/api/teams', teamController.addTeam);
 
   //////////////////////////////////////////////

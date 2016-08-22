@@ -10,6 +10,19 @@ const findAllTeams = (req, res) => {
   
 }
 
+// Triggered from 'GET /api/teams:slackTeamId'
+// Find a single team
+const findTeam = (req, res) => {
+  let slackTeamId = req.params.slackTeamId;
+
+  Team.findOne({
+    where: { slackTeamId }
+  })
+  .then(team => res.status(200).send(team))
+  .catch(err => res.send('Error finding team', err))
+
+}
+
 // Triggered from 'POST /api/teams'
 // Adds a team to the teams table
 const addTeam = (req, res) => {
@@ -31,4 +44,4 @@ const addTeam = (req, res) => {
 
 }
 
-export default { findAllTeams, addTeam };
+export default { findAllTeams, findTeam, addTeam };
