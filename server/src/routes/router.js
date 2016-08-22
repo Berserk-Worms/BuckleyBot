@@ -1,4 +1,6 @@
 import path from 'path';
+import authTeamController from '../controllers/authTeamController';
+import authUserController from '../controllers/authUserController';
 import teamController from '../controllers/teamController';
 import userController from '../controllers/userController';
 import jobController from '../controllers/jobController';
@@ -19,26 +21,26 @@ export default (app, express) => {
   // API ROUTES
 
   //////////////////////////////////////////////
-  //Handling Team Oauth
+  //Handling Oauth
   //////////////////////////////////////////////
-  app.get('/slack/teams/auth', teamController.addTeam);
+  app.get('/slack/teams/auth', authTeamController.authTeam);
+  app.get('/slack/users/auth', authUserController.checkAuthCode);
+  app.get('/slack/users/data', requireAuth, authUserController.getUserData);
+
+  //////////////////////////////////////////////
+  //Handling Team
+  //////////////////////////////////////////////
+  app.get('/api/teams', teamController.findAllTeams);
+  app.get('/api/teams/:slackTeamId', teamController.findTeam);
+  app.post('/api/teams', teamController.addTeam);
 
   //////////////////////////////////////////////
   //Handling Users
   //////////////////////////////////////////////
-
-  // TODO: fix this so that it is in the userController!
-  app.get('/slack/users/:slackUserId', userController.findUser);
-  app.post('/slack/users', userController.addUsers);
-  app.put('/slack/users', userController.updateLocation)
-
-  // Grabbing user data
-  app.get('/slack/users/data', requireAuth, userController.getUserData);
-
-  //////////////////////////////////////////////
-  //Handling Oauth
-  //////////////////////////////////////////////
-  app.get('/slack/users/auth', userController.checkAuthCode);
+  app.get('/api/users/:slackUserId', userController.findUser);
+  app.post('/api/users', userController.addUsers);
+  app.post('/api/users/user', userController.addUser);
+  app.put('/api/users/location', userController.updateLocation);
 
   //////////////////////////////////////////////
   //Handling Job
@@ -48,6 +50,7 @@ export default (app, express) => {
   //////////////////////////////////////////////
   //Handling Tag
   //////////////////////////////////////////////
+  app.get('/api/tags', tagController.findAllTags);
   app.post('/api/tags', tagController.addTag);
 
   //////////////////////////////////////////////

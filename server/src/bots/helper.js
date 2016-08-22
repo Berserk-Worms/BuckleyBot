@@ -2,12 +2,14 @@ import { connection } from '../bot.js';
 import Tag from '../models/tagModel';
 import rp from 'request-promise';
 
+const server = 'http://localhost:8080';
+
 const helper =  {
   updateUser: (response) => {
     let slackUserId = response.user;
     let location = response.text;
     let usersData = { 
-      url: 'http://localhost:8080/slack/users',
+      url: `${server}/api/users/location`,
       method: 'PUT',
       json: { slackUserId, location } 
     }

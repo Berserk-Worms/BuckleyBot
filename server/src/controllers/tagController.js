@@ -1,6 +1,15 @@
 import Tag from '../models/tagModel';
 
-// Triggered from '/api/tags'
+// Triggered from 'GET /api/tags'
+const findAllTags = (req, res) => {
+
+  Tag.findAll()
+  .then(tags => res.send(tags))
+  .catch(err => res.send('No tags were found', err));
+
+}
+
+// Triggered from 'POST /api/tags'
 const addTag = (req, res) => {
   let tagData = req.body.tagData;
   let jobData = null;
@@ -23,4 +32,4 @@ const addTag = (req, res) => {
   }
 }
 
-export default { addTag }
+export default { findAllTags, addTag }

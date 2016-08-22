@@ -26,4 +26,4 @@ let Job = db.define('job', {
   },
 });
 
-export default Job
+export default Job;
