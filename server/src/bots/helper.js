@@ -1,6 +1,4 @@
 import { connection } from '../bot.js';
-import User from '../models/userModel';
-import Team from '../models/teamModel';
 import Tag from '../models/tagModel';
 import rp from 'request-promise';
 
@@ -28,7 +26,7 @@ const helper =  {
     let words = message.text.split(/[\\.,\\ !;?:]/);
     let match = [];
 
-    return Tag.findAll()
+    return rp('/api/tags')
     .then(tags => {
 
       tags.forEach(item => {
@@ -40,6 +38,8 @@ const helper =  {
       console.log('this is match, ', match);
       return match;
     })
+
+    
     .catch(err => {
       console.log('Error: ', err);
     })

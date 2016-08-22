@@ -1,8 +1,8 @@
 import Botkit from 'botkit';
 import dotenv from 'dotenv';
-import Team from './models/teamModel';
 import userJobsListener from './bots/job';
 import helper from './bots/helper';
+import rp from 'request-promise';
 
 dotenv.config();
 
@@ -29,12 +29,12 @@ const spawnBot = (team) => {
 //then to teamModel after any team is created
 const teams = () => {
   console.log('starting instances of bots in database')
-  Team.findAll()
-    .then(teams => {
-      teams.forEach((team) => {
-        spawnBot(team); 
-      });
+  rp('/api/teams')
+  .then((teams) => {
+    teams.forEach((team) => {
+      spawnBot(team); 
     });
+  })
 };
 
 const addTeamBot = (createdTeam) => {
