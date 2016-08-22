@@ -1,7 +1,6 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import { teams } from './bot';
-import Sequelize from 'sequelize';
 import routes from './routes/router';
 import jobCron from './utils/jobReminderCron';
 import jobScrape from './utils/jobScraper';

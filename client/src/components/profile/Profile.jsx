@@ -26,7 +26,7 @@ class Profile extends Component {
     return (
       <Grid>
         <Jumbotron className="contact-card">
-          <UserInfo name={this.props.name} />
+          <UserInfo name={this.props.name} location={this.props.location} />
         </Jumbotron>
         <JobList /> 
       </Grid>
@@ -35,7 +35,10 @@ class Profile extends Component {
 }
 
 function mapStateToProps(state) {
-  return { name: state.user.name };
+  return { 
+    name: state.user.name,
+    location: state.user.location
+   };
 }
 
 export default connect(mapStateToProps, actions)(Profile);

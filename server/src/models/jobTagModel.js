@@ -9,4 +9,5 @@ let JobTag = db.define('job_tag', {});
 Job.belongsToMany(Tag, { through: JobTag });
 Tag.belongsToMany(Job, { through: JobTag });
 
-export default JobTag
+export default JobTag;
+
