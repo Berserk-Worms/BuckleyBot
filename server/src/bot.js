@@ -1,12 +1,13 @@
 import Botkit from 'botkit';
 import dotenv from 'dotenv';
-import Team from './models/teamModel';
 import userJobsListener from './bots/job';
 import helper from './bots/helper';
+import rp from 'request-promise';
 
 dotenv.config();
 
 const store = {};
+const server = 'http://localhost:8080';
 
 const connection = Botkit.slackbot({
   //this will make it possible to be interactive with
@@ -15,26 +16,33 @@ const connection = Botkit.slackbot({
   debug: false,
 });
 
+
+//Spawn a bot connection for a specific team
 const spawnBot = (team) => {
-  let data = team.dataValues;
   let temp = connection.spawn({
-    token: data.slackBotToken,
+    token: team.slackBotToken,
     retry: 20
   });
-  store[data.slackTeamId] = temp.startRTM();
+  store[team.slackTeamId] = temp.startRTM();
 };
 
 //allow you to do RTM without having to create a new team
 //note this is imported to server.js first on server start
-//then to teamModel after any team is created
 const teams = () => {
   console.log('starting instances of bots in database')
-  Team.findAll()
-    .then(teams => {
-      teams.forEach((team) => {
-        spawnBot(team); 
-      });
+  rp({
+    url: `${server}/api/teams`,
+    json: true
+  })
+  .then((teams) => {
+    teams.forEach((team) => {
+      console.log('spanwing bot for', team.slackTeamName);
+      spawnBot(team);
     });
+  })
+  .catch((err) => {
+    console.log('Error fetching all teams from /api/teams', err);
+  });
 };
 
 const addTeamBot = (createdTeam) => {
@@ -52,8 +60,8 @@ connection.hears(["change", "update"], ['direct_message'], function(bot, message
     convo.ask("Where do you want to change your job search location to?", (response, convo) => {
       askLocation(response,convo);
       convo.next();
-    })
-  })
+    });
+  });
 });
 
 const askLocation = (response, convo) => {

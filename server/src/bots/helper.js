@@ -1,6 +1,4 @@
 import { connection } from '../bot.js';
-import User from '../models/userModel';
-import Team from '../models/teamModel';
 import Tag from '../models/tagModel';
 import rp from 'request-promise';
 
@@ -28,23 +26,22 @@ const helper =  {
 
     //with splitting, how would be handle .js
     let words = message.text.split(/[\\.,\\ !;?:]/);
-    let match = [];
+    let match;
 
-    return Tag.findAll()
+    return rp({
+      url: `${server}/api/tags`,
+      json: true
+    })
     .then(tags => {
-
-      tags.forEach(item => {
-        if (words.indexOf(item.dataValues.name) !== -1) {
-          match.push(item.dataValues.name)
-        }
-      })
-  
+      match = tags.filter((tag) => {
+        return words.indexOf(tag.name) !== -1;
+      });
       console.log('this is match, ', match);
-      return match;
+      return match.length > 0 ? match : tags;
     })
     .catch(err => {
       console.log('Error: ', err);
-    })
+    });
 
   }
 };

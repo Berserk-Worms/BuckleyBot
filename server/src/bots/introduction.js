@@ -1,26 +1,21 @@
-import User from '../models/userModel';
 import { store } from '../bot';
 import helper from '../bots/helper';
+import rp from 'request-promise';
 
 //Init convo by accepting an argument of created Profile
 const intro = (createdUser) => {
   let slackUserId = createdUser.dataValues.slackUserId;
+  let slackTeamId = createdUser.dataValues.slackTeamId;
+  
+  const BUCKLEY = store[slackTeamId];
 
-  User.find({ where: { slackUserId }})
-  .then(({slackUserId, slackTeamId}) => {
-
-    const BUCKLEY = store[slackTeamId];
-
-    BUCKLEY.startPrivateConversation({ user: slackUserId }, (err, convo) => {
-      convo.ask('Yoooo, watsup?!?', (response, convo) => {
-        askLocation(response, convo);
-        convo.next();
-      });
+  BUCKLEY.startPrivateConversation({ user: slackUserId }, (err, convo) => {
+    convo.ask('Yoooo, watsup?!?', (response, convo) => {
+      askLocation(response, convo);
+      convo.next();
     });
-  })
-  .catch(err => {
-    console.log('Error: ', err);
-  })
+  });
+
 };
 
 const askLocation = (response, convo) => {

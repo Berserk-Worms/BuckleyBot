@@ -21,7 +21,7 @@ Team.hook('afterCreate', (team, options) => {
 
   //should call the method where we are only adding one team
   // console.log(team);
-  addTeamBot(team);
+  addTeamBot(team.get({ plain: true }));
 });
 
 export default Team;

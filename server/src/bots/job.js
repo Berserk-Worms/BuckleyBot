@@ -1,6 +1,4 @@
 import { connection } from '../bot.js';
-import Tag from '../models/tagModel';
-import Job from '../models/jobModel';
 import _ from 'underscore';
 import UserJob from '../models/userJobModel';
 import helper from '../bots/helper';
@@ -9,17 +7,9 @@ let userJobsListener = {
   replyWithJobs: function(bot, message) {
     helper.findTags(message)
     .then(tags => {
-      console.log('tags', tags);
-      let query = (tags.length === 0) ? 'javascript' : tags[0];
-      return Tag.findOne({ 
-        where: { name: query},
-        include: [{ model: Job }], 
-      });
-    })
-    .then((tag) => {
-      if (tag) {
+      if (tags.length > 0) {
         //TODO Filter with sequelize rather than _.filter
-        let sample = this.returnJobSample(tag.jobs, 3);
+        let sample = this.returnJobSample(tags[0].jobs, 3);
 
         //Set attachment to message to be three random jobs
         let reply_with_attachments = {
@@ -37,7 +27,7 @@ let userJobsListener = {
       //TODO: Need to do further filtering to ensure that the 
       //user's saved job does not show up in slack
       
-      let jobTitle = job.dataValues.title.toLowerCase();
+      let jobTitle = job.title.toLowerCase();
 
       return jobTitle.indexOf('lead') === -1 && 
         jobTitle.indexOf('senior') === -1 && 
@@ -50,12 +40,12 @@ let userJobsListener = {
     //Format job data for Slack message attachment 
     let attachments = _.map(filterJobs, (job) => {
       return {
-        title: `:computer: ${job.dataValues.title}`,
-        text: `:office: ${job.dataValues.company} - ${job.dataValues.location} \n :link: ${job.dataValues.link}`,
+        title: `:computer: ${job.title}`,
+        text: `:office: ${job.company} - ${job.location} \n :link: ${job.link}`,
         callback_id: `clickSaveJobs`,
         attachment_type: `default`,
         actions: [
-          {name: `saveJob`, text: `Save`, value: job.dataValues.id, type: `button`, style: `default`}
+          {name: `saveJob`, text: `Save`, value: job.id, type: `button`, style: `default`}
         ]
       };
     });
@@ -65,4 +55,4 @@ let userJobsListener = {
   }
 };
 
-export default userJobsListener 
+export default userJobsListener; 
