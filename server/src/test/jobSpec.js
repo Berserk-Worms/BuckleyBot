@@ -33,7 +33,7 @@ describe('jobController', () => {
         json: { jobData },
         resolveWithFullResponse: true
       })
-      .then((res) => expect(res.statusCode).to.equal(201));
+      .then(res => expect(res.statusCode).to.equal(201));
 
     });
 
