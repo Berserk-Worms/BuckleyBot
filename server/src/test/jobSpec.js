@@ -6,7 +6,7 @@ import Job from '../models/jobModel';
 describe('jobController', () => {
 
     //Clear Database after tests run
-    after((done) => {
+    before((done) => {
       db.sync({force: true})
       .then(() => {
         done();
@@ -33,7 +33,7 @@ describe('jobController', () => {
         json: { jobData },
         resolveWithFullResponse: true
       })
-      .then(res => expect(res.statusCode).to.equal(201))
+      .then((res) => expect(res.statusCode).to.equal(201));
 
     });
 
