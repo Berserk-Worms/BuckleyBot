@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import userJobsListener from './bots/job';
 import helper from './bots/helper';
 import rp from 'request-promise';
+import _ from 'underscore';
 
 dotenv.config();
 
@@ -80,35 +81,55 @@ connection.hears("tag", ['direct_message'], (bot, message) => {
 });
 
 const respondWithTags = (response, convo) => {
-  let tags;
+  //find all tags
+  helper.listAllTags()
+  .then(allTags => {
+    console.log(allTags)
+  })
 
   helper.listUserTags(response)
   .then(userTag => {
-    console.log('this is the userTag, ', userTag)
     let data = JSON.parse(userTag);
-    let tags = data[0].tagId;
+    let tags = _.map(data, (item) => {
+      return item.tagId;
+    });
+    console.log('this is the userTag, ', tags)
     let attachments = [];
 
+    //how can i loop through the user tags
+    //if the user has the tag, have a delete button
+    //otherwise, have a button to add
+
     data.forEach(tag => {
+      console.log(tags, tag.tagId);
+      let addButton =  {
+        name: `addTag`,
+        text: `Add Tag`,
+        value: tag.tagId,
+        type: `button`
+      }; 
+      let deleteButton = {
+        name: `deleteTag`, 
+        text: `Delete Tag`, 
+        value: tag.tagId, 
+        type: `button`, 
+        style: `danger`,
+        confirm: {
+          title: `Are you sure?`,
+          text: `Confirmation to delete tag?`,
+          ok_text: `Yes, delete it!`,
+          dismiss_text: `No, don't delete!`
+        } 
+      };
+
+      let button = (tagArr.indexOf(tag.tagId) !== -1) ? deleteButton : addButton;
+          
       let attachment = {
-        title: `${tag.tagId}`,
-        callback_id: `user_tags`,
+        text: `${tag.tagId}`,
+        callback_id: `deleteUserTag`,
         attachment_type: `default`,
-        actions: [
-          {
-            name: `deleteTag`, 
-            text: `Delete`, 
-            value: tag.tagId, 
-            type: `button`, 
-            style: `danger`,
-            confirm: {
-              title: `Are you sure?`,
-              text: `Confirmation to delete tag?`,
-              ok_text: `Yes, delete it!`,
-              dismiss_text: `No, don't delete!`
-            } 
-          }
-        ]
+        color: `#3AA3E3`,
+        actions: [button]
       }
       attachments.push(attachment);
     })

@@ -26,13 +26,16 @@ const updateUserTags = (req, res) => {
 };
 
 const deleteUserTags = (req, res) => {
-  UserTag.destory({
+  UserTag.find({
     where: {
-      userId: req.body.userId,
-      tagId: req.body.tagId
+      userId: req.params.userId,
+      tagId: req.params.tagId
     }
   })
-  .then(userTag => console.log('Destroyed'))
+  .then(userTag => {
+    console.log('Destroyed, ', userTag)
+    userTag.destroy();
+  })
   .catch(err => console.log('Error destrying user tag: ', err))
 };
 

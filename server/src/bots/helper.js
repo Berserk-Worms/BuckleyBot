@@ -1,6 +1,7 @@
 import { connection } from '../bot.js';
 import Tag from '../models/tagModel';
 import rp from 'request-promise';
+import _ from 'underscore';
 
 const server = 'http://localhost:8080';
 
@@ -50,6 +51,14 @@ const helper =  {
       method: 'GET'
     }
     return rp(userData);
+  },
+  listAllTags: () => {
+    let tagData = {
+      url: `http://localhost:8080/api/tags`,
+      method: `GET`
+    }
+
+    return rp(tagData);
   }
 };
 

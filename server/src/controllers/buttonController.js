@@ -3,6 +3,7 @@ import User from '../models/userModel';
 import Job from '../models/jobModel';
 import botHelper from '../bots/helper';
 import { connection, store } from '../bot';
+import rp from 'request-promise';
 
 //master dispatcher to check the callback_id of incoming requests
 const buttonDispatcher = (req, res) => {
@@ -13,6 +14,10 @@ const buttonDispatcher = (req, res) => {
     saveJob(req, res, parsedPayload);
   } else if (parsedPayload.callback_id === 'location') {
     locationButtons(req, res, parsedPayload);
+  } else if (parsedPayload.callback_id === 'deleteUserTag') {
+    deleteUserTag(req, res, parsedPayload);
+  } else if (parsedPayload.callback_id === 'addUserTag') {
+    addUserTag(req, res, parsedPayload);
   } else {
     res.end();
   }
@@ -62,7 +67,7 @@ const saveJob = (req, res, data) => {
     return UserJob.findOrCreate({ where: userJob })
   })
   .then(created => {    
-    let reply = buttonUpdater(data, "Saved!");
+    let reply = buttonUpdater(data, "Saved!", 0, 'primary');
 
     res.json(reply);
   })
@@ -128,7 +133,7 @@ const locationButtons = (req, res, data) => {
     } else {
       //if the button clicked was update, update the location
       //and notify user the location was updated!
-      reply = buttonUpdater(data, "Update", 1);
+      reply = buttonUpdater(data, "Update", 1, 'primary');
       reply.attachments[0].text = 'Respond to Buckleybot to update search location',
       // bot asks user where they want to change location
       store[teamId].startPrivateConversation({ user: id }, (err, convo) => {
@@ -143,15 +148,54 @@ const locationButtons = (req, res, data) => {
       res.json(reply);
     }
   });
+};
+
+const deleteUserTag = (req, res, data) => {
+  console.log('deleteUserTag: ', data.user.id, data.actions[0].value)
+  let userTagData = {
+    url: `http://localhost:8080/slack/users/tags/${data.user.id}/${data.actions[0].value}`,
+    method: `DELETE`
+  }
+
+  let reply = buttonUpdater(data, 'Add Tag', 0, 'primary')
+
+  rp(userTagData)
+  .then(success => res.json(reply))
+  .catch(err => console.log(err));
+};
+
+const addUserTag = (req, res, data) => {
+  let id = data.user.id;
+  let teamId = data.team.id;
+
+  store[teamId].startPrivateConversation({ user: id }, (err, convo) => {
+    convo.ask(`What tags would you like to add? Please type them out in the ` + 
+      `following format\ntags: _exampleTag1_, _exampleTag2_, _exampleTag3_`, (response, convo) => {
+        //function to add the user tags
+        botHelper.addUserTags(response);
+        convo.say(`Great, you tags have been added!`);
+        convo.next();
+      })
+  })
+
+  res.send();
+
+  // let userTagData = {
+  //   url: `http://localhost:8080/slack/user/tags/${data.user.name}`,
+  //   method: `POST`,
+  //   json: { userId: data.user.name, tagId: }
+  // }
+
 }
 
-const buttonUpdater = (data, buttonText, buttonInt) => {
+const buttonUpdater = (data, buttonText, buttonInt, buttonStyle) => {
   let message = {
     type: 'message',
     text: data.original_message.text,
     attachments: data.original_message.attachments
   }
   let clickedInt = `${parseInt(data.attachment_id, 10) - 1}`;
+  console.log('clicked attachment int, ', clickedInt)
   
   if (buttonInt === undefined) {
     buttonInt = 0;
@@ -159,7 +203,7 @@ const buttonUpdater = (data, buttonText, buttonInt) => {
   //Functions to change the button text and color
   //Note: 1st array is the attachment, 2nd is the button
   message.attachments[clickedInt].actions[buttonInt].text = buttonText;
-  message.attachments[clickedInt].actions[buttonInt].style = 'primary';
+  message.attachments[clickedInt].actions[buttonInt].style = buttonStyle;
   //give it a new callback_id so it wont make a slack button interaction
   message.attachments[clickedInt].callback_id = 'something else';
 
