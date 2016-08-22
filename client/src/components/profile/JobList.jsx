@@ -5,11 +5,11 @@ import JobEntry from './JobEntry';
 
 
 class JobList extends Component {
+
   render() {
     return (
       <Row>
         <Col smOffset={1} sm={10}>
-          <JobEntry />
           <JobEntry />
           <JobEntry />
         </Col>

@@ -7,7 +7,7 @@ class UserInfo extends Component {
     return (
       <Row>
         <Col sm={5}>
-          <Image  src="../assets/robo_head.png" responsive rounded />
+          <Image  src={this.props.photo} responsive rounded />
         </Col>
         <Col sm={7}>
           <h1>{this.props.name}</h1>
