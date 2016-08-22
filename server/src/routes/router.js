@@ -1,5 +1,6 @@
 import path from 'path';
 import authTeamController from '../controllers/authTeamController';
+import authUserController from '../controllers/authUserController';
 import teamController from '../controllers/teamController';
 import userController from '../controllers/userController';
 import jobController from '../controllers/jobController';
@@ -22,10 +23,9 @@ export default (app, express) => {
   //////////////////////////////////////////////
   //Handling Oauth
   //////////////////////////////////////////////
-  // TODO: fix this so that it is in the authController!
   app.get('/slack/teams/auth', authTeamController.authTeam);
-  app.get('/slack/users/auth', userController.checkAuthCode);
-  app.get('/slack/users/data', requireAuth, userController.getUserData);
+  app.get('/slack/users/auth', authUserController.checkAuthCode);
+  app.get('/slack/users/data', requireAuth, authUserController.getUserData);
 
   //////////////////////////////////////////////
   //Handling Team
@@ -37,9 +37,10 @@ export default (app, express) => {
   //////////////////////////////////////////////
   //Handling Users
   //////////////////////////////////////////////
-  app.get('/slack/users/:slackUserId', userController.findUser);
-  app.post('/slack/users', userController.addUsers);
-  app.put('/slack/users', userController.updateLocation);
+  app.get('/api/users/:slackUserId', userController.findUser);
+  app.post('/api/users', userController.addUsers);
+  app.post('/api/users/user', userController.addUser);
+  app.put('/api/users/location', userController.updateLocation);
 
   //////////////////////////////////////////////
   //Handling Job
