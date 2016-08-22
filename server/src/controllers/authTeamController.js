@@ -1,5 +1,7 @@
 import rp from 'request-promise';
 
+const server = 'http://localhost:8080';
+
 // Triggered from 'GET /slack/teams/auth' after bot was added to team
 // Queries Slack and makes a request to teamcontroller to add team
 const authTeam = (req, res) => {
@@ -10,11 +12,12 @@ const authTeam = (req, res) => {
       client_id: process.env.CLIENT_ID,
       client_secret: process.env.CLIENT_SECRET,
       code: req.query.code,
-      redirect_uri: 'http://localhost:8080/slack/teams/auth'
+      redirect_uri: `${server}/slack/teams/auth`
     },
     json: true
   }
 
+  console.log('----- Making Request to Slack -----');
   rp(options)
   .then((body) => {
     if (body.ok) {
@@ -32,10 +35,11 @@ const authTeam = (req, res) => {
   })
   .then((slackTeamData) => {
     let teamData = { 
-      url: 'http://localhost:8080/api/teams',
+      url: `${server}/api/teams`,
       method: 'POST',
       json: { slackTeamData } 
     }
+    console.log('----- Making Request to /api/teams -----');
     return rp(teamData);
   }) 
   .then((team) => {
@@ -57,16 +61,18 @@ const findTeamUsers = (team) => {
     qs: { token: team.slackBotToken }
   }
 
+  console.log('----- Making Request to Slack -----');
   rp(teamUsersData)
   .then(body => {
     body = JSON.parse(body);
     if (body.ok) {
       let users = parseUsersInfo(body.members);
       let usersData = { 
-        url: 'http://localhost:8080/slack/users',
+        url: `${server}/api/users`,
         method: 'POST',
         json: { users } 
       }
+      console.log('----- Making Request to /api/users -----');
       return rp(usersData);
     } else {
       res.redirect('/oops');
