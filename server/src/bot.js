@@ -70,6 +70,90 @@ const askLocation = (response, convo) => {
   convo.next();
 }
 
+connection.hears("tag", ['direct_message'], (bot, message) => {
+  bot.startConversation(message, (err, convo) => {
+    convo.ask(`I heard someone say tag!`, (response, convo) => {
+      respondWithTags(response, convo);
+      convo.next();
+    });
+  });
+});
+
+const respondWithTags = (response, convo) => {
+  let tags;
+
+  helper.listUserTags(response)
+  .then(userTag => {
+    console.log('this is the userTag, ', userTag)
+    let data = JSON.parse(userTag);
+    let tags = data[0].tagId;
+    let attachments = [];
+
+    data.forEach(tag => {
+      let attachment = {
+        title: `${tag.tagId}`,
+        callback_id: `user_tags`,
+        attachment_type: `default`,
+        actions: [
+          {
+            name: `deleteTag`, 
+            text: `Delete`, 
+            value: tag.tagId, 
+            type: `button`, 
+            style: `danger`,
+            confirm: {
+              title: `Are you sure?`,
+              text: `Confirmation to delete tag?`,
+              ok_text: `Yes, delete it!`,
+              dismiss_text: `No, don't delete!`
+            } 
+          }
+        ]
+      }
+      attachments.push(attachment);
+    })
+
+    let message = {
+      text: `Here are a list of your tags: `,
+      fallback: `Unable to show tags`,
+      color: `#3AA3E3`,
+      attachments: attachments
+    }
+
+    convo.say(message);
+    convo.next();
+  });
+};
+
+connection.hears("location", ['direct_message'], (bot, message) => {
+  bot.reply(message, { 
+    text: `Would you like to *view* or *update* your current job search location?`,
+    attachments: [
+      {
+        text: `Choose to view or update`,
+        fallback: `You are unable to choose`,
+        callback_id: `location`,
+        color: `#3AA3E3`,
+        attachment_type: `default`,
+        actions: [
+          {
+            name: `view`,
+            text: `View`,
+            type: `button`,
+            value: `view`
+          },
+          {
+            name: `update`,
+            text: `Update`,
+            type: `button`,
+            value: `update`
+          }
+        ]
+      }
+    ]
+  });
+});
+
 connection.hears("weather", ['direct_message'], (bot, message) => {
   console.log('replying to message');
   bot.reply(message, 'Great weather today huh?');

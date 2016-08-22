@@ -62,7 +62,15 @@ export default (app, express) => {
   //Handling Interactive Buttons
   //////////////////////////////////////////////
   app.post('/slack/receive', buttonController.buttonDispatcher);
-  
+
+  //////////////////////////////////////////////
+  //Handling User Tags
+  //////////////////////////////////////////////
+  app.get('/slack/users/tags/:userId', userTagController.getUserTags);
+  app.post('/slack/users/tags', userTagController.addUserTags);
+  app.put('/slack/users/tags', userTagController.updateUserTags);
+  app.delete('/slack/users/tags', userTagController.deleteUserTags);
+
   //////////////////////////////////////////////
   //Handling Error
   //////////////////////////////////////////////

@@ -18,7 +18,7 @@ const helper =  {
       .catch(err => console.log(err))
 
   },
-  findTags: (message) => {
+  findJobTags: (message) => {
     //given a string of text, split the string by spaces
     //loop through the array and check if the tag exists
     //for now we will not consider new tags that the users 
@@ -42,7 +42,14 @@ const helper =  {
     .catch(err => {
       console.log('Error: ', err);
     });
+  },
+  listUserTags: (message) => {
 
+    let userData = {
+      url: `http://localhost:8080/slack/users/tags/${message.user}`,
+      method: 'GET'
+    }
+    return rp(userData);
   }
 };
 
