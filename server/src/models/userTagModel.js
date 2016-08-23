@@ -12,10 +12,10 @@ let UserTag = db.define('user_tag', {
     }
   },
   tagId: {
-    type: Sequelize.STRING,
+    type: Sequelize.INTEGER,
     references: {
       model: Tag,
-      key: 'name'
+      key: 'id'
     }
   }
 });

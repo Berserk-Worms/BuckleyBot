@@ -92,18 +92,18 @@ const respondWithTags = (bot, message) => {
       //if the user has the tag, have a delete button
       //otherwise, have a button to add
 
-      allTags.forEach(({name}) => {
+      allTags.forEach(({id, name}) => {
         let addButton =  {
           name: `addTag`,
           text: `Add Tag`,
-          value: name,
+          value: id,
           type: `button`,
           style: `primary`
         }; 
         let deleteButton = {
           name: `deleteTag`, 
           text: `Delete Tag`, 
-          value: name, 
+          value: id, 
           type: `button`, 
           style: `danger`,
           confirm: {
@@ -114,7 +114,7 @@ const respondWithTags = (bot, message) => {
           } 
         };
         //does tag(user tag) exist in tags(tag table)
-        let button = (userTag.indexOf(name) !== -1) ? deleteButton : addButton;
+        let button = (userTag.indexOf(id) !== -1) ? deleteButton : addButton;
             
         let attachment = {
           text: `${name}`,
