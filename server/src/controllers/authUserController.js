@@ -46,7 +46,7 @@ const authenticateUser = (req, res) => {
       userData = body;
       let slackTeamId = body.team.id;
       //Check for any team with the slack team id
-      return rp(`${server}/api/users/${slackTeamId}`);
+      return rp(`${server}/api/teams/${slackTeamId}`);
     } else {
       console.log('Response body NOT OK. Error:', body.error);
       res.redirect('/');

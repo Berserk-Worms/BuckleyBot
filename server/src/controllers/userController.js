@@ -38,7 +38,7 @@ const getUserData = (req, res) => {
 
 }
 
-// Triggered from 'GET /slack/users:slackUserId'
+// Triggered from 'GET /api/users/:slackUserId'
 // Query for single user
 const findUser = (req, res) => {
   let slackUserId = req.params.slackUserId;
@@ -56,12 +56,10 @@ const findUser = (req, res) => {
 // NOTE: location is set to San Francisco for default 
 const addUsers = (req, res) => {
   let users = req.body.users;
-  let accessToken = null;
-  let location = 'San Francisco';
 
   Promise.all(users.map( ({ name, email, photo, slackUserId, slackTeamId }) => {
     return User.create({
-      name, email, location, photo, accessToken, slackUserId, slackTeamId 
+      name, email, photo, slackUserId, slackTeamId 
     })
   }))
   .then((users) => res.send(users))
@@ -79,7 +77,6 @@ const addUser = (req, res) => {
   let slackUserId = user.slackUserId;
   let slackTeamId = user.slackTeamId;
   let accessToken = user.accessToken;
-  let location = 'San Francisco';
 
   User.findOne({ 
     where: {slackUserId} 
@@ -89,7 +86,7 @@ const addUser = (req, res) => {
       return user.updateAttributes({ accessToken });
     } else {
       return User.findOrCreate({ 
-        where: { name, email, location, photo, accessToken, slackUserId, slackTeamId } 
+        where: { name, email, photo, accessToken, slackUserId, slackTeamId } 
       });
     }
   })
