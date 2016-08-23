@@ -15,11 +15,10 @@ app.use(bodyParser.json());
 app.use(express.static('client'));
 
 const router = routes(app, express);
-
-app.listen(port, () => {
-  console.log('Server started on port ' + port);
-  db.sync()
-  .then(() => {
+db.sync()
+.then(() => {
+  app.listen(port, () => {
+    console.log('Server started on port ' + port);
     console.log(`${process.env.NODE_ENV} database synced`);
     //invoking teams to generate all instances of bots
     //which exist in the database
@@ -28,7 +27,6 @@ app.listen(port, () => {
     // start cron job to do daily job reminder
     jobCron.start();
     jobScrape.start();
-    app.emit("appStarted");
   });
 });
 
