@@ -55,7 +55,7 @@ describe('tagController', () => {
       .post('/api/tags')
       .send({ tagData })
       .expect(500, done);
-    })
+    });
 
     it('should return 500 when no data is posted', (done) => {     
       request(app)
