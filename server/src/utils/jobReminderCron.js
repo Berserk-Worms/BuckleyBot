@@ -10,7 +10,7 @@ import Sequelize from 'sequelize';
 
 let jobCron = new CronJob({
   cronTime: '00 30 08 * * 1-5',
-  // cronTime: '15 * * * * *',
+  // cronTime: '50 * * * * *',
   onTick: () => {
     console.log('Cron jobs to dank jobs');
     messageUsers();
@@ -23,7 +23,14 @@ let messageUsers = () => {
   User.findAll({
     include: [{
       model: Tag,
-      include: [Job]
+      include: [{
+        model: Job,
+        where: {
+          createdAt: {
+            $gt: new Date(new Date() - 24 * 60 * 60 * 1000)
+          }
+        }
+      }]
     }]
   })
   .then(users => {
