@@ -14,14 +14,14 @@ const getUserData = (req, res) => {
     include: [Job]
   })
   .then(user => {
-
     let jobs = user.jobs.map(job => {
+      let publishDate = job.dataValues.publishDate.toString().slice(0,16);
       return {
         title: job.dataValues.title,
         link: job.dataValues.link,
         location: job.dataValues.location,
         company: job.dataValues.company,
-        publishDate: job.dataValues.publishDate
+        publishDate: publishDate
       }
     });
 
