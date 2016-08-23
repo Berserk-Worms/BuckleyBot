@@ -1,7 +1,9 @@
 import UserJob from '../models/userJobModel';
 import User from '../models/userModel';
 import Job from '../models/jobModel';
-
+import botHelper from '../bots/helper';
+import { connection, store } from '../bot';
+import rp from 'request-promise';
 
 //master dispatcher to check the callback_id of incoming requests
 const buttonDispatcher = (req, res) => {
@@ -10,6 +12,16 @@ const buttonDispatcher = (req, res) => {
   //dispatch to the responsible function based on the callback_id
   if (parsedPayload.callback_id === 'clickSaveJobs') {
     saveJob(req, res, parsedPayload);
+  } else if (parsedPayload.callback_id === 'location') {
+    locationButtons(req, res, parsedPayload);
+  } else if (parsedPayload.callback_id === 'userTag' && parsedPayload.actions[0].name === 'deleteTag') {
+    console.log('============ DELETE ============')
+    deleteUserTag(req, res, parsedPayload);
+  } else if (parsedPayload.callback_id === 'userTag' && parsedPayload.actions[0].name === 'addTag') {
+    console.log('============ ADD ============');
+    addUserTag(req, res, parsedPayload);
+  } else {
+    res.end();
   }
 
   //BELOW is the format of incoming req.body//////////////////////////
@@ -50,31 +62,16 @@ const saveJob = (req, res, data) => {
     where: { slackUserId: data.user.id }
   })
   .then((user) => {
-
     let userJob = {
       userId: user.dataValues.id,
       jobId : `${data.actions[0].value}`
     }
-
     return UserJob.findOrCreate({ where: userJob })
   })
-  .then(created => {
-    console.log('Success');
-    let reply_saved = {
-      type: 'message',
-      text: 'Some Jobs',
-      attachments: data.original_message.attachments
-    }
-    let clickedInt = `${parseInt(data.attachment_id, 10) - 1}`;
+  .then(created => {    
+    let reply = buttonUpdater(data, "Saved!", 0, 'primary', 'something else');
 
-    //Functions to change the button text and color
-    //Note: 1st array is the attachment, 2nd is the button
-    reply_saved.attachments[clickedInt].actions[0].text = 'Saved!';
-    reply_saved.attachments[clickedInt].actions[0].style = 'primary';
-    //give it a new callback_id so it wont make a slack button interaction
-    reply_saved.attachments[clickedInt].callback_id = 'something else';
-
-    res.json(reply_saved);
+    res.json(reply);
   })
   .catch(err => {
     console.log('Error saving data');
@@ -106,6 +103,125 @@ const saveJob = (req, res, data) => {
     //   ]
     // });
     ////////////////////////////////////////////////////////////////////
+}
+
+const locationButtons = (req, res, data) => {
+  let id = data.user.id;
+  let teamId = data.team.id;
+
+  User.find({
+    where: { slackUserId: data.user.id }
+  })
+  .then(user => {
+    console.log(user.dataValues);
+    let location = user.dataValues.location;
+    let reply;
+    //if button clicked was view, send a direct message 
+    //to the user with user location, and change the button to clicked!
+    if (data.actions[0].value === 'view') {
+      reply = {
+        type: 'message',
+        text: data.original_message.text,
+        attachments: [
+          {
+            text: `Your current search loation is:\n ${location}`,
+            callback_id: 'something else',
+            color: `#3AA3E3`,
+            attachment_type: `default`
+          }
+        ]
+      };
+      res.json(reply);
+    } else {
+      //if the button clicked was update, update the location
+      //and notify user the location was updated!
+      reply = buttonUpdater(data, "Update", 1, 'primary', 'something else');
+      reply.attachments[0].text = 'Respond to Buckleybot to update search location',
+      // bot asks user where they want to change location
+      store[teamId].startPrivateConversation({ user: id }, (err, convo) => {
+        convo.ask("Where do you want to change your job search location to?", (response, convo) => {
+          botHelper.updateUser(response);
+          convo.say(`Great, your location has been updated to ${response.text}!`);
+          convo.next();
+        });
+      });
+      botHelper.updateUser({ user: id, location });
+
+      res.json(reply);
+    }
+  });
+};
+
+const deleteUserTag = (req, res, data) => {
+  let clickedInt = `${parseInt(data.attachment_id, 10) - 1}`;
+
+  let userTagData = {
+    url: `http://localhost:8080/api/users/tags/${data.user.id}/${data.actions[0].value}`,
+    method: `DELETE`
+  }
+
+  let reply = buttonUpdater(data, 'Add Tag', 0, 'primary', 'userTag');
+  //update the button name to 'addTag'
+  //remove the confirm functionality
+  reply.attachments[clickedInt].actions[0].name = 'addTag';
+  delete reply.attachments[clickedInt].actions[0].confirm;
+
+  rp(userTagData)
+  .then(success => console.log('Success deleting user tag: ', success.dataValues))
+  .catch(err => console.log('Error deleting user tag: ', err));
+
+  res.json(reply);
+};
+
+const addUserTag = (req, res, data) => {
+  let clickedInt = `${parseInt(data.attachment_id, 10) - 1}`;
+
+  let userId = data.user.id;
+  let tagId = data.actions[0].value;
+
+  let userTagData = {
+    url: `http://localhost:8080/api/users/tags`,
+    method: `POST`,
+    json: { userId, tagId }
+  };
+
+  let reply = buttonUpdater(data, 'Delete Tag', 0, 'danger', 'userTag');
+  //update the button name to 'deleteTag'
+  //add a confirm
+  reply.attachments[clickedInt].actions[0].name = 'deleteTag';
+  reply.attachments[clickedInt].actions[0].confirm = {
+    title: `Are you sure?`,
+    text: `Confirmation to delete tag?`,
+    ok_text: `Yes, delete it!`,
+    dismiss_text: `No, don't delete!`
+  };
+
+  rp(userTagData)
+  .then(success => console.log('Success adding user tag: ', success.dataValues))
+  .catch(err => console.log('Error adding user tags: ', err));
+
+  res.json(reply);
+}
+
+const buttonUpdater = (data, buttonText, buttonInt, buttonStyle, callbackId) => {
+  let message = {
+    type: 'message',
+    text: data.original_message.text,
+    attachments: data.original_message.attachments
+  };
+  let clickedInt = `${parseInt(data.attachment_id, 10) - 1}`;
+  
+  if (buttonInt === undefined) {
+    buttonInt = 0;
+  }
+  //Functions to change the button text and color
+  //Note: 1st array is the attachment, 2nd is the button
+  message.attachments[clickedInt].actions[buttonInt].text = buttonText;
+  message.attachments[clickedInt].actions[buttonInt].style = buttonStyle;
+  //give it a new callback_id so it wont make a slack button interaction
+  message.attachments[clickedInt].callback_id = callbackId;
+
+  return message;
 }
 
 export default { buttonDispatcher };
