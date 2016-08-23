@@ -32,7 +32,7 @@ const deleteUserTags = (req, res) => {
     console.log('Destroyed, ', userTag.dataValues.userId, userTag.dataValues.tagId)
     userTag.destroy();
   })
-  .catch(err => console.log('Error destrying user tag: ', err))
+  .catch(err => console.log('Error destrying user tag: ', err));
 };
 
 export default { getUserTags, addUserTags, deleteUserTags };

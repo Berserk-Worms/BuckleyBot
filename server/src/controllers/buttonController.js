@@ -145,7 +145,7 @@ const locationButtons = (req, res, data) => {
           convo.next();
         });
       });
-      botHelper.updateUser({ user: id, location })
+      botHelper.updateUser({ user: id, location });
 
       res.json(reply);
     }
@@ -160,7 +160,7 @@ const deleteUserTag = (req, res, data) => {
     method: `DELETE`
   }
 
-  let reply = buttonUpdater(data, 'Add Tag', 0, 'primary', 'userTag')
+  let reply = buttonUpdater(data, 'Add Tag', 0, 'primary', 'userTag');
   //update the button name to 'addTag'
   //remove the confirm functionality
   reply.attachments[clickedInt].actions[0].name = 'addTag';
@@ -183,7 +183,7 @@ const addUserTag = (req, res, data) => {
     url: `http://localhost:8080/api/users/tags`,
     method: `POST`,
     json: { userId, tagId }
-  }
+  };
 
   let reply = buttonUpdater(data, 'Delete Tag', 0, 'danger', 'userTag');
   //update the button name to 'deleteTag'
@@ -194,10 +194,10 @@ const addUserTag = (req, res, data) => {
     text: `Confirmation to delete tag?`,
     ok_text: `Yes, delete it!`,
     dismiss_text: `No, don't delete!`
-  }
+  };
 
   rp(userTagData)
-  .then(success => console.log('Sucess adding user tag: ', success.dataValues))
+  .then(success => console.log('Success adding user tag: ', success.dataValues))
   .catch(err => console.log('Error adding user tags: ', err));
 
   res.json(reply);
@@ -208,9 +208,8 @@ const buttonUpdater = (data, buttonText, buttonInt, buttonStyle, callbackId) => 
     type: 'message',
     text: data.original_message.text,
     attachments: data.original_message.attachments
-  }
+  };
   let clickedInt = `${parseInt(data.attachment_id, 10) - 1}`;
-  console.log('clicked attachment int, ', clickedInt)
   
   if (buttonInt === undefined) {
     buttonInt = 0;

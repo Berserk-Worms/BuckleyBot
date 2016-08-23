@@ -83,7 +83,7 @@ const respondWithTags = (bot, message) => {
     helper.listUserTags(message)
     .then(res => {
       //all user tags
-      let userTag = _.map(res, item => {
+      let userTagArr = _.map(res, item => {
         return item.tagId;
       });
       let attachments = [];
@@ -114,11 +114,12 @@ const respondWithTags = (bot, message) => {
           } 
         };
         //does tag(user tag) exist in tags(tag table)
-        let button = (userTag.indexOf(id) !== -1) ? deleteButton : addButton;
+        let button = (userTagArr.indexOf(id) !== -1) ? deleteButton : addButton;
             
         let attachment = {
           text: `${name}`,
           callback_id: `userTag`,
+          fallback: `This option is disabled`,
           attachment_type: `default`,
           color: `#3AA3E3`,
           actions: [button]
@@ -130,7 +131,7 @@ const respondWithTags = (bot, message) => {
         text: `Here are a list of your tags: `,
         fallback: `Unable to show tags`,
         color: `#3AA3E3`,
-        attachments: attachments
+        attachments
       };
 
       bot.reply(message, response);
@@ -144,7 +145,7 @@ connection.hears("location", ['direct_message'], (bot, message) => {
     attachments: [
       {
         text: `Choose to view or update`,
-        fallback: `You are unable to choose`,
+        fallback: `This option is disabled`,
         callback_id: `location`,
         color: `#3AA3E3`,
         attachment_type: `default`,
@@ -169,7 +170,7 @@ connection.hears("location", ['direct_message'], (bot, message) => {
 
 connection.hears("help", ['direct_message'], (bot, message) => {
   bot.reply(message, `If you would like to change your location, you can type *location*!\n` +
-    `If you would like to add filters for you search, type *tags* and toggle the button to add or ` +
+    `If you would like to add filters for your search, type *tags* and toggle the button to add or ` +
     `remove tags!`);
 });
 

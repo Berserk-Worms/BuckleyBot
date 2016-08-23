@@ -49,7 +49,7 @@ const helper =  {
       url: `http://localhost:8080/api/users/tags/${message.user}`,
       method: 'GET',
       json: true
-    }
+    };
     return rp(userData);
   },
   listAllTags: () => {
@@ -57,7 +57,7 @@ const helper =  {
       url: `http://localhost:8080/api/tags`,
       method: `GET`,
       json: true
-    }
+    };
 
     return rp(tagData);
   }
