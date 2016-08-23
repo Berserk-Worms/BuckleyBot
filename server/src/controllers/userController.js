@@ -17,6 +17,7 @@ const getUserData = (req, res) => {
     let jobs = user.jobs.map(job => {
       let publishDate = job.dataValues.publishDate.toString().slice(0,16);
       return {
+        jobId: job.dataValues.id,
         title: job.dataValues.title,
         link: job.dataValues.link,
         location: job.dataValues.location,
