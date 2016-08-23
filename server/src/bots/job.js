@@ -1,6 +1,5 @@
 import { connection } from '../bot.js';
 import _ from 'underscore';
-import UserJob from '../models/userJobModel';
 import helper from '../bots/helper';
 
 let userJobsListener = {
