@@ -28,7 +28,10 @@ db.sync()
     jobCron.start();
     jobScrape.start();
   });
-});
+})
+.catch((err) => {
+  console.log('Error syncing the DB', err);
+})
 
 
 export default app;
