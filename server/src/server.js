@@ -18,6 +18,8 @@ const router = routes(app, express);
 db.sync()
 .then(() => {
   app.listen(port, () => {
+    //Emit start event;
+    app.emit('appStarted');
     console.log('Server started on port ' + port);
     console.log(`${process.env.NODE_ENV} database synced`);
     //invoking teams to generate all instances of bots

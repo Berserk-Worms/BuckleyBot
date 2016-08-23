@@ -5,6 +5,11 @@ import db from '../db/db-config';
 import Job from '../models/jobModel';
 
 describe('jobController', () => {
+  before((done) => {
+    app.on("appStarted", () => {
+      done();
+    });
+  });
 
   //Clear Database after tests run
   after((done) => {
