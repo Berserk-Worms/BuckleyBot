@@ -1,4 +1,4 @@
-import env from './env';
+// import env from './env';
 import express from 'express';
 import bodyParser from 'body-parser';
 import { teams } from './bot';
