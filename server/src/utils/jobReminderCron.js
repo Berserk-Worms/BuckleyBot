@@ -5,10 +5,12 @@ import userJobsListener from '../bots/job';
 import { store } from '../bot';
 import { startConvo } from '../bots/introduction';
 import { CronJob } from 'cron';
+import Promise from 'bluebird';
+import Sequelize from 'sequelize';
 
 let jobCron = new CronJob({
-  // cronTime: '00 30 08 * * 1-5',
-  cronTime: '45 * * * * *',
+  cronTime: '00 30 08 * * 1-5',
+  // cronTime: '15 * * * * *',
   onTick: () => {
     console.log('Cron jobs to dank jobs');
     messageUsers();
@@ -20,73 +22,56 @@ let jobCron = new CronJob({
 let messageUsers = () => {
   User.findAll({
     include: [{
-      model: Tag
+      model: Tag,
+      include: [Job]
     }]
   })
-  .then(users =>{
+  .then(users => {
     users.forEach(user => {
-      console.log(user.dataValues.tags);
+      // console.log('this is the user,', JSON.stringify(user));
+      let count ={};
+      // console.log('cluster fuck. ', user.dataValues);
       let tagArr = user.dataValues.tags.map(item => {
         return item.name
       });
       const id = user.dataValues.slackUserId;
       const BUCKLEY = store[user.dataValues.slackTeamId];
-      console.log('this is the tagArr, ', tagArr);
+      // console.log('this is the tagArr, ', tagArr);
 
-      //if no tags, show all jobs from database
-      //if all tags, show jobs with javascript tag
-      // let count = {};
-
-      // tagArr.forEach(item => {
-      //   let count = {};
-      //   Tag.find({
-      //     where: { name: item},
-      //     include: [{ model :Job }]
-      //   })
-      //   .then(found => {
-      //     // console.log('found in tagArr, ', found.jobs[0])
-      //     found.jobs.forEach(job => {
-      //       if (count[job.dataValues.id]) {
-      //         count[job.id]++;
-      //       } else {
-      //         count[job.id] = 1;
-      //       }
-      //     })
-      //   })
-      // })
-
-      // Tag.findAll({
-      //   where: {
-      //     $or: [
-      //       { name : tagArr }
-      //     ]
-      //   },
-      //   include: [{ model: Job }]
-      // })
-
-
-      Tag.findOne({
-        // TODO: Figure out how to make this a join table
-        where: { name: 'javascript' },
-        include: [{ model: Job }],
+      user.dataValues.tags.forEach(tag => {
+        tag.jobs.forEach(job => {
+          if (count[job.id]) { count[job.id]++; }
+          else { count[job.id] = 1; }
+        })
       })
-      .then((tag) => {
-        // console.log('this is the tag in jobcron, ', tag.jobs);
-        if (tag) {
-          //Set attachment to message to be three random jobs
-          let message_with_jobs = {
-            text: 'Good morning! I found some cool jobs you might be interested in:',
-            attachments: userJobsListener.returnJobSample(tag.jobs, 3)
-          };
-          BUCKLEY.startPrivateConversation({ user: id }, (err, convo) => {
-            convo.say(message_with_jobs);
-          });
-        }
+
+      let keySort = Object.keys(count).sort((a, b) => { return count[b] - count[a]}).slice(0, 6);
+      // console.log('this is the count,',  keySort);
+
+      // console.log('userId keySort, ', user.slackUserId, keySort);
+      if (keySort.length === 0) {
+        BUCKLEY.startPrivateConversation({ user: user.slackUserId }, (err, convo) =>{
+          convo.say(`It seems like you don't have any tags! Please type tags and set you filters!`);
+          return;
+        })
+      } 
+
+      return Job.findAll({
+        where: { $or: [
+          { id: keySort }
+        ]}
       })
-      .catch(err => {
-        console.log('Error:', err);
-      });
-    });
+      .then(jobs => {
+        console.log('this is the jobs!', jobs);
+        let message_with_jobs = {
+          text: 'Good morning! I found some cool jobs you might be interested in:',
+          attachments: userJobsListener.returnJobSample(jobs, 5)
+        };
+        BUCKLEY.startPrivateConversation({ user: user.slackUserId }, (err, convo) => {
+          convo.say(message_with_jobs);
+        });
+      })
+    })
   })
   .catch(err => {
     console.log('There was an error:', err);
