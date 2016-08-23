@@ -6,6 +6,7 @@ import jobCron from './utils/jobReminderCron';
 import jobScrape from './utils/jobScraper';
 import db from './db/db-config';
 
+
 const app = express();
 const port = process.env.PORT || 8080;
 
@@ -14,11 +15,12 @@ app.use(bodyParser.json());
 app.use(express.static('client'));
 
 const router = routes(app, express);
-
-app.listen(port, () => {
-  console.log('Server started on port ' + port);
-  db.sync()
-  .then(() => {
+db.sync()
+.then(() => {
+  app.listen(port, () => {
+    //Emit start event;
+    app.emit('appStarted');
+    console.log('Server started on port ' + port);
     console.log(`${process.env.NODE_ENV} database synced`);
     //invoking teams to generate all instances of bots
     //which exist in the database
@@ -27,8 +29,11 @@ app.listen(port, () => {
     // start cron job to do daily job reminder
     jobCron.start();
     jobScrape.start();
-    app.emit("appStarted");
   });
-});
+})
+.catch((err) => {
+  console.log('Error syncing the DB', err);
+})
+
 
 export default app;

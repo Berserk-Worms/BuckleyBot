@@ -9,25 +9,22 @@ const server = 'http://localhost:8080/';
 describe('teamController', () => {
 
   before((done) => {  
-    app.on("appStarted",() => {
-
+    Team.create({
+      slackTeamToken: 'TestToken',
+      slackTeamName: 'TestName',
+      slackBotId: 'TestBotId',
+      slackBotToken: 'TestBotToken',
+      slackTeamId: 'TestSlackTeamId'
+    })
+    .then(() => {
       Team.create({
-        slackTeamToken: 'TestToken',
-        slackTeamName: 'TestName',
-        slackBotId: 'TestBotId',
-        slackBotToken: 'TestBotToken',
-        slackTeamId: 'TestSlackTeamId'
+        slackTeamToken: 'TestToken2',
+        slackTeamName: 'TestName2',
+        slackBotId: 'TestBotId2',
+        slackBotToken: 'TestBotToken2',
+        slackTeamId: 'TestSlackTeamId2'
       })
-      .then(() => {
-        Team.create({
-          slackTeamToken: 'TestToken2',
-          slackTeamName: 'TestName2',
-          slackBotId: 'TestBotId2',
-          slackBotToken: 'TestBotToken2',
-          slackTeamId: 'TestSlackTeamId2'
-        })
-        done();
-      });
+      done();
     });
   });
 
