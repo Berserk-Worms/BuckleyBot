@@ -89,8 +89,6 @@ const respondWithTags = (bot, message) => {
       //if the user has the tag, have a delete button
       //otherwise, have a button to add
 
-      console.log(userTagArr);
-      
       allTags.forEach(({id, name}) => {
         let addButton =  {
           name: `addTag`,
