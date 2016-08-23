@@ -4,7 +4,7 @@
   "description": "personalized slack bots for educational institutions",
   "main": "server/server.js",
   "scripts": {
-    "test": "NODE_ENV=test mocha ./server/dist/test",
+    "test": "NODE_ENV=test ./node_modules/mocha/bin/mocha ./server/dist/test",
     "dev:startdb": "postgres -D /usr/local/var/postgres",
     "dev:buildserver": "babel ./server/src --out-dir ./server/dist --presets=es2015 --copy-files --watch",
     "dev:start": "nodemon server/dist/server.js",
