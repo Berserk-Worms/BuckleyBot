@@ -1,6 +1,9 @@
+services:
+  - postgresql
 language: node_js
 node_js:
   - "node" 
 before_script: 
+  - psql -c 'create database uncle_test;' -U postgres
   - "npm run buildServer"
 
