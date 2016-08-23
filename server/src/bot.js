@@ -1,11 +1,8 @@
 import Botkit from 'botkit';
-import dotenv from 'dotenv';
 import userJobsListener from './bots/job';
 import helper from './bots/helper';
 import rp from 'request-promise';
 import _ from 'underscore';
-
-dotenv.config();
 
 const store = {};
 const server = 'http://localhost:8080';

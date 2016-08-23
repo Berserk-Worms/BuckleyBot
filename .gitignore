@@ -4,4 +4,5 @@ client/dist/
 .DS_Store
 *.log
 .env
+server/src/env.js
 
