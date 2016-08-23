@@ -93,6 +93,10 @@
   font-size: 16px;
 }
 
+.button-margin {
+  margin-left: 5px;
+}
+
 @media (max-width: 767px) {
   .center-info {
       text-align: center;

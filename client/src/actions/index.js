@@ -32,6 +32,31 @@ export function getUserData() {
   }
 }
 
+export function deleteJob(jobId) {
+  return function(dispatch) {
+    axios.delete(`${ROOT_URL}/api/user/jobs/${jobId}`, {
+      headers: { authorization: localStorage.getItem('jwt') }
+    })
+    .then(res => {
+      //TODO: Refactor to update the state on the client side rather than making another API Call
+      return axios.get(`${ROOT_URL}/slack/users/data`, {
+        headers: { authorization: localStorage.getItem('jwt') }
+      })
+    })
+    .then(response => {
+      dispatch({
+        type: LOAD_USER_DATA,
+        payload: response.data
+      });
+    })
+    .catch(err => {
+      console.log('There was an error:', err);
+      signoutUser();
+      browserHistory.push('/');
+    });
+  }
+}
+
 export function signInUser() {
   return { type: AUTH_USER };
 }
