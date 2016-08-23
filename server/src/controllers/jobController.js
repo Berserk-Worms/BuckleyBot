@@ -3,9 +3,8 @@ import Job from '../models/jobModel';
 // Triggered from 'POST /api/job' 
 const addJob = (req, res) => {
   let jobData = req.body.jobData;
-
   //Check if we have the correct fields
-  if (jobData.title && jobData.link && jobData.location && jobData.company && jobData.publishDate) {
+  if (jobData && jobData.title && jobData.link && jobData.location && jobData.company && jobData.publishDate) {
     Job.findOrCreate({ 
       where: {  
         title: jobData.title,

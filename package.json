@@ -9,8 +9,7 @@
     "dev:buildserver": "babel ./server/src --out-dir ./server/dist --presets=es2015 --copy-files --watch",
     "dev:start": "nodemon server/dist/server.js",
     "dev:buildClient": "webpack",
-    "dev:watchClient": "webpack --watch",
-    "test:server": "NODE_ENV=test nodemon server/dist/server.js"
+    "dev:watchClient": "webpack --watch"
   },
   "repository": {
     "type": "git",

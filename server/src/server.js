@@ -27,6 +27,8 @@ app.listen(port, () => {
     // start cron job to do daily job reminder
     jobCron.start();
     jobScrape.start();
+    app.emit("appStarted");
   });
 });
 
+export default app;

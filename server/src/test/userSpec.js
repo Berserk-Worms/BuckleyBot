@@ -1,4 +1,3 @@
-// import request from 'supertest';
 // import { expect } from 'chai';
 // import db from '../db/db-config';
 // import Team from '../models/teamModel';
