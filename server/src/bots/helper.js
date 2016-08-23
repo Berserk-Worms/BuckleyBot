@@ -36,8 +36,7 @@ const helper =  {
         return words.indexOf(tag.name) !== -1;
       });
       console.log('this is match, ', match);
-      //Note, tags[5] is javascript 
-      return match.length > 0 ? match : tags[5];
+      return match.length > 0 ? match : tags;
     })
     .catch(err => {
       console.log('Error: ', err);
