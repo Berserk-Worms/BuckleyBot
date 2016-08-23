@@ -16,7 +16,6 @@ export function getUserData() {
       headers: { authorization: localStorage.getItem('jwt') }
     })
     .then(response => {
-      console.log('Response to getting user data:', response.data);
       // If response is good then load the user data
       dispatch({
         type: LOAD_USER_DATA,
