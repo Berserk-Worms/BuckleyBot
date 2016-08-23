@@ -1,6 +1,8 @@
+import dotenv from 'dotenv';
 import passport from 'passport';
 import rp from 'request-promise';
 import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt';
+dotenv.config({silent: true});
 
 const server = 'http://localhost:8080';
 // Where to find the jwt on the request

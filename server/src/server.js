@@ -1,4 +1,3 @@
-import dotenv from 'dotenv';
 import express from 'express';
 import bodyParser from 'body-parser';
 import { teams } from './bot';
@@ -7,7 +6,6 @@ import jobCron from './utils/jobReminderCron';
 import jobScrape from './utils/jobScraper';
 import db from './db/db-config';
 
-dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 8080;
