@@ -7,7 +7,8 @@ import { startConvo } from '../bots/introduction';
 import { CronJob } from 'cron';
 
 let jobCron = new CronJob({
-  cronTime: '00 30 08 * * 1-5',
+  // cronTime: '00 30 08 * * 1-5',
+  cronTime: '30 * * * * *',
   onTick: () => {
     console.log('Cron jobs to dank jobs');
     messageUsers();
@@ -17,8 +18,13 @@ let jobCron = new CronJob({
 });
 
 let messageUsers = () => {
-  User.findAll()
+  User.findAll({
+    include: [{
+      model: Tag
+    }]
+  })
   .then(users =>{
+    console.log(users[0].dataValues.tags);
     users.forEach(user => {
       const id = user.dataValues.slackUserId;
       const BUCKLEY = store[user.dataValues.slackTeamId];

@@ -4,7 +4,7 @@ import User from './userModel';
 import Tag from './tagModel';
 
 let UserTag = db.define('user_tag', {
-  userId: {
+  slackUserId: {
     type: Sequelize.STRING,
     references: {
       model: User,
@@ -19,5 +19,8 @@ let UserTag = db.define('user_tag', {
     }
   }
 });
+
+User.belongsToMany(Tag, { through: UserTag, foreignKey: 'slackUserId' });
+Tag.belongsToMany(User, { through: UserTag });
 
 export default UserTag

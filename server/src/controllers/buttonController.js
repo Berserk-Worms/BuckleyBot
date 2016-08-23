@@ -63,7 +63,7 @@ const saveJob = (req, res, data) => {
   })
   .then((user) => {
     let userJob = {
-      userId: user.dataValues.id,
+      slackUserId: user.dataValues.slackUserId,
       jobId : `${data.actions[0].value}`
     }
     return UserJob.findOrCreate({ where: userJob })
@@ -74,7 +74,7 @@ const saveJob = (req, res, data) => {
     res.json(reply);
   })
   .catch(err => {
-    console.log('Error saving data');
+    console.log('Error saving data, ', err);
   })
 
     //BELOW is a return format required to look exactly the same////////
@@ -167,7 +167,7 @@ const deleteUserTag = (req, res, data) => {
   delete reply.attachments[clickedInt].actions[0].confirm;
 
   rp(userTagData)
-  .then(success => console.log('Success deleting user tag: ', success.dataValues))
+  .then(success => console.log('Success deleting user tag!', success))
   .catch(err => console.log('Error deleting user tag: ', err));
 
   res.json(reply);
@@ -176,13 +176,15 @@ const deleteUserTag = (req, res, data) => {
 const addUserTag = (req, res, data) => {
   let clickedInt = `${parseInt(data.attachment_id, 10) - 1}`;
 
-  let userId = data.user.id;
+  let slackUserId = data.user.id;
   let tagId = data.actions[0].value;
+
+  console.log('addusertag: ', slackUserId, tagId);
 
   let userTagData = {
     url: `http://localhost:8080/api/users/tags`,
     method: `POST`,
-    json: { userId, tagId }
+    json: { slackUserId, tagId }
   };
 
   let reply = buttonUpdater(data, 'Delete Tag', 0, 'danger', 'userTag');
@@ -197,7 +199,7 @@ const addUserTag = (req, res, data) => {
   };
 
   rp(userTagData)
-  .then(success => console.log('Success adding user tag: ', success.dataValues))
+  .then(success => console.log('Success adding user tag: ', success))
   .catch(err => console.log('Error adding user tags: ', err));
 
   res.json(reply);

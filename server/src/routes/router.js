@@ -66,7 +66,7 @@ export default (app, express) => {
   //////////////////////////////////////////////
   //Handling User Tags
   //////////////////////////////////////////////
-  app.get('/api/users/tags/:userId', userTagController.getUserTags);
+  app.get('/api/users/tags/:slackUserId', userTagController.getUserTags);
   app.post('/api/users/tags', userTagController.addUserTags);
   app.delete('/api/users/tags/:userId/:tagId', userTagController.deleteUserTags);
 
