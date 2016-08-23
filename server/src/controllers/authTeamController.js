@@ -58,13 +58,13 @@ const findTeamUsers = (team) => {
   let teamUsersData = {
     uri: 'https://slack.com/api/users.list',
     method: 'GET',
-    qs: { token: team.slackBotToken }
+    qs: { token: team.slackBotToken },
+    json: true
   }
 
   console.log('----- Making Request to Slack -----');
   rp(teamUsersData)
   .then(body => {
-    body = JSON.parse(body);
     if (body.ok) {
       let users = parseUsersInfo(body.members);
       let usersData = { 

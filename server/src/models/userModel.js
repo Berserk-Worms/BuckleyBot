@@ -7,9 +7,15 @@ import intro from '../bots/introduction';
 let User = db.define('user', {
   name: Sequelize.STRING, 
   email: Sequelize.STRING,
-  location: Sequelize.STRING,
+  location: {
+    type: Sequelize.STRING,
+    defaultValue: 'San Francisco'
+  },
   photo: Sequelize.STRING,
-  accessToken: Sequelize.STRING,
+  accessToken: {
+    type: Sequelize.STRING,
+    defaultValue: null
+  },
   slackUserId: {
     type: Sequelize.STRING,
     unique: true
