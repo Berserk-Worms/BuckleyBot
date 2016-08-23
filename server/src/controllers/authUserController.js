@@ -100,21 +100,4 @@ const tokenForUser = (slackUserId) => {
   return jwt.encode({ sub: slackUserId, iat: timestamp }, process.env.JWT_SECRET);
 };
 
-// Triggered from 'GET /slack/users/data' after passport middleware finds user
-const getUserData = (req, res) => {
-  // Check if error
-  if (req.error) {
-    console.log('Error getting user data:', error);
-    res.send(req.error);
-  }
-  // Otherwise, send the relevant user data as an object
-  let userData = {
-    name: req.user.name,
-    location: req.user.location
-    // picture url
-    // jobs
-  }
-  res.send(userData);
-}
-
-export default { checkAuthCode, getUserData }
+export default { checkAuthCode }

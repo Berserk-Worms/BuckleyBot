@@ -25,7 +25,6 @@ export default (app, express) => {
   //////////////////////////////////////////////
   app.get('/slack/teams/auth', authTeamController.authTeam);
   app.get('/slack/users/auth', authUserController.checkAuthCode);
-  app.get('/slack/users/data', requireAuth, authUserController.getUserData);
 
   //////////////////////////////////////////////
   //Handling Team
@@ -37,6 +36,7 @@ export default (app, express) => {
   //////////////////////////////////////////////
   //Handling Users
   //////////////////////////////////////////////
+  app.get('/slack/users/data', requireAuth, userController.getUserData);
   app.get('/api/users/:slackUserId', userController.findUser);
   app.post('/api/users', userController.addUsers);
   app.post('/api/users/user', userController.addUser);
