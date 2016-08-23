@@ -15,13 +15,12 @@ const intro = (createdUser) => {
       convo.next();
     });
   });
-
 };
 
 const askLocation = (response, convo) => {
-  convo.ask("Awesome! Where do you want to look for jobs?", (response, convo) => {
-    convo.say(`I heard that ${response.text} is a great place. ` +
-      `Well I'll be here to help you out if you need me!`);
+  convo.ask("Awesome! Which _CITY_ do you want to look for jobs?", (response, convo) => {
+    convo.say(`I heard that ${response.text} is a great place! If you want to look for *jobs* ` +
+      `just let me know! \nIf you have any questions, you can type *help* and I will be here to help you!`);
     helper.updateUser(response);
     convo.next();
   });
