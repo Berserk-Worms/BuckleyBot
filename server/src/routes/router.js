@@ -66,9 +66,9 @@ export default (app, express) => {
   //////////////////////////////////////////////
   //Handling User Tags
   //////////////////////////////////////////////
-  app.get('/slack/users/tags/:userId', userTagController.getUserTags);
-  app.post('/slack/users/tags', userTagController.addUserTags);
-  app.delete('/slack/users/tags/:userId/:tagId', userTagController.deleteUserTags);
+  app.get('/api/users/tags/:userId', userTagController.getUserTags);
+  app.post('/api/users/tags', userTagController.addUserTags);
+  app.delete('/api/users/tags/:userId/:tagId', userTagController.deleteUserTags);
 
   //////////////////////////////////////////////
   //Handling Error

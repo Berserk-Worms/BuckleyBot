@@ -46,7 +46,7 @@ const helper =  {
   listUserTags: (message) => {
 
     let userData = {
-      url: `http://localhost:8080/slack/users/tags/${message.user}`,
+      url: `http://localhost:8080/api/users/tags/${message.user}`,
       method: 'GET',
       json: true
     }

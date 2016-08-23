@@ -156,7 +156,7 @@ const deleteUserTag = (req, res, data) => {
   let clickedInt = `${parseInt(data.attachment_id, 10) - 1}`;
 
   let userTagData = {
-    url: `http://localhost:8080/slack/users/tags/${data.user.id}/${data.actions[0].value}`,
+    url: `http://localhost:8080/api/users/tags/${data.user.id}/${data.actions[0].value}`,
     method: `DELETE`
   }
 
@@ -180,7 +180,7 @@ const addUserTag = (req, res, data) => {
   let tagId = data.actions[0].value;
 
   let userTagData = {
-    url: `http://localhost:8080/slack/users/tags`,
+    url: `http://localhost:8080/api/users/tags`,
     method: `POST`,
     json: { userId, tagId }
   }
