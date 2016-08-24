@@ -48,6 +48,11 @@ export default (app, express) => {
   app.post('/api/jobs', jobController.addJob);
 
   //////////////////////////////////////////////
+  //Handling User Jobs
+  //////////////////////////////////////////////
+  app.delete('/api/user/jobs/:jobId', requireAuth, userJobController.deleteUserJob);
+
+  //////////////////////////////////////////////
   //Handling Tag
   //////////////////////////////////////////////
   app.get('/api/tags', tagController.findAllTags);

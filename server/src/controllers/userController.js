@@ -10,13 +10,14 @@ const getUserData = (req, res) => {
   } 
 
   // Otherwise, send the relevant user data as an object
-  User.findById(req.user.id, {
+  User.findById(req.user.slackUserId, {
     include: [Job]
   })
   .then(user => {
     let jobs = user.jobs.map(job => {
       let publishDate = job.dataValues.publishDate.toString().slice(0,16);
       return {
+        jobId: job.dataValues.id,
         title: job.dataValues.title,
         link: job.dataValues.link,
         location: job.dataValues.location,
