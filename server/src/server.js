@@ -10,7 +10,6 @@ import jobCron from './utils/jobReminderCron';
 import jobScrape from './utils/jobScraper';
 import db from './db/db-config';
 
-
 const app = express();
 const port = process.env.PORT || 8080;
 const httpsPort = 8443;
@@ -19,10 +18,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 app.use(express.static('client'));
 
-<<<<<<< HEAD
 const router = routes(app);
-=======
-const router = routes(app, express);
 db.sync()
 .then(() => {
   app.listen(port, () => {
@@ -42,7 +38,5 @@ db.sync()
 .catch((err) => {
   console.log('Error syncing the DB', err);
 })
->>>>>>> master
-
 
 export default app;
