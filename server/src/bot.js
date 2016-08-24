@@ -80,9 +80,11 @@ const respondWithTags = (bot, message) => {
     helper.listUserTags(message)
     .then(res => {
       //all user tags
-      let userTagArr = _.map(res, item => {
-        return item.tagId;
+      let userTagObj = {}; 
+      _.each(res, item => {
+        userTagObj[item.tagId] = true
       });
+
       let attachments = [];
 
       //how can i loop through the user tags
@@ -110,8 +112,9 @@ const respondWithTags = (bot, message) => {
             dismiss_text: `No, don't delete!`
           } 
         };
+        
         //does tag(user tag) exist in tags(tag table)
-        let button = (userTagArr.indexOf(id) !== -1) ? deleteButton : addButton;
+        let button = (!!userTagObj[id]) ? deleteButton : addButton;
             
         let attachment = {
           text: `${name}`,

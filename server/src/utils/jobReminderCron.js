@@ -10,7 +10,7 @@ import Sequelize from 'sequelize';
 
 let jobCron = new CronJob({
   cronTime: '00 30 08 * * 1-5',
-  // cronTime: '50 * * * * *',
+  // cronTime: '40 * * * * *',
   onTick: () => {
     console.log('Cron jobs to dank jobs');
     messageUsers();
