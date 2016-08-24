@@ -6,7 +6,7 @@ import UserTag from '../models/userTagModel';
 import request from 'supertest';
 import app from '../server';
 import db from '../db/db-config';
-import rp from 'request-promise';
+import rp from 'request-promise'; 
 
 describe('userTagController', () => {
 
