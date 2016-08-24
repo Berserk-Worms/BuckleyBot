@@ -5,7 +5,7 @@ import Job from './jobModel';
 
 let UserJob = db.define('user_job', {});
 
-User.belongsToMany(Job, { through: UserJob });
+User.belongsToMany(Job, { through: UserJob, foreignKey: 'slackUserId' });
 Job.belongsToMany(User, { through: UserJob });
 
 export default UserJob;
