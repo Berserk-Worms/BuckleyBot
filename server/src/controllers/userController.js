@@ -9,8 +9,9 @@ const getUserData = (req, res) => {
     res.send(req.error);
   } 
 
+  console.log(req.user);
   // Otherwise, send the relevant user data as an object
-  User.findById(req.user.id, {
+  User.findById(req.user.slackUserId, {
     include: [Job]
   })
   .then(user => {

@@ -12,7 +12,7 @@ const deleteUserJob = (req, res) => {
 
   UserJob.find({
     where: {
-      userId: req.user.id,
+      slackUserId: req.user.slackUserId,
       jobId: req.params.jobId
     }
   })
