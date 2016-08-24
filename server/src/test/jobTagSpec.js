@@ -59,7 +59,7 @@ describe('jobTagController', () => {
       .then((jobTag) => expect(jobTag.length).to.equal(1));
     });
 
-    it('should indentify an assoication between the job and the tag', () => {
+    it('should indentify an association between the job and the tag', () => {
       return Job.findById(1)
       .then((job) => {
         return job.getTags();
@@ -69,7 +69,7 @@ describe('jobTagController', () => {
       });
     });
 
-    it('should not indentify assoications between unassociated jobs and tags', () => {
+    it('should not indentify associations between unassociated jobs and tags', () => {
       return Tag.findById(2)
       .then((tag) => {
         return tag.getJobs();

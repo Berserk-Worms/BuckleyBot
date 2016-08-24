@@ -21,8 +21,12 @@ const addUserTags = (req, res) => {
       tagId: req.body.tagId
     }
   })
-  .then(userTags => res.send(userTags))
-  .catch(err => res.send(err));
+  .spread((userTags, created) => {
+    if (userTags) {
+      created ? res.status(201).send(userTags) : res.status(200).send(userTags);
+    }
+  })
+  .catch(err => res.status(500).send(err));
 };
 
 const deleteUserTags = (req, res) => {
@@ -35,8 +39,12 @@ const deleteUserTags = (req, res) => {
   .then(userTag => {
     console.log('Destroyed,', userTag.dataValues.slackUserId, userTag.dataValues.tagId)
     userTag.destroy();
+    res.status(200).send(userTag);
   })
-  .catch(err => console.log('Error destrying user tag: ', err));
+  .catch(err => {
+    console.log('Error destrying user tag!');
+    res.status(500).send(err);
+  });
 };
 
 export default { getUserTags, addUserTags, deleteUserTags };
