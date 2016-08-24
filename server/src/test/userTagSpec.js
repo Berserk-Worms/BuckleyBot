@@ -176,7 +176,7 @@ describe('userTagController', () => {
     it('should return 500 when incorrect tag data is posted', (done) => {
       request(app)
       .post('/api/users/tags')
-      .send({ slackUserId: 'abcd', tagId: 3 })
+      .send({ slackUserId: 'abcd', tagId: 'xxx' })
       .expect(500, done);
     })
 
