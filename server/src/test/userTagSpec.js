@@ -78,37 +78,49 @@ describe('userTagController', () => {
 
     //Note: Relies on the previous two tests which insert
     //{ slackUserId: 'abcd', tagId: 1 } twice
-    it('should only store unique values', () => {
-      return UserTag.findAll({
-        where: { slackUserId: 'abcd', tagId: 1 }
-      })
-      .then((userTag) => {
-        expect(userTag.length).to.equal(1)
-      });
+    it('should only store unique values', (done) => {
+      let find = () => {
+        return UserTag.findAll({
+          where: { slackUserId: 'abcd', tagId: 1 }
+        })
+        .then((userTag) => {
+          return expect(userTag.length).to.equal(1)
+        });
+      };
+      find();
+      done();
     });
 
-    it('should identify an association between the user and the tag', () => {
-      return User.findOne({
-        include: [{
-          model: Tag
-        }]
-      })
-      .then(user => {
-        const tag = user.dataValues.tags[0].dataValues;
-        return expect(tag.name).to.equal('javascript');
-      })
+    it('should identify an association between the user and the tag', (done) => {
+      let find = () => {
+        return User.findOne({
+          include: [{
+            model: Tag
+          }]
+        })
+        .then(user => {
+          const tag = user.dataValues.tags[0].dataValues;
+          return expect(tag.name).to.equal('javascript');
+        })
+      };
+      find();
+      done();
     });
 
-    it('should not identify associations between unassociated jobs and tags', () => {
-      return Tag.findOne({
-        where: { name: 'node' },
-        include: [{
-          model: User
-        }]
-      })
-      .then(tag => {
-        return expect(tag.dataValues.users.length).to.equal(0);
-      })
+    it('should not identify associations between unassociated jobs and tags', (done) => {
+      let find = () => {
+        return Tag.findOne({
+          where: { name: 'node' },
+          include: [{
+            model: User
+          }]
+        })
+        .then(tag => {
+          return expect(tag.dataValues.users.length).to.equal(0);
+        })
+      };
+      find();
+      done();
     });
 
     it('should return 200 when successfully deleting an association between user and tag', (done) => {
@@ -164,7 +176,7 @@ describe('userTagController', () => {
     it('should return 500 when incorrect tag data is posted', (done) => {
       request(app)
       .post('/api/users/tags')
-      .send({ slackUserId: 'abcd', tagId: 3 })
+      .send({ slackUserId: 'abcd', tagId: 'xxx' })
       .expect(500, done);
     })
 
