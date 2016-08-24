@@ -18,7 +18,7 @@ class JobEntry extends Component {
         <p className="card-info">{this.props.publishDate}</p>
         <hr/>
         <p>
-          <Button href={this.props.link} bsStyle="primary">More Info</Button>
+          <Button target="_blank" href={this.props.link} bsStyle="primary">More Info</Button>
           <Button onClick={this.onDeleteEntry.bind(this)} bsStyle="danger" className="button-margin">Delete</Button>
         </p>
       </Panel>
