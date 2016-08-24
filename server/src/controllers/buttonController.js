@@ -74,7 +74,7 @@ const saveJob = (req, res, data) => {
     res.json(reply);
   })
   .catch(err => {
-    console.log('Error saving data, ', err);
+    console.log('Error saving data,', err);
   })
 
     //BELOW is a return format required to look exactly the same////////

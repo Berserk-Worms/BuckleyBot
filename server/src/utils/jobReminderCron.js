@@ -35,17 +35,20 @@ let messageUsers = () => {
   })
   .then(users => {
     users.forEach(user => {
-      let count ={};
+      let count = {};
       const tagArr = user.dataValues.tags.map(item => {
-        return item.name
+        return item.name;
       });
       const id = user.dataValues.slackUserId;
       const BUCKLEY = store[user.dataValues.slackTeamId];
 
       user.dataValues.tags.forEach(tag => {
         tag.jobs.forEach(job => {
-          if (count[job.id]) { count[job.id]++; }
-          else { count[job.id] = 1; }
+          if (count[job.id]) { 
+            count[job.id]++; 
+          } else { 
+            count[job.id] = 1; 
+          }
         })
       })
       const keySort = Object.keys(count).sort((a, b) => { return count[b] - count[a]}).slice(0, 6);
@@ -54,7 +57,7 @@ let messageUsers = () => {
         BUCKLEY.startPrivateConversation({ user: user.slackUserId }, (err, convo) =>{
           convo.say(`It seems like you don't have any tags! Please type tags and set you filters!`);
           return;
-        })
+        });
       } 
 
       return Job.findAll({
@@ -70,6 +73,9 @@ let messageUsers = () => {
         BUCKLEY.startPrivateConversation({ user: user.slackUserId }, (err, convo) => {
           convo.say(message_with_jobs);
         });
+      })
+      .catch(err => {
+        console.log('There was an error:', err);
       })
     })
   })

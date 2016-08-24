@@ -19,7 +19,6 @@ let User = db.define('user', {
   slackUserId: {
     type: Sequelize.STRING,
     primaryKey: true
-    // unique: true
   }, 
   slackTeamId: {
     type: Sequelize.STRING,
