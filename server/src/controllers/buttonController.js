@@ -156,7 +156,7 @@ const deleteUserTag = (req, res, data) => {
   let clickedInt = `${parseInt(data.attachment_id, 10) - 1}`;
 
   let userTagData = {
-    url: `http://localhost:8080/api/users/tags/${data.user.id}/${data.actions[0].value}`,
+    url: `${process.env.URI}/api/users/tags/${data.user.id}/${data.actions[0].value}`,
     method: `DELETE`
   }
 
@@ -170,7 +170,7 @@ const deleteUserTag = (req, res, data) => {
   .then(success => console.log('Success deleting user tag!', success))
   .catch(err => console.log('Error deleting user tag: ', err));
 
-  res.json(reply);
+  res.status(200).json(reply);
 };
 
 const addUserTag = (req, res, data) => {
@@ -182,7 +182,7 @@ const addUserTag = (req, res, data) => {
   console.log('addusertag: ', slackUserId, tagId);
 
   let userTagData = {
-    url: `http://localhost:8080/api/users/tags`,
+    url: `${process.env.URI}/api/users/tags`,
     method: `POST`,
     json: { slackUserId, tagId }
   };
@@ -202,7 +202,7 @@ const addUserTag = (req, res, data) => {
   .then(success => console.log('Success adding user tag: ', success))
   .catch(err => console.log('Error adding user tags: ', err));
 
-  res.json(reply);
+  res.status(200).json(reply);
 }
 
 const buttonUpdater = (data, buttonText, buttonInt, buttonStyle, callbackId) => {

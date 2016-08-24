@@ -5,7 +5,6 @@ import rp from 'request-promise';
 import _ from 'underscore';
 
 const store = {};
-const server = 'http://localhost:8080';
 
 const connection = Botkit.slackbot({
   //this will make it possible to be interactive with
@@ -29,7 +28,7 @@ const spawnBot = (team) => {
 const teams = () => {
   console.log('starting instances of bots in database')
   rp({
-    url: `${server}/api/teams`,
+    url: `${process.env.URI}/api/teams`,
     json: true
   })
   .then((teams) => {

@@ -1,8 +1,6 @@
 import rp from 'request-promise';
 import jwt from 'jwt-simple';
 
-const server = 'http://localhost:8080';
-
 // Triggered from 'GET /slack/users/auth' after bot was added to team
 // Authenticate user when they click on "sign in with Slack" button
 const checkAuthCode = (req, res) => {
@@ -28,7 +26,7 @@ const authenticateUser = (req, res) => {
       client_id: process.env.CLIENT_ID,
       client_secret: process.env.CLIENT_SECRET,
       code: req.query.code,
-      redirect_uri: `${server}/slack/users/auth`
+      redirect_uri: `${process.env.URI}/slack/users/auth`
     },
     headers: {
       'User-Agent': 'Request-Promise'
@@ -46,7 +44,7 @@ const authenticateUser = (req, res) => {
       userData = body;
       let slackTeamId = body.team.id;
       //Check for any team with the slack team id
-      return rp(`${server}/api/teams/${slackTeamId}`);
+      return rp(`${process.env.URI}/api/teams/${slackTeamId}`);
     } else {
       console.log('Response body NOT OK. Error:', body.error);
       res.redirect('/');
@@ -80,7 +78,7 @@ const findOrCreateUser = (body, res) => {
   }
 
   let userPayload = { 
-    url: `${server}/api/users/user`,
+    url: `${process.env.URI}/api/users/user`,
     method: 'POST',
     json: { user } 
   }

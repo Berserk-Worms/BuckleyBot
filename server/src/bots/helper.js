@@ -1,14 +1,12 @@
 import { connection } from '../bot.js';
 import rp from 'request-promise';
 
-const server = 'http://localhost:8080';
-
 const helper =  {
   updateUser: (response) => {
     let slackUserId = response.user;
     let location = response.text;
     let usersData = { 
-      url: `${server}/api/users/location`,
+      url: `${process.env.URI}/api/users/location`,
       method: 'PUT',
       json: { slackUserId, location } 
     }
@@ -28,7 +26,7 @@ const helper =  {
     let match;
 
     return rp({
-      url: `${server}/api/tags`,
+      url: `${process.env.URI}/api/tags`,
       json: true
     })
     .then(tags => {
@@ -45,7 +43,7 @@ const helper =  {
   listUserTags: (message) => {
 
     let userData = {
-      url: `http://localhost:8080/api/users/tags/${message.user}`,
+      url: `${process.env.URI}/api/users/tags/${message.user}`,
       method: 'GET',
       json: true
     };
@@ -53,7 +51,7 @@ const helper =  {
   },
   listAllTags: () => {
     let tagData = {
-      url: `http://localhost:8080/api/tags`,
+      url: `${process.env.URI}/api/tags`,
       method: `GET`,
       json: true
     };

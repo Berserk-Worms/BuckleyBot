@@ -4,8 +4,6 @@ import Team from '../models/teamModel';
 import request from 'supertest';
 import { expect } from 'chai';
 
-const server = 'http://localhost:8080/';
-
 describe('teamController', () => {
 
   before((done) => {  

@@ -1,7 +1,5 @@
 import rp from 'request-promise';
 
-const server = 'http://localhost:8080';
-
 // Triggered from 'GET /slack/teams/auth' after bot was added to team
 // Queries Slack and makes a request to teamcontroller to add team
 const authTeam = (req, res) => {
@@ -12,7 +10,7 @@ const authTeam = (req, res) => {
       client_id: process.env.CLIENT_ID,
       client_secret: process.env.CLIENT_SECRET,
       code: req.query.code,
-      redirect_uri: `${server}/slack/teams/auth`
+      redirect_uri: `${process.env.URI}/slack/teams/auth`
     },
     json: true
   }
@@ -35,7 +33,7 @@ const authTeam = (req, res) => {
   })
   .then((slackTeamData) => {
     let teamData = { 
-      url: `${server}/api/teams`,
+      url: `${process.env.URI}/api/teams`,
       method: 'POST',
       json: { slackTeamData } 
     }
@@ -68,7 +66,7 @@ const findTeamUsers = (team) => {
     if (body.ok) {
       let users = parseUsersInfo(body.members);
       let usersData = { 
-        url: `${server}/api/users`,
+        url: `${process.env.URI}/api/users`,
         method: 'POST',
         json: { users } 
       }
