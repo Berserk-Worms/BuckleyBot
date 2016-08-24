@@ -13,6 +13,7 @@ import db from './db/db-config';
 const app = express();
 const port = process.env.PORT || 8080;
 const httpsPort = 8443;
+const env = process.env.NODE_ENV;
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
@@ -20,16 +21,18 @@ app.use(express.static('client'));
 
 const router = routes(app);
 
+console.log('NODE_ENV is', env);
+
 db.sync()
 .then(() => {
 
   // If development
-  if (process.env.NODE_ENV === 'test' || process.env.NODE_ENV === 'dev') {
+  if (env === 'test' || env === 'dev' || env === undefined) {
     app.listen(port, () => {
       //Emit start event;
       app.emit('appStarted');
       console.log('Server started on port ' + port);
-      console.log(`${process.env.NODE_ENV} database synced`);
+      console.log(`${env} database synced`);
       //invoking teams to generate all instances of bots
       //which exist in the database
       teams();
@@ -38,7 +41,7 @@ db.sync()
       jobCron.start();
       jobScrape.start();
     });
-  } else if (process.env.NODE_ENV === 'production') {
+  } else if (env === 'production') {
     // if production
     const credentials = {
       key: fs.readFileSync('/etc/letsencrypt/live/buckleybot.com/privkey.pem'),
