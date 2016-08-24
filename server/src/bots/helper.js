@@ -27,6 +27,7 @@ const helper =  {
 
     return rp({
       url: `${process.env.BASE_URL}/api/tags`,
+      method: 'GET',
       json: true
     })
     .then(tags => {

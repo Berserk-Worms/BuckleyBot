@@ -6,9 +6,23 @@ let userJobsListener = {
   replyWithJobs: function(bot, message) {
     helper.findJobTags(message)
     .then(tags => {
+      let count = {};
       if (tags.length > 0) {
-        //TODO Filter with sequelize rather than _.filter
+        if (tags.length === 1) {
+          let sample = this.returnJobSample(tags[0].jobs, 3);
+        } else {
+          tags.forEach(tag => {
+            tag.jobs.forEach(job => {
+              if (count[job.id]) {
+                count[job.id]++;
+              } else {
+                count[job.id] = 1;
+              }
+            }); 
+          });
         let sample = this.returnJobSample(tags[0].jobs, 3);
+        }
+        console.log(count);
 
         //Set attachment to message to be three random jobs
         let reply_with_attachments = {
@@ -22,6 +36,7 @@ let userJobsListener = {
     });
   },
   returnJobSample: (jobs, numberOfJobs) => {
+    //TODO Filter with sequelize rather than _.filter
     let filterJobs = _.filter(jobs, (job) => {
       //TODO: Need to do further filtering to ensure that the 
       //user's saved job does not show up in slack
