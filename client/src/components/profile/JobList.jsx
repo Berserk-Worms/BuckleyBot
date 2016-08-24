@@ -19,6 +19,7 @@ class JobList extends Component {
                 location={job.location}
                 publishDate={job.publishDate}
                 link={job.link}
+                index={index}
                 key={index}
               />
             </Col>

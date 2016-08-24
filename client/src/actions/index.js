@@ -3,6 +3,7 @@ import { browserHistory } from 'react-router';
 
 import {
   LOAD_USER_DATA,
+  UPDATE_USER_JOB,
   AUTH_USER,
   UNAUTH_USER,
 } from './types';
@@ -32,27 +33,20 @@ export function getUserData() {
   }
 }
 
-export function deleteJob(jobId) {
+export function deleteJob(jobId, index) {
   return function(dispatch) {
+
     axios.delete(`${ROOT_URL}/api/user/jobs/${jobId}`, {
       headers: { authorization: localStorage.getItem('jwt') }
     })
     .then(res => {
-      //TODO: Refactor to update the state on the client side rather than making another API Call
-      return axios.get(`${ROOT_URL}/slack/users/data`, {
-        headers: { authorization: localStorage.getItem('jwt') }
-      })
-    })
-    .then(response => {
-      dispatch({
-        type: LOAD_USER_DATA,
-        payload: response.data
-      });
+        dispatch({
+          type: UPDATE_USER_JOB,
+          payload: index
+        });
     })
     .catch(err => {
-      console.log('There was an error:', err);
-      signoutUser();
-      browserHistory.push('/');
+      console.log('There was an error deleting entry:', err);
     });
   }
 }

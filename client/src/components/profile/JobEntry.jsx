@@ -7,7 +7,7 @@ import * as actions from '../../actions';
 class JobEntry extends Component {
 
   onDeleteEntry() {
-    this.props.deleteJob(this.props.jobId);
+    this.props.deleteJob(this.props.jobId, this.props.index);
   }
 
   render() {
