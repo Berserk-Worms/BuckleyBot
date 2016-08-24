@@ -10,7 +10,7 @@ const authTeam = (req, res) => {
       client_id: process.env.CLIENT_ID,
       client_secret: process.env.CLIENT_SECRET,
       code: req.query.code,
-      redirect_uri: `${process.env.URI}/slack/teams/auth`
+      redirect_uri: `${process.env.HOST}/slack/teams/auth`
     },
     json: true
   }
@@ -66,7 +66,7 @@ const findTeamUsers = (team) => {
     if (body.ok) {
       let users = parseUsersInfo(body.members);
       let usersData = { 
-        url: `${process.env.URI}/api/users`,
+        url: `${process.env.HOST}/api/users`,
         method: 'POST',
         json: { users } 
       }

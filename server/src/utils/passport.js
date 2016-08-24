@@ -15,7 +15,7 @@ const jwtLogin = new JwtStrategy(jwtOptions, (payload, done) => {
   // Check if user id exists in db 
   let slackUserId = payload.sub;
 
-  rp(`${process.env.URI}/api/users/${slackUserId}`)
+  rp(`${process.env.HOST}/api/users/${slackUserId}`)
   .then(user => {
     user = JSON.parse(user);
     if (user) {

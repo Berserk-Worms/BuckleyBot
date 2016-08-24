@@ -108,7 +108,7 @@ const getJobsFromIndeed = () => {
 
 const postJobData = (jobData, tagsData) => {
   return rp({
-    url: `${process.env.URI}/api/jobs`,
+    url: `${process.env.HOST}/api/jobs`,
     method: 'POST',
     json: { jobData } 
   });
@@ -116,7 +116,7 @@ const postJobData = (jobData, tagsData) => {
 
 let postTagData = (tagData) => {
   return rp({
-    url: `${process.env.URI}/api/tags`,
+    url: `${process.env.HOST}/api/tags`,
     method: 'POST',
     json: { tagData }
   })
@@ -124,7 +124,7 @@ let postTagData = (tagData) => {
 
 let postJobTagData = (jobId, tagId) => {
   return rp({
-    url: `${process.env.URI}/api/jobs/tags`,
+    url: `${process.env.HOST}/api/jobs/tags`,
     method: 'POST',
     json: { jobId, tagId }
   })
