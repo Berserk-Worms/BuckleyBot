@@ -20,14 +20,6 @@ app.use(express.static('client'));
 
 const router = routes(app);
 
-const credentials = {
-  key: fs.readFileSync('/etc/letsencrypt/live/buckleybot.com/privkey.pem'),
-  cert: fs.readFileSync('/etc/letsencrypt/live/buckleybot.com/fullchain.pem'),
-  ca: fs.readFileSync('/etc/letsencrypt/live/buckleybot.com/chain.pem'),
-};
-
-var httpsServer = https.createServer(credentials, app);
-
 db.sync()
 .then(() => {
 
