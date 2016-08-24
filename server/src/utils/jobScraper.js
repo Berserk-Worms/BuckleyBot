@@ -1,11 +1,23 @@
 import { parseString } from 'xml2js';
 import rp from 'request-promise';
 import Promise from 'bluebird';
+import { CronJob } from 'cron';
 let parseStringAsync = Promise.promisify(parseString);
+
+let jobScrape = new CronJob({
+  cronTime: '00 00 * * * *',
+  onTick: () => {
+    console.log('Running jobScrape Cron Task');
+    getJobsFromStackOverflow();
+    getJobsFromIndeed();
+  },
+  start: false,
+  timeZone: 'America/Los_Angeles'
+});
 
 const tags = ['javascript', 'react', 'node.js', 'node', 'angular', 'es6', 'backbone'];
 
-let getJobsFromStackOverflow = () => {
+const getJobsFromStackOverflow = () => {
   // make a request to Stack Overflow for jobs data
   tags.forEach((tagName) => {
     rp({
@@ -36,9 +48,10 @@ let getJobsFromStackOverflow = () => {
           company: job['a10:author'][0]['a10:name'][0],
           publishDate: new Date(job['pubDate'][0])
         }
-        let tagsData = tagName;
-        // send data to server
-        return postJobData(jobData, tagsData);
+        let tagData = tagName;
+
+        //Post Data to the Job and Tag Controller
+        return postData(jobData, tagData);
       }));
     })
     .catch((err) => {
@@ -47,7 +60,7 @@ let getJobsFromStackOverflow = () => {
   });
 }
 
-let getJobsFromIndeed = () => {
+const getJobsFromIndeed = () => {
   tags.forEach((tagName) => {
     let indeedOptions = {
       url: 'http://api.indeed.com/ads/apisearch',
@@ -71,7 +84,7 @@ let getJobsFromIndeed = () => {
     }
     rp(indeedOptions)
     .then((body) => {
-      let tagsData = tagName;
+      let tagData = tagName;
       let indeedJobs = body.results;
       //Return once the array of promises is resolved
       return Promise.all(indeedJobs.map((job) => {
@@ -83,7 +96,8 @@ let getJobsFromIndeed = () => {
           publishDate: new Date(job.date)
         }
 
-        return postJobData(jobData, tagsData);
+        //Post Data to the Job and Tag Controller
+        return postData(jobData, tagData);
       }));
     })
     .catch((err) => {
@@ -92,14 +106,45 @@ let getJobsFromIndeed = () => {
   });
 }
 
-
-let postJobData = (jobData, tagsData) => {
+const postJobData = (jobData, tagsData) => {
   return rp({
-    url: 'http://localhost:8080/api/job',
+    url: 'http://localhost:8080/api/jobs',
     method: 'POST',
-    json: { jobData, tagsData } 
+    json: { jobData } 
   });
 }
 
-getJobsFromStackOverflow();
-getJobsFromIndeed();
+let postTagData = (tagData) => {
+  return rp({
+    url: 'http://localhost:8080/api/tags',
+    method: 'POST',
+    json: { tagData }
+  })
+}
+
+let postJobTagData = (jobId, tagId) => {
+  return rp({
+    url: 'http://localhost:8080/api/jobs/tags',
+    method: 'POST',
+    json: { jobId, tagId }
+  })
+}
+
+let postData = (jobData, tagData) => {
+  let jobId;
+  let tagId;
+  return postJobData(jobData)
+  .then((savedJob) => {
+    jobId = savedJob.id;
+    return postTagData(tagData)
+  })
+  .then((savedTag) => {
+    tagId = savedTag.id;
+    return postJobTagData(jobId, tagId);
+  })
+  .catch((err) => {
+    console.log(err);
+  });
+}
+
+export default jobScrape;

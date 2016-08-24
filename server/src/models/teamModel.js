@@ -21,14 +21,7 @@ Team.hook('afterCreate', (team, options) => {
 
   //should call the method where we are only adding one team
   // console.log(team);
-  addTeamBot(team);
+  addTeamBot(team.get({ plain: true }));
 });
-
-Team.sync()
-  .then(() => {
-    console.log('Team table is connected');
-  }, (err) => {
-    console.log('An error occured while generating the Team table:', err);
-  });
 
 export default Team;

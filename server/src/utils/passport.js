@@ -1,7 +1,10 @@
+import dotenv from 'dotenv';
 import passport from 'passport';
-import User from '../models/userModel';
+import rp from 'request-promise';
 import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt';
+dotenv.config({silent: true});
 
+const server = 'http://localhost:8080';
 // Where to find the jwt on the request
 const jwtOptions = {
   jwtFromRequest: ExtractJwt.fromHeader('authorization'),
@@ -11,8 +14,11 @@ const jwtOptions = {
 // Create Jwt strategy for passport to use
 const jwtLogin = new JwtStrategy(jwtOptions, (payload, done) => {
   // Check if user id exists in db 
-  User.findOne({ where: { slackUserId: payload.sub} })
+  let slackUserId = payload.sub;
+
+  rp(`${server}/api/users/${slackUserId}`)
   .then(user => {
+    user = JSON.parse(user);
     if (user) {
       // if user exists, call done w/ that user
       done(null, user);

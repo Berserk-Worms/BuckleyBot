@@ -1,4 +1,6 @@
 import path from 'path';
+import authTeamController from '../controllers/authTeamController';
+import authUserController from '../controllers/authUserController';
 import teamController from '../controllers/teamController';
 import userController from '../controllers/userController';
 import jobController from '../controllers/jobController';
@@ -6,6 +8,7 @@ import tagController from '../controllers/tagController'
 import jobTagController from '../controllers/jobTagController';
 import buttonController from '../controllers/buttonController';
 import userJobController from '../controllers/userJobController';
+import userTagController from '../controllers/userTagController';
 
 // Passport stuff
 import passportConfig from '../utils/passport';
@@ -18,41 +21,55 @@ export default (app) => {
   // API ROUTES
 
   //////////////////////////////////////////////
-  //Handling Team Oauth
+  //Handling Oauth
   //////////////////////////////////////////////
-  app.get('/slack/teams/auth', teamController.addTeam);
+  app.get('/slack/teams/auth', authTeamController.authTeam);
+  app.get('/slack/users/auth', authUserController.checkAuthCode);
+
+  //////////////////////////////////////////////
+  //Handling Team
+  //////////////////////////////////////////////
+  app.get('/api/teams', teamController.findAllTeams);
+  app.get('/api/teams/:slackTeamId', teamController.findTeam);
+  app.post('/api/teams', teamController.addTeam);
 
   //////////////////////////////////////////////
   //Handling Users
   //////////////////////////////////////////////
-
-  // TODO: fix this so that it is in the userController!
-  app.post('/slack/users', userController.addUsers);
-  app.put('/slack/users', userController.updateLocation)
-
-  // Grabbing user data
   app.get('/slack/users/data', requireAuth, userController.getUserData);
-
-  //////////////////////////////////////////////
-  //Handling Oauth
-  //////////////////////////////////////////////
-  app.get('/slack/users/auth', userController.checkAuthCode);
+  app.get('/api/users/:slackUserId', userController.findUser);
+  app.post('/api/users', userController.addUsers);
+  app.post('/api/users/user', userController.addUser);
+  app.put('/api/users/location', userController.updateLocation);
 
   //////////////////////////////////////////////
   //Handling Job
   //////////////////////////////////////////////
-  app.post('/api/job', jobController.addJob);
+  app.post('/api/jobs', jobController.addJob);
 
   //////////////////////////////////////////////
   //Handling Tag
   //////////////////////////////////////////////
-  app.post('/api/tags/job', tagController.addJobTags);
+  app.get('/api/tags', tagController.findAllTags);
+  app.post('/api/tags', tagController.addTag);
+
+  //////////////////////////////////////////////
+  //Handling JobTag
+  //////////////////////////////////////////////
+  app.post('/api/jobs/tags', jobTagController.addJobTag);
 
   //////////////////////////////////////////////
   //Handling Interactive Buttons
   //////////////////////////////////////////////
   app.post('/slack/receive', buttonController.buttonDispatcher);
-  
+
+  //////////////////////////////////////////////
+  //Handling User Tags
+  //////////////////////////////////////////////
+  app.get('/api/users/tags/:slackUserId', userTagController.getUserTags);
+  app.post('/api/users/tags', userTagController.addUserTags);
+  app.delete('/api/users/tags/:slackUserId/:tagId', userTagController.deleteUserTags);
+
   //////////////////////////////////////////////
   //Handling Error
   //////////////////////////////////////////////

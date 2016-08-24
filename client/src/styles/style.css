@@ -61,9 +61,6 @@
   height: 250px;
 }
 
-.robo-oops-img {
-}
-
 .slack-button {
   margin-top: 20px;
 }
@@ -73,6 +70,31 @@
   border-radius: 0;
 }
 
+
+/* Profile Page */
 .contact-card {
   margin-top: 10px;
+  background-color: #424242;
+  color: #fafafa;
+}
+ 
+.panel-default>.panel-heading {
+  font-size: 20px;
+  font-weight: bold;
+  color: #fafafa;
+  background-color: #424242;
+}
+
+.position {
+  font-size: 18px;
+}
+
+.card-info {
+  font-size: 16px;
+}
+
+@media (max-width: 767px) {
+  .center-info {
+      text-align: center;
+  } 
 }

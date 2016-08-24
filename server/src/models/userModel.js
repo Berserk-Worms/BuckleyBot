@@ -7,12 +7,18 @@ import intro from '../bots/introduction';
 let User = db.define('user', {
   name: Sequelize.STRING, 
   email: Sequelize.STRING,
-  location: Sequelize.STRING,
+  location: {
+    type: Sequelize.STRING,
+    defaultValue: 'San Francisco'
+  },
   photo: Sequelize.STRING,
-  accessToken: Sequelize.STRING,
+  accessToken: {
+    type: Sequelize.STRING,
+    defaultValue: null
+  },
   slackUserId: {
     type: Sequelize.STRING,
-    unique: true
+    primaryKey: true
   }, 
   slackTeamId: {
     type: Sequelize.STRING,
@@ -28,13 +34,5 @@ let User = db.define('user', {
 User.hook('afterCreate', (user, options) => {
   intro(user);
 });
-
-User.sync()
-  .then(() => {
-    console.log('User table is connected');
-  }, (err) => {
-    console.log('failed in the users table:', err);
-    console.log('An error occured while generating the User table.');
-  });
 
 export default User;

@@ -1,15 +1,14 @@
 import { connection } from '../bot.js';
-import User from '../models/userModel';
-import Team from '../models/teamModel';
-import Tag from '../models/tagModel';
 import rp from 'request-promise';
+
+const server = 'http://localhost:8080';
 
 const helper =  {
   updateUser: (response) => {
     let slackUserId = response.user;
     let location = response.text;
     let usersData = { 
-      url: 'http://localhost:8080/slack/users',
+      url: `${server}/api/users/location`,
       method: 'PUT',
       json: { slackUserId, location } 
     }
@@ -18,7 +17,7 @@ const helper =  {
       .catch(err => console.log(err))
 
   },
-  findTags: (message) => {
+  findJobTags: (message) => {
     //given a string of text, split the string by spaces
     //loop through the array and check if the tag exists
     //for now we will not consider new tags that the users 
@@ -26,24 +25,40 @@ const helper =  {
 
     //with splitting, how would be handle .js
     let words = message.text.split(/[\\.,\\ !;?:]/);
-    let match = [];
+    let match;
 
-    return Tag.findAll()
+    return rp({
+      url: `${server}/api/tags`,
+      json: true
+    })
     .then(tags => {
-
-      tags.forEach(item => {
-        if (words.indexOf(item.dataValues.name) !== -1) {
-          match.push(item.dataValues.name)
-        }
-      })
-  
+      match = tags.filter((tag) => {
+        return words.indexOf(tag.name) !== -1;
+      });
       console.log('this is match, ', match);
-      return match;
+      return match.length > 0 ? match : tags;
     })
     .catch(err => {
       console.log('Error: ', err);
-    })
+    });
+  },
+  listUserTags: (message) => {
 
+    let userData = {
+      url: `http://localhost:8080/api/users/tags/${message.user}`,
+      method: 'GET',
+      json: true
+    };
+    return rp(userData);
+  },
+  listAllTags: () => {
+    let tagData = {
+      url: `http://localhost:8080/api/tags`,
+      method: `GET`,
+      json: true
+    };
+
+    return rp(tagData);
   }
 };
 

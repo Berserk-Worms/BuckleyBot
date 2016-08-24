@@ -9,12 +9,5 @@ let JobTag = db.define('job_tag', {});
 Job.belongsToMany(Tag, { through: JobTag });
 Tag.belongsToMany(Job, { through: JobTag });
 
-JobTag.sync()
-  .then(() => {
-    console.log('Job Tag table is connected')
-  }, (err) => {
-    console.log('An error occured while generating the Job Tag table')
-  });
+export default JobTag;
 
-
-export default JobTag
