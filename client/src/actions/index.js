@@ -3,6 +3,7 @@ import { browserHistory } from 'react-router';
 
 import {
   LOAD_USER_DATA,
+  UPDATE_USER_JOB,
   AUTH_USER,
   UNAUTH_USER,
 } from './types';
@@ -28,6 +29,24 @@ export function getUserData() {
       // (this might be ungraceful error handling)
       signoutUser();
       browserHistory.push('/');
+    });
+  }
+}
+
+export function deleteJob(jobId, index) {
+  return function(dispatch) {
+
+    axios.delete(`${ROOT_URL}/api/user/jobs/${jobId}`, {
+      headers: { authorization: localStorage.getItem('jwt') }
+    })
+    .then(res => {
+        dispatch({
+          type: UPDATE_USER_JOB,
+          payload: index
+        });
+    })
+    .catch(err => {
+      console.log('There was an error deleting entry:', err);
     });
   }
 }

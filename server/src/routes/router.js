@@ -16,7 +16,7 @@ import passport from 'passport';
 
 const requireAuth = passport.authenticate('jwt', { session: false });
 
-export default (app, express) => {
+export default (app) => {
 
   // API ROUTES
 
@@ -46,6 +46,11 @@ export default (app, express) => {
   //Handling Job
   //////////////////////////////////////////////
   app.post('/api/jobs', jobController.addJob);
+
+  //////////////////////////////////////////////
+  //Handling User Jobs
+  //////////////////////////////////////////////
+  app.delete('/api/user/jobs/:jobId', requireAuth, userJobController.deleteUserJob);
 
   //////////////////////////////////////////////
   //Handling Tag

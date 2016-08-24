@@ -12,12 +12,14 @@ class JobList extends Component {
         {this.props.jobs.map( (job, index) => {
           return (
             <Col smOffset={1} sm={10} mdOffset={0} md={6} key={index}>
-              <JobEntry 
+              <JobEntry
+                jobId={job.jobId}
                 company={job.company}
                 title={job.title}
                 location={job.location}
                 publishDate={job.publishDate}
                 link={job.link}
+                index={index}
                 key={index}
               />
             </Col>
