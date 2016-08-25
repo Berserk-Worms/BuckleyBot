@@ -8,7 +8,7 @@ let jobScrape = new CronJob({
   cronTime: '00 00 * * * *',
   onTick: () => {
     console.log('Running jobScrape Cron Task');
-    getJobsFromStackOverflow();
+    // getJobsFromStackOverflow();
     getJobsFromIndeed();
   },
   start: false,

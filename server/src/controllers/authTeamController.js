@@ -33,7 +33,7 @@ const authTeam = (req, res) => {
   })
   .then((slackTeamData) => {
     let teamData = { 
-      url: `${process.env.URI}/api/teams`,
+      url: `${process.env.HOST}/api/teams`,
       method: 'POST',
       json: { slackTeamData } 
     }
