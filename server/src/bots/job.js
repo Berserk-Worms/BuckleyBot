@@ -57,23 +57,27 @@ let userJobsListener = {
         })
         //slice by three instead of getting a gigantic array to search for jobs
         let uniqueJobs = _.difference(keySort, userSaveJobs);
-        console.log(uniqueJobs);
+        console.log('this is unique jobs,', uniqueJobs);
 
         return Job.findAll({
-          where: { $or: [
-            { id: uniqueJobs }
-          ]}
+          where: { 
+            id: uniqueJobs.slice(0, 30)
+          }
         })
         .then(jobs => {
+          console.log('this is the jobs length,', jobs.length)
           if (jobs.length > 0) {
             let jobArr = [];
             //parse the job data
             jobs.forEach(job => {
               jobArr.push(job.dataValues);
             })
+
+            //filter jobs
+            console.log('jobArr,',jobArr);
             //set the cards for the message
             let sample = userJobsListener.returnJobSample(jobArr, 3);
-
+            console.log('sample length,', sample.length);
             let reply_with_attachments = {
               text: 'Here are some jobs:',
               attachments: sample
@@ -87,6 +91,7 @@ let userJobsListener = {
     });
   },
   returnJobSample: (jobs, numberOfJobs) => {
+    // console.log(jobs);
     let filterJobs = _.filter(jobs, (job) => {
       //TODO: Need to do further filtering to ensure that the 
       //user's saved job does not show up in slack
@@ -103,7 +108,7 @@ let userJobsListener = {
     console.log("# of filtered jobs:", filterJobs.length);
 
     //Format job data for Slack message attachment 
-    let attachments = _.map(filterJobs, (job) => {
+    let attachments = _.map(filterJobs.slice(0, numberOfJobs), (job) => {
       return {
         title: `:computer: ${job.title}`,
         text: `:office: ${job.company} - ${job.location} \n :link: ${job.link}`,
@@ -116,8 +121,7 @@ let userJobsListener = {
       };
     });
 
-    let sample = attachments.slice(0, numberOfJobs);
-    return sample;
+    return attachments;
   }
 };
 
