@@ -3,14 +3,12 @@ import Tag from '../models/tagModel';
 import Job from '../models/jobModel';
 import userJobsListener from '../bots/job';
 import { store } from '../bot';
-import { startConvo } from '../bots/introduction';
 import { CronJob } from 'cron';
 import Promise from 'bluebird';
-import Sequelize from 'sequelize';
 
 let jobCron = new CronJob({
   cronTime: '00 30 08 * * 1-5',
-  // cronTime: '40 * * * * *',
+  // cronTime: '23 * * * * *',
   onTick: () => {
     console.log('Cron jobs to dank jobs');
     messageUsers();

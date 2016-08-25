@@ -1,6 +1,5 @@
 import { store } from '../bot';
 import helper from '../bots/helper';
-import rp from 'request-promise';
 
 //Init convo by accepting an argument of created Profile
 const intro = (createdUser) => {

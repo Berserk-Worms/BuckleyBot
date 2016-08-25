@@ -79,6 +79,7 @@ const addUser = (req, res) => {
   let slackTeamId = user.slackTeamId;
   let accessToken = user.accessToken;
 
+  
   User.findOne({ 
     where: {slackUserId} 
   })
