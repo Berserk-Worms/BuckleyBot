@@ -8,8 +8,6 @@ class Navigation extends Component {
 
   renderLinks() {
 
-    console.log('What is the state of authenticated?', this.props.authenticated);
-
     let route = '/signin';
     let text = 'Sign in';
 
@@ -28,7 +26,7 @@ class Navigation extends Component {
 
   render() {
     return (
-      <Navbar className="nav-size" inverse>
+      <Navbar className="navbar-custom">
         <Navbar.Header>
           <Navbar.Brand>
             <a href='/'>BuckleyBot</a>
