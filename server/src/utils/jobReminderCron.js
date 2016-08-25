@@ -7,8 +7,8 @@ import { CronJob } from 'cron';
 import Promise from 'bluebird';
 
 let jobCron = new CronJob({
-  // cronTime: '00 30 08 * * 1-5',
-  cronTime: '23 * * * * *',
+  cronTime: '00 30 08 * * 1-5',
+  // cronTime: '23 * * * * *',
   onTick: () => {
     console.log('Cron jobs to dank jobs');
     messageUsers();
