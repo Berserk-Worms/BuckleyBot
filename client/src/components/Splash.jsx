@@ -10,13 +10,13 @@ class Splash extends Component {
           <Grid>
             <Row>
               <Col className="animated pulse" lg={12}>
-                <img className="robo-img" src="../assets/robo_no_legs_wht_bg.png" alt="BuckleyBot"/>
+                <img className="robo-img" src="../assets/searching.png" alt="BuckleyBot"/>
                 <div className="intro-text">
                   <span className="name">BuckleyBot</span>
-                  <hr className="star-light" />
+                  <hr className="star-light hide-on-lg" />
                   <span className="skills">Slackbot for Jobseekers</span>
                   <span className="slack-btn-container">
-                    <Button className="slack-button" bsSize="large" bsStyle="danger" href="https://slack.com/oauth/reflow?scope=bot&client_id=66765912757.67864241282&redirect_uri=http://localhost:8080/slack/teams/auth"> 
+                    <Button className="slack-button" bsSize="large" bsStyle="primary" href="https://slack.com/oauth/reflow?scope=bot&client_id=66765912757.67864241282&redirect_uri=http://localhost:8080/slack/teams/auth"> 
                     <div className="slack-icon"></div>
                     <div className="slack-text">Add to Slack</div>
                     </Button> 
@@ -70,10 +70,13 @@ class Splash extends Component {
             <Grid>
               <Row>
                 <Col>
-                  <img className="robo-img-sm" src="../assets/robo_no_legs_wht_bg.png" alt="BuckleyBot" />
+                  <img className="robo-img-sm" src="../assets/searching.png" alt="BuckleyBot" />
                   <div>Made by: Billy, Jeff, Justin, Pranay
                     <a target="_blank" href="https://github.com/Berserk-Worms/BuckleyBot"> (Github)</a>
                   </div>
+                  <div>Robot icon designed by <a href="http://www.flaticon.com/free-icon/searching_202483#term=robot&page=1&position=6" title="Freepik">Freepik</a></div>
+                  <div>Banner designed by <a href="http://www.freepik.com/free-vector/realistic-workplace-elements_798002.htm">Freepik</a></div>
+                  
                 </Col>
               </Row>
             </Grid>

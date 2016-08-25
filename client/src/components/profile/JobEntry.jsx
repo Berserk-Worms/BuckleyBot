@@ -12,7 +12,7 @@ class JobEntry extends Component {
 
   render() {
     return (
-      <Panel header={this.props.company}>
+      <Panel className="hoverable" header={this.props.company}>
         <p className="position">{this.props.title}</p>
         <p className="card-info">{this.props.location}</p>
         <p className="card-info">{this.props.publishDate}</p>
