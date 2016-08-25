@@ -40,7 +40,7 @@ let userJobsListener = {
       })
       //sort the object by count
       const keySort = Object.keys(count).sort((a, b) => { return count[b] - count[a]}).slice(0, 100);
-    
+
       if (keySort.length === 0) {
         BUCKLEY.startPrivateConversation({ user: user.slackUserId }, (err, convo) => {
           convo.say(`It seems like you don't have any tags! Please type tags and set you filters!`);
@@ -56,11 +56,11 @@ let userJobsListener = {
           userSaveJobs.push(`${job.jobId}`);
         })
         //slice by three instead of getting a gigantic array to search for jobs
-        let uniqueJobs = _.difference(keySort, userSaveJobs).slice(0, 3);
+        let uniqueJobs = _.difference(keySort, userSaveJobs);
 
         return Job.findAll({
           where: { $or: [
-            { id: uniqueJobs }
+            { id: uniqueJobs.slice(0, 4) }
           ]}
         })
         .then(jobs => {
@@ -95,7 +95,7 @@ let userJobsListener = {
         jobTitle.indexOf('principal') === -1
         jobTitle.indexOf('staff') === -1;
     });
-    console.log("# of filtered jobs:", filterJobs);
+    console.log("# of filtered jobs:", filterJobs.length);
 
     //Format job data for Slack message attachment 
     let attachments = _.map(filterJobs, (job) => {
