@@ -28,7 +28,7 @@ const spawnBot = (team) => {
 const teams = () => {
   console.log('starting instances of bots in database')
   rp({
-    url: `${process.env.HOST}/api/teams`,
+    url: `${process.env.BASE_URL}/api/teams`,
     json: true
   })
   .then((teams) => {

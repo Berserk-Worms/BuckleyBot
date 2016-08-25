@@ -6,7 +6,7 @@ const helper =  {
     let slackUserId = response.user;
     let location = response.text;
     let usersData = { 
-      url: `${process.env.HOST}/api/users/location`,
+      url: `${process.env.BASE_URL}/api/users/location`,
       method: 'PUT',
       json: { slackUserId, location } 
     }
@@ -26,7 +26,7 @@ const helper =  {
     let match;
 
     return rp({
-      url: `${process.env.HOST}/api/tags`,
+      url: `${process.env.BASE_URL}/api/tags`,
       json: true
     })
     .then(tags => {
@@ -43,7 +43,7 @@ const helper =  {
   listUserTags: (message) => {
 
     let userData = {
-      url: `${process.env.HOST}/api/users/tags/${message.user}`,
+      url: `${process.env.BASE_URL}/api/users/tags/${message.user}`,
       method: 'GET',
       json: true
     };
@@ -51,7 +51,7 @@ const helper =  {
   },
   listAllTags: () => {
     let tagData = {
-      url: `${process.env.HOST}/api/tags`,
+      url: `${process.env.BASE_URL}/api/tags`,
       method: `GET`,
       json: true
     };
