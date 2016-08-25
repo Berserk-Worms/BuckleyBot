@@ -1,42 +1,87 @@
-import { connection } from '../bot.js';
+import { connection, store } from '../bot.js';
 import _ from 'underscore';
 import helper from '../bots/helper';
+import User from '../models/userModel';
+import Tag from '../models/tagModel';
+import Job from '../models/jobModel';
 
 let userJobsListener = {
-  replyWithJobs: function(bot, message) {
-    helper.findJobTags(message)
-    .then(tags => {
-      let count = {};
-      if (tags.length > 0) {
-        if (tags.length === 1) {
-          let sample = this.returnJobSample(tags[0].jobs, 3);
-        } else {
-          tags.forEach(tag => {
-            tag.jobs.forEach(job => {
-              if (count[job.id]) {
-                count[job.id]++;
-              } else {
-                count[job.id] = 1;
-              }
-            }); 
-          });
-        let sample = this.returnJobSample(tags[0].jobs, 3);
-        }
-        console.log(count);
-
-        //Set attachment to message to be three random jobs
-        let reply_with_attachments = {
-          text: 'Here are some jobs:',
-          attachments: sample
-        };
-        bot.reply(message, reply_with_attachments);
-      } else {
-        bot.reply(message, "Sorry, I couldn't find any new jobs -- please check back soon :)");
+  //reply with jobs for users that suit their tags
+  //should not display saved or ignored jobs
+  replyWithJobs: (bot, message) => {
+    //do a joined query that will return user, tags, and jobs
+    User.findOne({
+      where: { slackUserId: message.user },
+      include: [{
+        model: Tag,
+        include: [{
+          model: Job,
+          where: {
+            createdAt: {
+              $gt: new Date(new Date() - 24 * 60 * 60 * 1000)
+            }
+          }
+        }]
+      }]
+    })
+    .then(user => {
+      //start instance of bot 
+      const BUCKLEY = store[user.dataValues.slackTeamId];
+      const count = {};
+      //create an object thta will find jobs with most matched tags
+      user.dataValues.tags.forEach(tag => {
+        tag.jobs.forEach(job => {
+          if (count[job.id]) {
+            count[job.id]++;
+          } else {
+            count[job.id] = 1;
+          }
+        })
+      })
+      //sort the object by count
+      const keySort = Object.keys(count).sort((a, b) => { return count[b] - count[a]}).slice(0, 100);
+    
+      if (keySort.length === 0) {
+        BUCKLEY.startPrivateConversation({ user: user.slackUserId }, (err, convo) => {
+          convo.say(`It seems like you don't have any tags! Please type tags and set you filters!`);
+          return;
+        });
       }
+
+      //get the users saved and ignored jobs to geneerate a uniqueJob arr
+      helper.getUserJobs(user.slackUserId)
+      .then(savedJobs => {
+        let userSaveJobs = [];
+        savedJobs.forEach(job => {
+          userSaveJobs.push(`${job.jobId}`);
+        })
+        //slice by three instead of getting a gigantic array to search for jobs
+        let uniqueJobs = _.difference(keySort, userSaveJobs).slice(0, 3);
+
+        return Job.findAll({
+          where: { $or: [
+            { id: uniqueJobs }
+          ]}
+        })
+        .then(jobs => {
+          let jobArr = [];
+          //parse the job data
+          jobs.forEach(job => {
+            jobArr.push(job.dataValues);
+          })
+          //set the cards for the message
+          let sample = userJobsListener.returnJobSample(jobArr, 3);
+
+          let reply_with_attachments = {
+            text: 'Here are some jobs:',
+            attachments: sample
+          };
+          bot.reply(message, reply_with_attachments);
+        })
+      })
     });
   },
   returnJobSample: (jobs, numberOfJobs) => {
-    //TODO Filter with sequelize rather than _.filter
     let filterJobs = _.filter(jobs, (job) => {
       //TODO: Need to do further filtering to ensure that the 
       //user's saved job does not show up in slack
@@ -47,9 +92,10 @@ let userJobsListener = {
         jobTitle.indexOf('senior') === -1 && 
         jobTitle.indexOf('manager') === -1 &&
         jobTitle.indexOf('sr.') === -1 &&
-        jobTitle.indexOf('principal') === -1;
+        jobTitle.indexOf('principal') === -1
+        jobTitle.indexOf('staff') === -1;
     });
-    console.log("# of filtered jobs:", filterJobs.length);
+    console.log("# of filtered jobs:", filterJobs);
 
     //Format job data for Slack message attachment 
     let attachments = _.map(filterJobs, (job) => {
@@ -59,13 +105,13 @@ let userJobsListener = {
         callback_id: `clickSaveJobs`,
         attachment_type: `default`,
         actions: [
-          {name: `saveJob`, text: `Save`, value: job.id, type: `button`, style: `default`}
+          {name: `saveJob`, text: `Save`, value: job.id, type: `button`, style: `default`},
+          {name: `ignoreJob`, text: `Ignore This Job`, value: job.id, type: `button`, style: `default`}
         ]
       };
     });
 
-    let sample = _.sample(attachments, numberOfJobs);
-    return sample;
+    return attachments.slice(0, 3);
   }
 };
 
