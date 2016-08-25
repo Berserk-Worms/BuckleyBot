@@ -8,12 +8,12 @@ import {
   UNAUTH_USER,
 } from './types';
 
-const ROOT_URL = 'http://localhost:8080';
+const BASE_URL = window.location.origin;
 
 export function getUserData() {
   return function(dispatch) {
     // Submit jwt to the server
-    axios.get(`${ROOT_URL}/slack/users/data`, {
+    axios.get(`${BASE_URL}/slack/users/data`, {
       headers: { authorization: localStorage.getItem('jwt') }
     })
     .then(response => {
@@ -36,7 +36,7 @@ export function getUserData() {
 export function deleteJob(jobId, index) {
   return function(dispatch) {
 
-    axios.delete(`${ROOT_URL}/api/user/jobs/${jobId}`, {
+    axios.delete(`${BASE_URL}/api/user/jobs/${jobId}`, {
       headers: { authorization: localStorage.getItem('jwt') }
     })
     .then(res => {
