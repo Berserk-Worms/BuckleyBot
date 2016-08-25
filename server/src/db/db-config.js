@@ -1,4 +1,6 @@
 import Sequelize from 'sequelize';
+import dotenv from 'dotenv';
+dotenv.config({silent: true});
 
 //make path for production environment
 let databaseUrl;
