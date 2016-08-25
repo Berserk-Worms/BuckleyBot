@@ -57,26 +57,31 @@ let userJobsListener = {
         })
         //slice by three instead of getting a gigantic array to search for jobs
         let uniqueJobs = _.difference(keySort, userSaveJobs);
+        console.log(uniqueJobs);
 
         return Job.findAll({
           where: { $or: [
-            { id: uniqueJobs.slice(0, 4) }
+            { id: uniqueJobs }
           ]}
         })
         .then(jobs => {
-          let jobArr = [];
-          //parse the job data
-          jobs.forEach(job => {
-            jobArr.push(job.dataValues);
-          })
-          //set the cards for the message
-          let sample = userJobsListener.returnJobSample(jobArr, 3);
+          if (jobs.length > 0) {
+            let jobArr = [];
+            //parse the job data
+            jobs.forEach(job => {
+              jobArr.push(job.dataValues);
+            })
+            //set the cards for the message
+            let sample = userJobsListener.returnJobSample(jobArr, 3);
 
-          let reply_with_attachments = {
-            text: 'Here are some jobs:',
-            attachments: sample
-          };
-          bot.reply(message, reply_with_attachments);
+            let reply_with_attachments = {
+              text: 'Here are some jobs:',
+              attachments: sample
+            };
+            bot.reply(message, reply_with_attachments);
+          } else {
+            bot.reply(message, "Sorry, I couldn't find any new jobs -- please check back soon :)");
+          }
         })
       })
     });
@@ -111,7 +116,8 @@ let userJobsListener = {
       };
     });
 
-    return attachments.slice(0, 3);
+    let sample = attachments.slice(0, numberOfJobs);
+    return sample;
   }
 };
 
