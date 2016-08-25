@@ -1,16 +1,19 @@
 import Sequelize from 'sequelize';
+import dotenv from 'dotenv';
+dotenv.config({silent: true});
 
 //make path for production environment
 let databaseUrl;
 if (process.env.NODE_ENV === 'test') {
   databaseUrl = 'postgres://localhost:5432/uncle_test';
 } else if (process.env.NODE_ENV === 'production') {
-  databaseUrl = process.env.DATABASE_URL 
+  databaseUrl = process.env.DATABASE_URL;
 } else {
-  databaseUrl = 'postgres://localhost:5432/uncle'
+  databaseUrl = 'postgres://localhost:5432/uncle';
 }
 
-let host =  !!process.env.DATABASE_URL ? process.env.DATABASE_URL.split(':')[2] : 'localhost';
+// let host =  !!process.env.DATABASE_URL ? process.env.DATABASE_URL.split(':')[2] : 'localhost';
+let host = 'localhost';
 
 let db = new Sequelize(databaseUrl, {
   host: host,
