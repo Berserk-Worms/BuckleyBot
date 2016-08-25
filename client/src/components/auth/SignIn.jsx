@@ -9,10 +9,11 @@ class SignIn extends Component {
         <div className="main-center">
           <Grid>
             <Row>
-              <Col className="animated bounce" lg={12}>
-                <img className="robo-img" src="../assets/robo_no_legs_wht_bg.png" alt="BuckleyBot" responsive/>
+              <Col className="animated rubberBand" lg={12}>
+                <img className="robo-img" src="../assets/robo_no_legs_wht_bg.png" alt="BuckleyBot" />
                 <div className="intro-text">
-                  <span className="skills">Sign in through slack to view all of your saved jobs and start applying now!</span>
+                  <div className="skills">Sign in through slack to view all of your</div>
+                  <div className="skills"> saved jobs and start applying now!</div>
                   <span className="slack-btn-container">
                     <Button className="slack-button" bsSize="large" bsStyle="danger" href="https://slack.com/oauth/authorize?scope=identity.basic,identity.email,identity.team,identity.avatar&client_id=66765912757.67864241282&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Fslack%2Fusers%2Fauth"> 
                     <div className="slack-icon"></div>

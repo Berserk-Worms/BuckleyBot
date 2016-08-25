@@ -9,9 +9,10 @@ class Oops extends Component {
           <Grid>
             <Row>
               <Col className="animated bounce" lg={12}>
-                <img className="robo-img" src="../assets/robo_oops.png" alt="BuckleyBot" responsive/>
+                <img className="robo-img" src="../assets/robo_oops.png" alt="BuckleyBot" />
                 <div className="intro-text">
-                  <span className="skills">Oops: Please add BuckleyBot to you team before signing in</span>
+                  <div className="skills">Oops: Please add BuckleyBot to your </div>
+                  <div className="skills">team before signing in</div>
                   <span className="slack-btn-container">
                     <Button className="slack-button" bsSize="large" bsStyle="danger" href="https://slack.com/oauth/reflow?scope=bot&client_id=66765912757.67864241282&redirect_uri=http://localhost:8080/slack/teams/auth"> 
                     <div className="slack-icon"></div>

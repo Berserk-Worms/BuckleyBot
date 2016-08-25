@@ -17,10 +17,10 @@ class SignOut extends Component {
           <Grid>
             <Row>
               <Col className="animated rubberBand" lg={12}>
-                <img className="robo-img" src="../assets/robo_no_legs_wht_bg.png" alt="BuckleyBot" responsive/>
+                <img className="robo-img" src="../assets/robo_no_legs_wht_bg.png" alt="BuckleyBot" />
                 <div className="intro-text">
-                  <span className="skills">You have Successfully Signed Out</span>
-                  <span className="skills">Hope to see you again soon!</span>
+                  <div className="skills">You have Successfully Signed Out</div>
+                  <div className="skills">Hope to see you back soon!</div>
                   <span className="slack-btn-container">
                     <Button className="slack-button" bsSize="large" bsStyle="danger" href="/"> 
                     <div className="slack-icon"></div>

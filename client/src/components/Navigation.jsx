@@ -8,8 +8,6 @@ class Navigation extends Component {
 
   renderLinks() {
 
-    console.log('What is the state of authenticated?', this.props.authenticated);
-
     let route = '/signin';
     let text = 'Sign in';
 

@@ -10,7 +10,7 @@ class Splash extends Component {
           <Grid>
             <Row>
               <Col className="animated pulse" lg={12}>
-                <img className="robo-img" src="../assets/robo_no_legs_wht_bg.png" alt="BuckleyBot" responsive/>
+                <img className="robo-img" src="../assets/robo_no_legs_wht_bg.png" alt="BuckleyBot"/>
                 <div className="intro-text">
                   <span className="name">BuckleyBot</span>
                   <hr className="star-light" />
@@ -40,7 +40,7 @@ class Splash extends Component {
                   <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quibusdam quis eius quod. Commodi sunt, enim facere, consequatur veniam fugiat modi consectetur sapiente dolore laudantium tempora consequuntur, dicta dolores voluptatum harum.</p>
                 </Col>
                 <Col lg={6}>
-                  <img className="slack-add-pic" src="../../assets/slack_add.png" alt="" responsive/>
+                  <img className="slack-add-pic" src="../../assets/slack_add.png" alt="" />
                 </Col>
             </Row>
           </Grid>
@@ -70,7 +70,7 @@ class Splash extends Component {
             <Grid>
               <Row>
                 <Col>
-                  <img className="robo-img-sm" src="../assets/robo_no_legs_wht_bg.png" alt="BuckleyBot" responsive/>
+                  <img className="robo-img-sm" src="../assets/robo_no_legs_wht_bg.png" alt="BuckleyBot" />
                   <div>Made by: Billy, Jeff, Justin, Pranay
                     <a target="_blank" href="https://github.com/Berserk-Worms/BuckleyBot"> (Github)</a>
                   </div>
