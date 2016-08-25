@@ -9,9 +9,9 @@ class NotFound extends Component {
       <Grid>
         <Row>
           <Col className="animated bounce" lg={12}>
-            <img className="robo-img" src="../assets/robo_oops.png" alt="BuckleyBot" />
+            <img className="robo-img" src="../assets/searching_plain.png" alt="BuckleyBot" />
             <div className="intro-text">
-              <span className="skills">Oops: Page Not Found</span>
+              <div className="skills">Oops: Page Not Found</div>
               <span className="slack-btn-container">
                 <Button className="slack-button" bsSize="large" bsStyle="danger" href="/"> 
                   <div className="slack-icon"></div>

@@ -9,7 +9,7 @@ class Oops extends Component {
           <Grid>
             <Row>
               <Col className="animated bounce" lg={12}>
-                <img className="robo-img" src="../assets/robo_oops.png" alt="BuckleyBot" />
+                <img className="robo-img" src="../assets/searching_plain.png" alt="BuckleyBot" />
                 <div className="intro-text">
                   <div className="skills">Oops: Please add BuckleyBot to your </div>
                   <div className="skills">team before signing in</div>

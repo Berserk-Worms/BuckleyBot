@@ -5,12 +5,12 @@ import { Grid, Row, Col, Button } from 'react-bootstrap';
 class SignIn extends Component {
   render() {
     return (
-      <div className="signin-bg">
+      <div className="auth-bg">
         <div className="main-center">
           <Grid>
             <Row>
               <Col className="animated rubberBand" lg={12}>
-                <img className="robo-img" src="../assets/robo_no_legs_wht_bg.png" alt="BuckleyBot" />
+                <img className="robo-img" src="../assets/searching.png" alt="BuckleyBot" />
                 <div className="intro-text">
                   <div className="skills">Sign in through slack to view all of your</div>
                   <div className="skills"> saved jobs and start applying now!</div>
@@ -31,13 +31,3 @@ class SignIn extends Component {
 }
 
 export default SignIn;
-
-// <div className="center-vertical-align text-center">
-//   <h1 >Sign in</h1>
-//   <p>Sign in through slack to view all of your saved jobs and start applying now!</p>
-//     <img className="" src="../assets/robo_big_head.png" alt=""/>
-//   <div className="slack-button center-item">
-//     <a href="https://slack.com/oauth/authorize?scope=identity.basic,identity.email,identity.team,identity.avatar&client_id=66765912757.67864241282&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Fslack%2Fusers%2Fauth"><img src="https://api.slack.com/img/sign_in_with_slack.png"/>
-//     </a>
-//   </div>
-// </div>
