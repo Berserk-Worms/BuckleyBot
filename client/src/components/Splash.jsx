@@ -17,7 +17,7 @@ class Splash extends Component {
                 <div className="intro-text">
                   <span className="name">BuckleyBot</span>
                   <hr className="star-light hide-on-lg" />
-                  <span className="skills">Slackbot for Jobseekers</span>
+                  <span className="skills">Come with me if you want a job</span>
                   <span className="slack-btn-container">
                     <Button className="slack-button" bsSize="large" bsStyle="primary" href={`https://slack.com/oauth/reflow?scope=bot&client_id=66765912757.67864241282&redirect_uri=${BASE_URL}/slack/teams/auth`}> 
                     <div className="slack-icon"></div>
@@ -25,6 +25,7 @@ class Splash extends Component {
                     </Button> 
                   </span>
                 </div>
+                <i className="fa fa-chevron-down chevron hide-on-sm" aria-hidden="true"></i>
               </Col>
             </Row>
           </Grid>
@@ -39,30 +40,52 @@ class Splash extends Component {
                 </Col>
               </Row>
               <Row>
-                <Col lgOffset={1} lg={5} className="section-text">
-                  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quibusdam quis eius quod. Commodi sunt, enim facere, consequatur veniam fugiat modi consectetur sapiente dolore laudantium tempora consequuntur, dicta dolores voluptatum harum.</p>
+                <Col sm={6} mdOffset={1} md={5} lgOffset={1} lg={5} className="text-center">
+                  <div className="how-to">
+                    <i className="fa fa-plus-circle icon-style" aria-hidden="true"></i>
+                    <p className="section-content">Adding Buckley to your team is a breeze -- just click Add to Slack.</p>
+                  </div>
+                  <div className="how-to">
+                    <i className="fa fa-commenting icon-style" aria-hidden="true"></i>
+                    <p className="section-content">Once authorized, Buckley will work with you to find jobs that are a great fit. It’s that easy.</p>
+                  </div>
+                  <div className="how-to">
+                    <Button className="slack-button" bsSize="large" bsStyle="primary" href={`https://slack.com/oauth/reflow?scope=bot&client_id=66765912757.67864241282&redirect_uri=${BASE_URL}/slack/teams/auth`}> 
+                    <div className="slack-icon"></div>
+                    <div className="slack-text">Add to Slack</div>
+                    </Button> 
+                  </div>
                 </Col>
-                <Col lg={6}>
-                  <img className="slack-add-pic" src="../../assets/slack_add.png" alt="" />
+                <hr className="hide-on-lg hr-margin" />
+                <Col sm={6} md={5} lg={5}>
+                  <img className="slack-add-pic z-depth-2" src="../../assets/intro.gif" alt="" />
                 </Col>
             </Row>
           </Grid>
         </section>
 
-        <section className="contact">
+        <section className="about">
           <Grid>
               <Row>
                 <Col lg={12} className="text-center">
-                  <h2 className="title">Contact</h2>
+                  <h2 className="title">Personalize Your Experience</h2>
                   <hr className="star-light" />
                 </Col>
               </Row>
               <Row>
-                <Col lgOffset={2} lg={4}>
-                  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quibusdam quis eius quod. Commodi sunt, enim facere, consequatur veniam fugiat modi consectetur sapiente dolore laudantium tempora consequuntur, dicta dolores voluptatum harum.</p>
+                <Col sm={6} mdOffset={1} md={5} lgOffset={1} lg={5}>
+                    <img className="slack-add-pic z-depth-2" src="../../assets/julius.png" alt="" />
                 </Col>
-                <Col lg={4}>
-                  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quibusdam quis eius quod. Commodi sunt, enim facere, consequatur veniam fugiat modi consectetur sapiente dolore laudantium tempora consequuntur, dicta dolores voluptatum harum.</p>
+                <hr className="hide-on-lg hr-margin" />
+                <Col sm={6} md={5} lg={5} className="text-center">
+                  <div className="how-to">
+                    <i className="fa fa-user icon-style" aria-hidden="true"></i>
+                    <p className="section-content">To view and manage your saved jobs, simply sign in on buckleybot.com using your Slack account.</p>
+                  </div>
+                  <div className="how-to">
+                    <i className="fa fa-tachometer icon-style" aria-hidden="true"></i>
+                    <p className="section-content">Your dashboard is automatically synced from your conversations with Buckley, so nothing is ever lost.</p>
+                  </div>
                 </Col>
             </Row>
           </Grid>

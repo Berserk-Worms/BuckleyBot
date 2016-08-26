@@ -19,7 +19,7 @@ class SignOut extends Component {
               <Col className="animated rubberBand" lg={12}>
                 <img className="robo-img" src="../assets/searching.png" alt="BuckleyBot" />
                 <div className="intro-text">
-                  <div className="skills">You have successfully signed out.</div>
+                  <div className="skills">Thanks for stopping by.</div>
                   <div className="skills">Hope to see you back soon!</div>
                   <span className="slack-btn-container">
                     <Button className="slack-button" bsSize="large" bsStyle="danger" href="/"> 
