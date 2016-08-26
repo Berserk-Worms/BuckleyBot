@@ -62,24 +62,14 @@ const saveJob = (req, res, data) => {
     where: { slackUserId: data.user.id }
   })
   .then((user) => {
-    console.log('this is the data!', data);
-    let userJob = data.actions[0].name === `saveJob` ?
-     {
-        slackUserId: user.dataValues.slackUserId,
-        jobId: `${data.actions[0].value}`,
-        ignore: false
-      } : 
-      {
-        slackUserId: user.dataValues.slackUserId,
-        jobId: `${data.actions[0].value}`,
-        ignore: true
-      }
+    let userJob = {
+      slackUserId: user.dataValues.slackUserId,
+      jobId : `${data.actions[0].value}`
+    }
     return UserJob.findOrCreate({ where: userJob })
   })
-  .then(created => {  
-    let reply = data.actions[0].name === `saveJob` ?
-      buttonUpdater(data, "Saved!", 0, 'primary', 'something else') :
-      buttonUpdater(data, "Ignored This Job!", 1, 'danger', 'something else');
+  .then(created => {    
+    let reply = buttonUpdater(data, "Saved!", 0, 'primary', 'something else');
 
     res.json(reply);
   })

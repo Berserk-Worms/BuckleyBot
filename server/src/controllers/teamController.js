@@ -3,11 +3,9 @@ import Team from '../models/teamModel';
 // Triggered from 'GET /api/teams'
 // Find all teams in teams table
 const findAllTeams = (req, res) => {
-  console.log('findallteams');
+
   Team.findAll()
-  .then(teams => {
-    console.log('in then, ', teams);
-    res.send(teams)})
+  .then(teams => res.send(teams))
   .catch(err => res.send('No teams were found', err));
   
 }

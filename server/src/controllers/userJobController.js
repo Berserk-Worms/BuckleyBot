@@ -23,16 +23,6 @@ const deleteUserJob = (req, res) => {
   .then(() => res.send('Deleted Successfully'))
   .catch(err => console.log('Error destrying user tag: ', err));
 
-};
-
-const getUserJobs = (req, res) => {
-  let slackUserId = req.params.slackUserId;
-  console.log('inside getUserJobs!!!!!', slackUserId);
-  UserJob.findAll({
-    where: { slackUserId }
-  })
-  .then(userJob => res.status(200).send(userJob))
-  .catch(err => res.status(500).send(err))
 }
 
-export default { deleteUserJob, getUserJobs }
+export default { deleteUserJob }
