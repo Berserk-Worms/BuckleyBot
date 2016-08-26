@@ -5,7 +5,7 @@ import { CronJob } from 'cron';
 let parseStringAsync = Promise.promisify(parseString);
 
 let jobScrape = new CronJob({
-  cronTime: '00 00 * * * *',
+  cronTime: '00 * * * * *',
   onTick: () => {
     console.log('Running jobScrape Cron Task');
     // getJobsFromStackOverflow();
