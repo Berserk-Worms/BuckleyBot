@@ -15,7 +15,7 @@ let jobScrape = new CronJob({
   timeZone: 'America/Los_Angeles'
 });
 
-const tags = ['javascript', 'reactjs', 'node', 'angular', 'es6', 'backbone'];
+const tags = ['javascript', 'reactjs', 'node', 'angular', 'es6', 'backbone', 'redux'];
 
 const getJobsFromStackOverflow = () => {
   // make a request to Stack Overflow for jobs data
