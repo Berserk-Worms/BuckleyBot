@@ -12,7 +12,8 @@ class Splash extends Component {
           <Grid>
             <Row>
               <Col className="animated pulse" lg={12}>
-                <img className="robo-img" src="../assets/searching.png" alt="BuckleyBot"/>
+                <img className="robo-img hide-on-lg" src="../assets/searching.png" alt="BuckleyBot"/>
+                <img className="robo-img hide-on-sm" src="../assets/searching_default.png" alt="BuckleyBot"/>
                 <div className="intro-text">
                   <span className="name">BuckleyBot</span>
                   <hr className="star-light hide-on-lg" />
