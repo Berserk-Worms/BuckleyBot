@@ -74,7 +74,7 @@ class Splash extends Component {
               <Row>
                 <Col>
                   <img className="robo-img-sm" src="../assets/searching.png" alt="BuckleyBot" />
-                  <div>Made by: Billy, Jeff, Justin, Pranay
+                  <div>Made by: Billy, Jeff, Justin, and Pranay
                     <a target="_blank" href="https://github.com/Berserk-Worms/BuckleyBot"> (Github)</a>
                   </div>
                   <div>Robot icon designed by: <a target="_blank" href="http://www.flaticon.com/free-icon/searching_202483#term=robot&page=1&position=6" title="Freepik">Freepik</a></div>
