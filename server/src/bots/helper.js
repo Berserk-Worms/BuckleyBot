@@ -27,13 +27,14 @@ const helper =  {
 
     return rp({
       url: `${process.env.BASE_URL}/api/tags`,
+      method: 'GET',
       json: true
     })
     .then(tags => {
       match = tags.filter((tag) => {
         return words.indexOf(tag.name) !== -1;
       });
-      console.log('this is match, ', match);
+      // console.log('this is match, ', match);
       return match.length > 0 ? match : tags;
     })
     .catch(err => {
@@ -47,6 +48,7 @@ const helper =  {
       method: 'GET',
       json: true
     };
+
     return rp(userData);
   },
   listAllTags: () => {
@@ -57,6 +59,15 @@ const helper =  {
     };
 
     return rp(tagData);
+  },
+  getUserJobs: (theUser) => {
+    let userJobsData ={
+      url: `http://localhost:8080/api/user_jobs/${theUser}`,
+      method: `GET`,
+      json: true
+    };
+
+    return rp(userJobsData);
   }
 };
 
