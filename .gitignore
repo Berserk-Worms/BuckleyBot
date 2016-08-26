@@ -2,6 +2,7 @@ node_modules/
 server/dist/
 client/dist/
 resources/
+.pem
 .DS_Store
 *.log
 .env

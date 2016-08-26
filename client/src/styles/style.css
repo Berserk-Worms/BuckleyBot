@@ -13,8 +13,7 @@ Fonts: Lato, Montserrat
   a,
   a:hover,
   a:focus,
-  a:active,
-  a.active {
+  a:active {
     color: #18BC9C;
     outline: none;
   }
@@ -64,7 +63,6 @@ Navigation
     color: #18BC9C;
     outline: none;
   }
-
   .navbar-default .navbar-nav > .active > a, 
   .navbar-default .navbar-nav > .active > a:hover, 
   .navbar-default .navbar-nav > .active > a:focus {
@@ -139,6 +137,10 @@ Header
     display: block;
     margin-top: 20px;
   }
+  header .chevron {
+    font-size: 1.5em;
+    margin-top: 20px;
+  }
   @media (min-width: 768px) {
     header {
       color: #2C3E50;
@@ -203,6 +205,15 @@ Horizontal Rule
   hr.star-primary:after {
     background-color: white;
     color: #2C3E50;
+  }
+  hr.hr-margin {
+    padding: 0;
+    border: none;
+    border-top: solid 5px;
+    text-align: center;
+    max-width: 250px;
+    margin: 25px auto;
+    border-color: transparent;
   }
 
 /***************************************************
@@ -272,30 +283,41 @@ Slack Button
 Section
 ***************************************************/
   section {
-    padding: 100px 0;
+    padding: 75px 0;
   }
   section h2 {
     margin: 0;
     font-size: 3em;
   }
-  section .section-text {
-    margin-top: 15px;
+  section .title {
+    font-size: 2em;
   }
-
+  section .section-content {
+    font-size: 1.3em;
+  }
   section.start {
     background: #fff;
     color: #2C3E50;
   }
-  section.contact {
+  section.about {
     background: #18BC9C;
     color: #fff;
   }
-  @media (max-width: 767px) {
+  .how-to {
+    margin-bottom: 20px;
+  }
+  .icon-style {
+    font-size: 2em;
+  }
+  @media (min-width: 767px) {
     section {
-      padding: 75px 0;
+      padding: 100px 0;
     }
     section .title {
-      font-size: 2em;
+      font-size: 3em;
+    }
+    section .section-content {
+      font-size: 1.6em;
     }
   }
 
@@ -309,7 +331,6 @@ Footer
     background: #2C3E50;
     color: #fff;
   }
-
   footer .footer-below {
     position: absolute;
     bottom: 0;
@@ -330,7 +351,7 @@ SignIn & SignOut
   .main-center {
     text-align: center;
     color: #fff;
-    margin-top: 70px;
+    margin-top: 90px;
   }
   .main-center img {
     display: block;
@@ -338,7 +359,7 @@ SignIn & SignOut
   }
 
   .main-center .intro-text .skills {
-    font-size: 1.5em;
+    font-size: 1.25em;
     font-weight: 300;
   }
   .main-center .intro-text .slack-btn-container {
@@ -405,4 +426,29 @@ Profile
     .center-info {
         text-align: center;
     } 
+  }
+
+/***************************************************
+Drop Shadow
+***************************************************/
+  .z-depth-0 {
+    box-shadow: none !important;
+  }
+  .z-depth-1, nav, .card-panel, .card, .toast, .btn, .btn-large, .btn-floating, .dropdown-content, .collapsible, .side-nav {
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+  }
+  .z-depth-1-half, .btn:hover, .btn-large:hover, .btn-floating:hover {
+    box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);
+  }
+  .z-depth-2 {
+    box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  }
+  .z-depth-3 {
+    box-shadow: 0 12px 15px 0 rgba(0, 0, 0, 0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19);
+  }
+  .z-depth-4, .modal {
+    box-shadow: 0 16px 28px 0 rgba(0, 0, 0, 0.22), 0 25px 55px 0 rgba(0, 0, 0, 0.21);
+  }
+  .z-depth-5 {
+    box-shadow: 0 27px 24px 0 rgba(0, 0, 0, 0.2), 0 40px 77px 0 rgba(0, 0, 0, 0.22);
   }
