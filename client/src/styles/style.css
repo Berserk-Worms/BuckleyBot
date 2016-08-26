@@ -64,6 +64,7 @@ Navigation
     color: #18BC9C;
     outline: none;
   }
+
   .navbar-default .navbar-nav > .active > a, 
   .navbar-default .navbar-nav > .active > a:hover, 
   .navbar-default .navbar-nav > .active > a:focus {
@@ -365,7 +366,7 @@ Oops
 ***************************************************/
   .oops .intro-text .skills {
     color: #000;
-    font-size: 2em;
+    font-size: 1.3em;
     font-weight: 300;
   }
 
