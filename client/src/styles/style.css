@@ -85,7 +85,7 @@ Navigation
   }
   @media (min-width: 768px) {
     .navbar-custom {
-      padding: 25px 0;
+      padding: 10px 0;
       -webkit-transition: padding 0.3s;
       -moz-transition: padding 0.3s;
       transition: padding 0.3s;
@@ -158,6 +158,11 @@ Header
       font-size: 1.75em;
     }
     .hide-on-lg {
+      display: none;
+    }
+  }
+  @media (max-width: 768px) {
+    .hide-on-sm {
       display: none;
     }
   }
@@ -258,6 +263,9 @@ Slack Button
     background-color: #0e705d;
     border-color: #0e705d;
   }
+  .slack-add-pic {
+    width: 100%;
+  }
 
 /***************************************************
 Section
@@ -310,7 +318,7 @@ Footer
   }
 
 /***************************************************
-SignIn
+SignIn & SignOut
 ***************************************************/
   .auth-bg {
     position:absolute; 
@@ -323,7 +331,7 @@ SignIn
     color: #fff;
     position: absolute;
     width: 100%;
-    top: 40%;
+    top: 37%;
     transform: translateY(-50%);*/
   }
   .main-center img {
@@ -351,34 +359,9 @@ SignIn
       background-size: cover;
     }
     .main-center .intro-text .skills {
-      font-size: 1.75em;
+      font-size: 1.5em;
     }
   }
-
-/***************************************************
-SignOut
-***************************************************/
-/*  .signout-bg {
-    position:absolute; 
-    height:100%; 
-    width:100%; 
-    background: #E76663;
-  }
-  @media (min-width: 768px) {
-    .signout-bg {
-      position:absolute; 
-      height:100%; 
-      width:100%; 
-      background: url('../../assets/desk4.jpg') no-repeat center center;
-      -webkit-background-size: cover;
-      -moz-background-size: cover;
-      -o-background-size: cover;
-      background-size: cover;
-    }
-    .signout-bg .main-center{
-      color: #2C3E50;
-    }
-  }*/
 
 /***************************************************
 Oops
