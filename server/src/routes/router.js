@@ -51,7 +51,6 @@ export default (app) => {
   //Handling User Jobs
   //////////////////////////////////////////////
   app.delete('/api/user/jobs/:jobId', requireAuth, userJobController.deleteUserJob);
-  app.get('/api/user_jobs/:slackUserId', userJobController.getUserJobs);
 
   //////////////////////////////////////////////
   //Handling Tag

@@ -8,7 +8,7 @@ import Promise from 'bluebird';
 
 let jobCron = new CronJob({
   cronTime: '00 30 08 * * 1-5',
-  // cronTime: '05 * * * * *',
+  // cronTime: '23 * * * * *',
   onTick: () => {
     console.log('Cron jobs to dank jobs');
     messageUsers();
@@ -34,7 +34,6 @@ let messageUsers = () => {
   .then(users => {
     users.forEach(user => {
       let count = {};
-      let savedJobs = [];
       const tagArr = user.dataValues.tags.map(item => {
         return item.name;
       });
@@ -51,9 +50,6 @@ let messageUsers = () => {
         })
       })
       const keySort = Object.keys(count).sort((a, b) => { return count[b] - count[a]}).slice(0, 6);
-      keySort.map(key => { return parseInt(key, 10)});
-
-      console.log(keySort);
 
       if (keySort.length === 0) {
         BUCKLEY.startPrivateConversation({ user: user.slackUserId }, (err, convo) =>{

@@ -29,7 +29,6 @@ const teams = () => {
   console.log('starting instances of bots in database')
   rp({
     url: `${process.env.BASE_URL}/api/teams`,
-    method: 'GET',
     json: true
   })
   .then((teams) => {
