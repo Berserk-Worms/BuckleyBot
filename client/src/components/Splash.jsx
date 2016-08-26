@@ -34,7 +34,7 @@ class Splash extends Component {
           <Grid>
               <Row>
                 <Col lg={12} className="text-center">
-                  <h2 className="title">How to Get Start</h2>
+                  <h2 className="title">How to Get Started</h2>
                   <hr className="star-primary" />
                 </Col>
               </Row>
@@ -77,8 +77,8 @@ class Splash extends Component {
                   <div>Made by: Billy, Jeff, Justin, Pranay
                     <a target="_blank" href="https://github.com/Berserk-Worms/BuckleyBot"> (Github)</a>
                   </div>
-                  <div>Robot icon designed by <a target="_blank" href="http://www.flaticon.com/free-icon/searching_202483#term=robot&page=1&position=6" title="Freepik">Freepik</a></div>
-                  <div>Banner designed by <a target="_blank" href="http://www.freepik.com/free-vector/realistic-workplace-elements_798002.htm">Freepik</a></div>
+                  <div>Robot icon designed by: <a target="_blank" href="http://www.flaticon.com/free-icon/searching_202483#term=robot&page=1&position=6" title="Freepik">Freepik</a></div>
+                  <div>Banner designed by: <a target="_blank" href="http://www.freepik.com/free-vector/realistic-workplace-elements_798002.htm">Freepik</a></div>
                   
                 </Col>
               </Row>
