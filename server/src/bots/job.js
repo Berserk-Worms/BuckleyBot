@@ -10,7 +10,7 @@ let userJobsListener = {
         let jobsArray = [];
         tags.forEach((tag) => {
           jobsArray = jobsArray.concat(tag.jobs);
-        })
+        });
         //TODO Filter with sequelize rather than _.filter
         let sample = this.returnJobSample(jobsArray, 3);
 
