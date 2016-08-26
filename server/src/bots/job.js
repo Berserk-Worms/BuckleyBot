@@ -7,8 +7,12 @@ let userJobsListener = {
     helper.findJobTags(message)
     .then(tags => {
       if (tags.length > 0) {
+        let jobsArray = [];
+        tags.forEach((tag) => {
+          jobsArray = jobsArray.concat(tag.jobs);
+        });
         //TODO Filter with sequelize rather than _.filter
-        let sample = this.returnJobSample(tags[0].jobs, 3);
+        let sample = this.returnJobSample(jobsArray, 3);
 
         //Set attachment to message to be three random jobs
         let reply_with_attachments = {
