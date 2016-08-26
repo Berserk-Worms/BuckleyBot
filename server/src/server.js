@@ -3,6 +3,7 @@ import bodyParser from 'body-parser';
 import fs from 'fs';
 import http from 'http';
 import https from 'https';
+import enforce from 'express-sslify';
 
 import { teams } from './bot';
 import routes from './routes/router';
@@ -17,6 +18,7 @@ const env = process.env.NODE_ENV;
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
+app.use(enforce.HTTPS());
 app.use(express.static('client'));
 
 const router = routes(app);
@@ -49,6 +51,7 @@ db.sync()
       ca: fs.readFileSync('/etc/letsencrypt/live/buckleybot.com/chain.pem'),
     };
 
+    var httpServer = http.createServer(app).listen(port, () => {console.log('Http server redirecting to https')});
     var httpsServer = https.createServer(credentials, app);
 
     httpsServer.listen(httpsPort, () => {
