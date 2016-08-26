@@ -6,4 +6,5 @@ resources/
 *.log
 .env
 server/src/env.js
+.pem
 
