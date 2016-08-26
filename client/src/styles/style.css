@@ -64,6 +64,7 @@ Navigation
     color: #18BC9C;
     outline: none;
   }
+
   .navbar-default .navbar-nav > .active > a, 
   .navbar-default .navbar-nav > .active > a:hover, 
   .navbar-default .navbar-nav > .active > a:focus {
@@ -329,10 +330,7 @@ SignIn & SignOut
   .main-center {
     text-align: center;
     color: #fff;
-    position: absolute;
-    width: 100%;
-    top: 37%;
-    transform: translateY(-50%);*/
+    margin-top: 70px;
   }
   .main-center img {
     display: block;
@@ -352,7 +350,7 @@ SignIn & SignOut
       position:absolute; 
       height:100%; 
       width:100%; 
-      background: url('../../assets/desk2.jpg') no-repeat center bottom;
+      background: url('../../assets/desk2.jpg') no-repeat center top;
       -webkit-background-size: cover;
       -moz-background-size: cover;
       -o-background-size: cover;
@@ -368,7 +366,7 @@ Oops
 ***************************************************/
   .oops .intro-text .skills {
     color: #000;
-    font-size: 2em;
+    font-size: 1.3em;
     font-weight: 300;
   }
 
