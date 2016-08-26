@@ -9,7 +9,7 @@ const intro = (createdUser) => {
   const BUCKLEY = store[slackTeamId];
 
   BUCKLEY.startPrivateConversation({ user: slackUserId }, (err, convo) => {
-    convo.ask('Yoooo, watsup?!?', (response, convo) => {
+    convo.ask("Hi I'm Buckley, I'm here to help you find the newest and most relevant jobs! Can I ask you some questions about your job search?", (response, convo) => {
       askLocation(response, convo);
       convo.next();
     });
@@ -17,7 +17,7 @@ const intro = (createdUser) => {
 };
 
 const askLocation = (response, convo) => {
-  convo.ask("Awesome! Which _CITY_ do you want to look for jobs?", (response, convo) => {
+  convo.ask("Awesome! Which city do you want to look for jobs in?", (response, convo) => {
     convo.say(`I heard that ${response.text} is a great place! If you want to look for *jobs* ` +
       `just let me know! \nIf you have any questions, you can type *help* and I will be here to help you!`);
     helper.updateUser(response);
