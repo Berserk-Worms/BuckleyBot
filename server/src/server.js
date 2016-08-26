@@ -51,7 +51,7 @@ db.sync()
       ca: fs.readFileSync('/etc/letsencrypt/live/buckleybot.com/chain.pem'),
     };
 
-    var httpServer = http.createServer(app).listen(8080, () => {console.log('Http server redirecting to https')});
+    var httpServer = http.createServer(app).listen(port, () => {console.log('Http server redirecting to https')});
     var httpsServer = https.createServer(credentials, app);
 
     httpsServer.listen(httpsPort, () => {
