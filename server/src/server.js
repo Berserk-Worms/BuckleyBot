@@ -18,7 +18,6 @@ const env = process.env.NODE_ENV;
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
-app.use(enforce.HTTPS());
 app.use(express.static('client'));
 
 const router = routes(app);
@@ -44,6 +43,8 @@ db.sync()
       jobScrape.start();
     });
   } else if (env === 'production') {
+    // Enforce HTTPS if running on prod
+    app.use(enforce.HTTPS());
     // if production
     const credentials = {
       key: fs.readFileSync('/etc/letsencrypt/live/buckleybot.com/privkey.pem'),
