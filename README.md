@@ -1,4 +1,6 @@
 # BuckleyBot
+![Bot Demo](./client/assets/intro.gif)
+
 
 ## Installation steps
 
